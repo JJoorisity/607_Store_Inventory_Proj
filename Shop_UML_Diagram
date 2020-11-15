@@ -1,0 +1,115 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+Shop "1" o-- "many" Inventory : has
+Shop "1" o-- "many" SupplierList: : has
+Supplier "1" -- "many" Item : has
+Inventory "1" o-- "many" Item : has
+SupplierList "1" o-- "many" Supplier : has
+Inventory "1" o-- "many" Order : has
+Order "1" -- "many" OrderLine : < has
+OrderLine "1" -- "1" Item : < has
+FileMgr <.. Shop : uses
+
+class Item {
+- itemID: int
+- itemType: String
+- itemName: String
+- itemQty: int
+- itemPrice: double
+- supplier: Supplier
++ Item (iId: int, name: String, qty: int, price: double, s: Supplier)
++ delete(): Tool
++ searchName(n: String): Tool
++ searchID(id: int): Tool
++ void decrementQty(inventory: Inventory)
++ void addOrderLine(inventory: Inventory, qty: int)
++ getItemId(): int
++ void setItemId(id: int)
++ getToolType(): String
++ void setToolType(type: String)
++ getItemName(): String
++ void setItemName(name: String)
++ getItemQty(): int
++ setItemQty(qty: int): int
++ getItemPrice(): double
++ void setItemPrice(price: double)
++ getSupplier(): Supplier
++ void setSupplier(s: Supplier)
++ toString(): String
+}
+
+class Supplier {
+- supplierID: int
+- supplierType: String
+- supplierName: String
+- address: String
+- contact: String
+- items: LinkedHashSet<Item>
++ Supplier(id: int, name: String, address: String, contact: String)
++ getName(): String
++ getSupplierId(): int
++ void setSupplierId(id: int)
++ getSupplierType(): String
++ getSupplierName(): String
++ void setSupplierName(name: String)
++ getAddress(): String
++ void setAddress(address: String)
++ getContact(): String
++ void setContact(contact: String)
++ getItems(): LinkedHashSet<Item>
++ void addItems(i: Item)
+}
+
+class Order {
+- orderID: int
+- date: String
+- orderLines: LinkedHashSet <OrderLine>
++ Order(orderId: int, date: String)
++ void addOrderLine(t: Tool, qty: int)
++ void writeOrder()
++ getOrderId(): int
++ void setOrderId(orderId: int)
++ getDate(): String
++ void setDate(date: String)
++ getOrderLines(): LinkedHashSet <OrderLine>
++ void setOrderLines(orderLines: LinkedHashSet <OrderLine>)
++ void addOrderLine(line: OrderLine)
+}
+
+class OrderLine {
+- item: Item
+- orderQty: int
++ OrderLine()
++ getItem(): Item
++ void setItem(i: Item)
++ getOrderQty(): int
++ void setOrderQty(qty: int)
+}
+
+class Inventory {
+- itemList: LinkedHashSet <Item>
+- supplierList: LinkedHashSet <Supplier>
++ Inventory(items: LinkedHashSet <Item>, orders: Order)
++ void addItem(item: Item)
++ void deleteItem(item: Item)
++ void addNewSupplier(s: Supplier)
++ searchName(name: String): String
++ searchId(id: int): String
++ checkQty(name: String): String
++ reduceQty(name: String): String
++ void addOrder(o: Order)
++ toString(): String
++ getItemList(): LinkedHashSet <Item>
++ void setItemList(items: LinkedHashSet <Item>)
++ getOrderList(): LinkedHashSet <Order>
++ void setOrderList(orders: LinkedHashSet <Order>)
+}
+
+class SupplierList {
+- supplierList: LinkedHashSet<Supplier>
++ SupplierList(suppliers: LinkedHashSet<Supplier>)
++ getSupplierList(): LinkedHashSet<Supplier>
++ setSupplierList(sl: LinkedHashSet<Supplier>)
+}
+@enduml
