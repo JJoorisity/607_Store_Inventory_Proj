@@ -16,17 +16,10 @@ GuiFactory <|-- ImsGuiFactory
 GuiFactory <|-- CmsGuiFactory
 ImsGuiFactory -- Button
 CmsGuiFactory -- Button
-Button <|-- SaveButton
-Button <|-- ClearButton
-Button <|-- UpdateButton
-Button <|-- SearchButton
-Button <|-- CloseButton
 ImsGuiFactory -- TextField
 CmsGuiFactory -- TextField
 ImsGuiFactory -- ScrollBar
 CmsGuiFactory -- ScrollBar
-TextField <|-- TextLabel
-TextField <|-- TextArea
 }
 
 package clientControllers {
