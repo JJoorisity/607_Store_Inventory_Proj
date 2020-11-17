@@ -1,0 +1,17 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+Shop "1" o-- "*" InventoryManager : has
+Shop "1" o-- "*" SupplierList : has
+Shop "1" o-- "*" CustomerMgmt : has
+InventoryManager "1" o-- "*" Item : has
+CustomerMgmt "1" o-- "*" Client : has
+SupplierList "1" o-- "*" Supplier : has
+InventoryManager "1" o-- "*" Order : has
+Order "1" -- "*" OrderLine : < has
+OrderLine "1" o-- "1" Item : has
+FileManager <.. Shop : uses
+Supplier <|-- IntSupplier : is
+Item <|-- ElecItem : is
+
+@enduml

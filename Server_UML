@@ -1,0 +1,50 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+client "*" -- "1" server
+
+package client {
+package clientViews {
+class ImsApplication {
+}
+class CmsApplication {
+}
+}
+
+package clientModel {
+class ImsModel{
+}
+class CmsModel {
+}
+}
+
+package clientControllers {
+ClientController o-- ImsController
+ClientController o-- CmsController
+CmsController o-- CmsApplication
+ImsController o-- ImsApplication
+CmsController o-- CmsModel
+ImsController o-- ImsModel
+}
+
+
+
+}
+
+package server {
+package serverControllers {
+
+ServerController o-- modelController : has
+ServerController o-- DBController : has
+ShopDB <.. DBController : uses
+}
+
+package serverModel {
+modelController o-- Shop : has
+DBController <.. Shop : uses
+}
+
+database ShopDB{
+}
+}
+@enduml

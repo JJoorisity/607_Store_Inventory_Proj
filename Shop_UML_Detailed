@@ -1,0 +1,235 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+Shop "1" o-- "*" Inventory : has
+Shop "1" o-- "*" SupplierList : has
+Shop "1" o-- "*" CustomerMgmt : has
+Inventory "1" o-- "*" Item : has
+CustomerMgmt "1" o-- "*" Client : has
+SupplierList "1" o-- "*" Supplier : has
+Inventory "1" o-- "*" Order : has
+Order "1" -- "*" OrderLine : < has
+Order "1" -- "*" OrderLineV2 : < has
+OrderLine "1" o-- "1" Item : has
+OrderLineV2 "1" <.. "1" Item : uses
+FileManager <.. Shop : uses
+ShopServer "1" o-- "*" Shop : has
+Supplier <|-- IntSupplier : is
+Item <|-- ElecItem : is
+
+class Item {
+- itemID: int
+- itemType: String
+- itemName: String
+- itemQty: int
+- itemPrice: double
+- supplier: String
++ ORDERQTYLIMIT: int
++ Item (iId: int, name: String, qty: int, price: double, s: String)
++ delete(): Tool
++ searchName(n: String): Tool
++ searchID(id: int): Tool
++ decrementQty(inventory: Inventory): void
++ addOrderLine(inventory: Inventory, qty: int): void
++ getItemId(): int
++ setItemId(id: int): void
++ getToolType(): String
++ setToolType(type: String): void
++ getItemName(): String
++ setItemName(name: String): void
++ getItemQty(): int
++ setItemQty(qty: int): void
++ getItemPrice(): double
++ setItemPrice(price: double): void
++ getSupplier(): Supplier
++ setSupplier(s: Supplier): void
++ toString(): String
++ equals(o: Object): boolean
++ hashCode(): int
++ getOrderqtylimit(): int
+}
+
+class ElecItem {
+- powerType: String
+- vph: int
++ getPowerType(): String
++ setPowerType(type: String): void
++ getVph(): int
++ setVph(vph: int): void
+}
+
+class Supplier {
+- supplierID: int
+- supplierType: String
+- supplierName: String
+- address: String
+- contact: String
++ Supplier(id: int, name: String, address: String, contact: String)
++ getName(): String
++ getSupplierId(): int
++ setSupplierId(id: int): void
++ getSupplierType(): String
++ getSupplierName(): String
++ setSupplierName(name: String): void
++ getAddress(): String
++ setAddress(address: String): void
++ getContact(): String
++ setContact(contact: String): void
++ toString(): String
++ equals(o: Object): boolean
++ hashCode(): int
+}
+
+class IntSupplier {
+- importTax: double
++ calculateTax(): double
++ getImportTax(): double
++ setImportTax(tax: double): void
+}
+
+class Client {
+- clientId: int
+- firstName: char[20]
+- lastName: char[20]
+- address: char[50]
+- postalCode: char[7]
+- phoneNumber: int[12]
+- clientType: char
++ Client(id: int, fn: char[], ln: char[], ad: char[], pc: char[], pn: int[], type: char)
++ getClientId(): int
++ setClientId(id: int): void
++ getFirstName(): char[]
++ setFirstName(nm: char[]): void
++ getLastName(): char[]
++ setLastName(nm: char[]): void
++ getAddress(): char[]
++ setAddress(address: char[]): void
++ getPostalCode(): char[]
++ setPostalCode(pc: char[]): void
++ getPhoneNumber(): int[]
++ setPhoneNumber(pn: int[]): void
++ getClientType(): char
++ setClientType(t: char): void
+}
+
+class Order {
+- orderID: int
+- date: LocalDate
+- orderLines: LinkedHashSet <OrderLine>
++ Order(orderId: int, date: String)
++ addOrderLine(t: Tool, qty: int): void
++ inOrder(s: String): boolean
++ printOrder(): void
++ getOrderId(): int
++ setOrderId(orderId: int): void
++ getDate(): LocalDate
++ setDate(): void
++ getOrderLines(): LinkedHashSet <OrderLine>
++ setOrderLines(orderLines: LinkedHashSet <OrderLine>): void
++ addOrderLine(line: OrderLine): void
+}
+
+class OrderLine {
+- item: Item
+- orderQty: int
++ OrderLine(i: Item, qty: int)
++ getItem(): Item
++ setItem(i: Item): void
++ getOrderQty(): int
++ setOrderQty(qty: int): void
+}
+
+class OrderLineV2 {
+- orderString: String
++ OrderLine(i: Item)
++ getOrderString(): String
++ setOrderString(s: String): void
+}
+
+class Inventory {
+- itemList: LinkedHashSet <Item>
+- supplierList: LinkedHashSet <Supplier>
++ Inventory(items: LinkedHashSet <Item>, orders: Order)
++ addItem(item: Item): void
++ deleteItem(item: Item): void
++ addNewSupplier(s: Supplier): void
++ searchName(name: String): String
++ searchId(id: int): String
++ checkQty(name: String): String
++ reduceQty(name: String): String
++ createOrder(o: Order): void
++ generateOrderId(s: String): int
++ returnItem(s: String): Item
++ toString(): String
++ getItemList(): LinkedHashSet <Item>
++ setItemList(items: LinkedHashSet <Item>): void
++ getOrderList(): LinkedHashSet <Order>
++ setOrderList(orders: LinkedHashSet <Order>): void
+}
+
+class SupplierList {
+- supplierList: LinkedHashSet<Supplier>
++ SupplierList(suppliers: LinkedHashSet<Supplier>)
++ getSupplierList(): LinkedHashSet<Supplier>
++ setSupplierList(sl: LinkedHashSet<Supplier>)
+}
+
+class CustomerMgmt {
+- customers: LinkedHashSet <Client>
++ CustomerMgmt()
++ getCustomers(): LinkedHashSet <Client>
++ addCustomer(c: Client)
++ removeCustomer(c: Client)
++ modifyCustomer(c: Client): String
++ searchCustomer(id: int): String
++ searchCustomer(name: String): String
++ searchCustomer(type: char): String
++ toString(): String
+}
+
+class Shop {
+- inventory: Inventory
+- suppliers: SupplierList
+- customers: CustomerMgmt
++ Shop(itemFile: String, suppFile: String)
++ toString(): String
++ searchName(name: String): String
++ searchId(id: int): String
++ checkQty(name: String): String
++ reduceQty(name: String): String
++ getInventory(): Inventory
++ setInventory(inventory: Inventory): void
++ getSuppliers(): SupplierList
++ setSuppliers(suppliers: SupplierList): void
++ getCustomers(): CustomerMgmt
++ setCustomers(customers: CustomerMgmt): void
+}
+
+class FileManager {
+- data: String[][]
+- filenameItems: String
+- filenameSuppliers:String
++ FileManager(items: String, supp: String)
++ loadData(s: String): void
++ getItems(): LinkedHashSet <Item>
++ getSupplierList: LinkedHashSet <Supplier>
++ setFilenameItems(s: String): void
++ setFilenameSuppliers(s: String): void
+--
++ FileManager()
++ createSupplierList(fileName: String): SupplierList
++ createInventory(fileName: String): Inventory
++ createOrder(items: LinkedHashSet<Item>)
+}
+
+class ShopServer {
+- userSocket: Socket
+- serverSocket: ServerSocket
+- userIn: BufferedReader 
+- userOut: PrintWriter
+- pool: ExecutorService
++ ShopServer()
++ runServer(): void
++ close(): void
+}
+@enduml

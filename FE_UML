@@ -1,0 +1,51 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package clientModels {
+class Client
+class Item
+class Supplier
+class Order
+}
+
+package clientViews {
+ShopApplication <|-- CmsApplication
+ShopApplication <|-- ImsApplication
+ShopApplication *-- GuiFactory
+GuiFactory <|-- ImsGuiFactory
+GuiFactory <|-- CmsGuiFactory
+ImsGuiFactory -- Button
+CmsGuiFactory -- Button
+Button <|-- SaveButton
+Button <|-- ClearButton
+Button <|-- UpdateButton
+Button <|-- SearchButton
+Button <|-- CloseButton
+ImsGuiFactory -- TextField
+CmsGuiFactory -- TextField
+ImsGuiFactory -- ScrollBar
+CmsGuiFactory -- ScrollBar
+TextField <|-- TextLabel
+TextField <|-- TextArea
+}
+
+package clientControllers {
+interface ActionListener
+ClientController o-- ImsController
+ClientController o-- CmsController
+ImsController +-- ImsListener
+CmsController +-- CmsListener
+ActionListener <|.. ImsListener :realizes
+ActionListener <|.. CmsListener :realizes
+CmsController o-- CmsApplication
+ImsController o-- ImsApplication
+CmsController o-- Client
+ImsController o-- Item
+ImsController o-- Supplier
+ImsController o-- Order
+}
+
+
+
+
+@enduml
