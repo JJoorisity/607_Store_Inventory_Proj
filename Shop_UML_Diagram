@@ -14,6 +14,8 @@ OrderLine "1" o-- "1" Item : has
 OrderLineV2 "1" <.. "1" Item : uses
 FileManager <.. Shop : uses
 ShopServer "1" o-- "*" Shop : has
+Supplier <|-- IntSupplier : is
+Item <|-- ElecItem : is
 
 class Item {
 - itemID: int
@@ -47,6 +49,15 @@ class Item {
 + getOrderqtylimit(): int
 }
 
+class ElecItem {
+- powerType: String
+- vph: int
++ getPowerType(): String
++ setPowerType(type: String): void
++ getVph(): int
++ setVph(vph: int): void
+}
+
 class Supplier {
 - supplierID: int
 - supplierType: String
@@ -67,6 +78,13 @@ class Supplier {
 + toString(): String
 + equals(o: Object): boolean
 + hashCode(): int
+}
+
+class IntSupplier {
+- importTax: double
++ calculateTax(): double
++ getImportTax(): double
++ setImportTax(tax: double): void
 }
 
 class Client {
