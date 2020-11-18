@@ -2,17 +2,17 @@
 skinparam classAttributeIconSize 0
 
 package serverModel {
-Inventory "1" o-- "*" Order
-Order "1" -- "*" OrderLine : <
-OrderLine "1" o-- "1" Item
-Inventory "1" o-- "*" Item
+Inventory o-- Order
+Order o-- OrderLine
+OrderLine o-- Item
+Inventory o-- Item
 Item <|-- ElecItem
-Shop "1" o-- "*" Inventory
-Shop "1" o-- "*" SupplierList
-Shop "1" o-- "*" CustomerMgmt
-CustomerMgmt "1" o-- "*" Client
-SupplierList "1" o-- "*" Supplier
-FileManager <.. Shop : uses
+Shop o-- Inventory
+Shop o-- SupplierList
+Shop o-- CustomerMgmt
+CustomerMgmt o-- Client
+SupplierList o-- Supplier
+FileManager <.. Shop
 Supplier <|-- IntSupplier
 }
 @enduml
