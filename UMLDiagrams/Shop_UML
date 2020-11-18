@@ -1,0 +1,18 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package serverModel {
+Inventory o-- Order
+Order o-- OrderLine
+OrderLine o-- Item
+Inventory o-- Item
+Item <|-- ElecItem
+Shop o-- Inventory
+Shop o-- SupplierList
+Shop o-- CustomerMgmt
+CustomerMgmt o-- Client
+SupplierList o-- Supplier
+FileManager <.. Shop
+Supplier <|-- IntSupplier
+}
+@enduml

@@ -5,7 +5,7 @@ package clientModels {
 class Client
 class Item
 class Supplier
-class Order
+Order o-- OrderLine
 }
 
 package clientViews {
