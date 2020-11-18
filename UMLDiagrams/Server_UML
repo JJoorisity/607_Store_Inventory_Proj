@@ -2,7 +2,7 @@
 skinparam classAttributeIconSize 0
 
 package client {
-package clientModel {
+package sharedModel {
 }
 package clientControllers{
 ClientController "1" o-- "1" CmsController
@@ -13,8 +13,8 @@ CmsController "1" o-- "1" CmsApplication
 ImsController "1" o-- "1" ImsApplication
 }
 
-CmsController "1" o-- "1" clientModel
-ImsController "1" o-- "1" clientModel
+CmsController "1" o-- "1" sharedModel
+ImsController "1" o-- "1" sharedModel
 
 }
 
