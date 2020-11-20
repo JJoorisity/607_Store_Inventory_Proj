@@ -2,17 +2,23 @@
 skinparam classAttributeIconSize 0
 
 package serverModel {
-Inventory o-- Order
-Order o-- OrderLine
-OrderLine o-- Item
-Inventory o-- Item
-Item <|-- ElecItem
-Shop o-- Inventory
-Shop o-- SupplierList
-Shop o-- CustomerMgmt
-CustomerMgmt o-- Client
-SupplierList o-- Supplier
-FileManager <.. Shop
+Shop "1" o-- "*" Inventory
+Shop "1" o-- "*" SupplierList
+Shop "1" o-- "*" CustomerList
+FileManager "*" <.. "*" Shop
+package sharedModel {
+CustomerList "1" o-- "*" Customer
+SupplierList "1" o-- "*" Supplier
 Supplier <|-- IntSupplier
+Supplier <|-- LocalSupplier
+Customer <|-- Residential
+Customer <|-- Commercial
+Order "1" o-- "*" OrderLine
+OrderLine "*" o-- "*" Item
+Item <|-- ElecItem
+Item <|-- NonElecItem
+}
+Inventory o-- Order
+Inventory o-- Item
 }
 @enduml

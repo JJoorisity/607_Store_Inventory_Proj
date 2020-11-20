@@ -1,41 +1,36 @@
 @startuml
 skinparam classAttributeIconSize 0
 
-package clientModels {
-class Client
-class Item
-class Supplier
-Order o-- OrderLine
+package sharedModel {
+Customer <|-- Residential
+Customer <|-- Commercial
+Order "1" o-- "*" OrderLine
+OrderLine "*" o-- "*" Item
+Item <|-- ElecItem
+Item <|-- NonElecItem
+Supplier <|-- IntSupplier
+Supplier <|-- LocalSupplier
 }
 
 package clientViews {
 ShopApplication <|-- CmsApplication
 ShopApplication <|-- ImsApplication
-ShopApplication *-- GuiFactory
+ShopApplication "1" *-- "*" GuiFactory
 GuiFactory <|-- ImsGuiFactory
 GuiFactory <|-- CmsGuiFactory
-ImsGuiFactory -- Button
-CmsGuiFactory -- Button
-ImsGuiFactory -- TextField
-CmsGuiFactory -- TextField
-ImsGuiFactory -- ScrollBar
-CmsGuiFactory -- ScrollBar
 }
 
 package clientControllers {
-interface ActionListener
-ClientController o-- ImsController
-ClientController o-- CmsController
+ClientController "1" o-- "1" ImsController
+ClientController "1" o-- "1" CmsController
 ImsController +-- ImsListener
 CmsController +-- CmsListener
-ActionListener <|.. ImsListener :realizes
-ActionListener <|.. CmsListener :realizes
-CmsController o-- CmsApplication
-ImsController o-- ImsApplication
-CmsController o-- Client
-ImsController o-- Item
-ImsController o-- Supplier
-ImsController o-- Order
+CmsController "1" o-- "*" CmsApplication
+ImsController "1" o-- "*" ImsApplication
+CmsController "1" o-- "*" Customer
+ImsController "1" o-- "*" Item
+ImsController "1" o-- "*" Supplier
+ImsController  o-- "*" Order
 }
 
 
