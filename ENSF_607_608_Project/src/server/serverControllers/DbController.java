@@ -1,3 +1,4 @@
+package server.serverControllers;
 
 import java.sql.Connection;
 import java.sql.Driver;
@@ -6,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.*;
 
-public class MySQLJDBC implements IDBCredentials {
+public class DbController implements IDBCredentials {
 
 	// Attributes
 	private Connection conn;// Object of type connection from the JDBC class that deals with connecting to
@@ -137,7 +138,7 @@ public class MySQLJDBC implements IDBCredentials {
 	}
 
 	public static void main(String[] args0) {
-		MySQLJDBC myApp = new MySQLJDBC();
+		DbController myApp = new DbController();
 		myApp.initializeConnection();
 		myApp.createTable();
 		// myApp.insertUser();

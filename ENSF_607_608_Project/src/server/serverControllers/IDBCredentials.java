@@ -1,3 +1,4 @@
+package server.serverControllers;
 
 public interface IDBCredentials {
 	
