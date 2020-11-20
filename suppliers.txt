@@ -1,20 +1,20 @@
-8001;L;Grommet Builders;788 30th St., SE, Calgary, Alberta;Fred
-8002;L;Pong Works;749 Dufferin Blvd., SE, Calgary, Alberta;Bart
-8003;L;Wiley Inc.;26 40th St., SE, Calgary, Alberta;BillyBob
-8004;I;Winork Manufacturing Inc.;1114 2nd Ave., NE, Jamestown, North Dakota;Marty
-8005;I;Grab Bag Inc.;20842 Apollo Ter, Ashburn, Virginia;Monty
-8006;L;Paddy's Manufacturing;311 McCall Way, NE, Calgary, Alberta;Barney
-8007;L;Smickles Industries;966 Smed Lane, SE, Calgary, Alberta;Lisa
-8008;L;Thangs Inc.;879 37th Ave., NE, Calgary, Alberta;Thelma
-8009;I;Flip Works Inc.;4016 Wood Duck Trl., Chipley, Florida;Rory
-8010;L;Irkle Industries;754 Sunridge Way, NE, Calgary, Alberta;Irma
-8011;L;Biff Builders;690 19th St., NE, Calgary, Alberta;Borjn
-8012;I;Twinkles Inc.;382 Linden Ave., Newport, Kentucky;Barkley
-8013;I;Piddles Industries;6703 Hanson Ln., Lorton, Virginia;Parnell
-8014;L;Tic Tac Manufacturing;598 Palmer Rd., NE, Calgary, Alberta;Teisha
-8015;L;Knock Knock Inc.;363 42nd Ave., NE, Calgary, Alberta;Ned
-8016;I;Corky Things Inc.;766 Black Rd., Idabel, Oklahoma;Corrine
-8017;L;E & O Industries;883 44th St., SE, Calgary, Alberta;Stan
-8018;L;Fiddleys Makes Stuff Inc.;350 27th St., NE, Calgary, Alberta;Fredda
-8019;I;Horks and Stuff Manufacturing;2615 Pennington Rd., Pennington, New Jersey;Harold
-8020;I;Wings Works;521 S Oakwood St., Oakwood, Illinois;Wing
+8001;L;Grommet Builders;788 30th St., SE, Calgary, Alberta;Fred;NULL
+8002;L;Pong Works;749 Dufferin Blvd., SE, Calgary, Alberta;Bart;NULL
+8003;L;Wiley Inc.;26 40th St., SE, Calgary, Alberta;BillyBob;NULL
+8004;I;Winork Manufacturing Inc.;1114 2nd Ave., NE, Jamestown, North Dakota;Marty;25.79
+8005;I;Grab Bag Inc.;20842 Apollo Ter, Ashburn, Virginia;Monty;88.12
+8006;L;Paddy's Manufacturing;311 McCall Way, NE, Calgary, Alberta;Barney;NULL
+8007;L;Smickles Industries;966 Smed Lane, SE, Calgary, Alberta;Lisa;NULL
+8008;L;Thangs Inc.;879 37th Ave., NE, Calgary, Alberta;Thelma;NULL
+8009;I;Flip Works Inc.;4016 Wood Duck Trl., Chipley, Florida;Rory;76.13
+8010;L;Irkle Industries;754 Sunridge Way, NE, Calgary, Alberta;Irma;NULL
+8011;L;Biff Builders;690 19th St., NE, Calgary, Alberta;Borjn;NULL
+8012;I;Twinkles Inc.;382 Linden Ave., Newport, Kentucky;Barkley;41.87
+8013;I;Piddles Industries;6703 Hanson Ln., Lorton, Virginia;Parnell;39.26
+8014;L;Tic Tac Manufacturing;598 Palmer Rd., NE, Calgary, Alberta;Teisha;NULL
+8015;L;Knock Knock Inc.;363 42nd Ave., NE, Calgary, Alberta;Ned;NULL
+8016;I;Corky Things Inc.;766 Black Rd., Idabel, Oklahoma;Corrine;98.99
+8017;L;E & O Industries;883 44th St., SE, Calgary, Alberta;Stan;NULL
+8018;L;Fiddleys Makes Stuff Inc.;350 27th St., NE, Calgary, Alberta;Fredda;NULL
+8019;I;Horks and Stuff Manufacturing;2615 Pennington Rd., Pennington, New Jersey;Harold;76.57
+8020;I;Wings Works;521 S Oakwood St., Oakwood, Illinois;Wing;87.65
