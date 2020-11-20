@@ -140,7 +140,7 @@ public class DbController implements IDBCredentials {
 	public static void main(String[] args0) {
 		DbController myApp = new DbController();
 		myApp.initializeConnection();
-		myApp.createTable();
+		// myApp.createTable();
 		// myApp.insertUser();
 		// myApp.insertUserPreparedStatment(1, "sam", "Smith");
 		// myApp.close();

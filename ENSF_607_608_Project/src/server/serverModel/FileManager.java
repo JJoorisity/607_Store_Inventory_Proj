@@ -1,4 +1,5 @@
 package server.serverModel;
+import sharedModel.*;
 
 import java.io.*;
 import java.util.LinkedHashSet;

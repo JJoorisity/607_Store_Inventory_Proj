@@ -47,8 +47,8 @@ public class ServerController {
 			while (true) {
 				clientSocket = serverSocket.accept();
 				System.out.println("Server has accepted a connection.");
-				clientIn = new ObjectInputStream(new FileInputStream(clientSocket.getInputStream()));
-				clientOut = new ObjectOutputStream(new FileOutputStream(clientSocket.getOutputStream());
+				clientIn = new ObjectInputStream(clientSocket.getInputStream());
+				clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
 				ModelController newShop = new ModelController();
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
