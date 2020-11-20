@@ -1,17 +1,13 @@
 package server.serverControllers;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 /**
  * Server class to initialize the server and run a game of Tic-Tac-Toe for two
  * Client classes.
@@ -49,7 +45,9 @@ public class ServerController {
 				System.out.println("Server has accepted a connection.");
 				clientIn = new ObjectInputStream(clientSocket.getInputStream());
 				clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
-				ModelController newShop = new ModelController();
+
+				ModelController newShop = new ModelController(clientIn, clientOut);
+
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
 			}
