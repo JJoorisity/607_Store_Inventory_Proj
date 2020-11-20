@@ -45,7 +45,7 @@ public class ServerController {
 				System.out.println("Server has accepted a connection.");
 				clientIn = new ObjectInputStream(clientSocket.getInputStream());
 				clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
-				ModelController newShop = new ModelController();
+				ModelController newShop = new ModelController(clientIn, clientOut);
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
 			}
