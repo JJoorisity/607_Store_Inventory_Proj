@@ -1,3 +1,4 @@
+package server.serverControllers;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.Connection;
@@ -13,106 +14,33 @@ import java.util.Scanner;
 // This program allows you to create and manage a store inventory database.
 // It creates a database and datatable, then populates that table with tools from
 // items.txt.
-public class InventoryManager {
+public class DbControllerHelper implements DatabaseConstants {
 	
-	public Connection jdbc_connection;
-	public Statement statement;
-	public String databaseName = "InventoryDB", tableName = "ToolTable", dataFile = "items.txt";
-	
-	// Students should configure these variables for their own MySQL environment
-	// If you have not created your first database in mySQL yet, you can leave the 
-	// "[DATABASE NAME]" blank to get a connection and create one with the createDB() method.
-	public String connectionInfo = "jdbc:mysql://localhost:[PORT NUMBER]/[DATABASE NAME]",  
-				  login          = "",
-				  password       = "";
-
-	public InventoryManager()
-	{
-		try{
-			// If this throws an error, make sure you have added the mySQL connector JAR to the project
-			Class.forName("com.mysql.jdbc.Driver");
-			
-			// If this fails make sure your connectionInfo and login/password are correct
-			jdbc_connection = DriverManager.getConnection(connectionInfo, login, password);
-			System.out.println("Connected to: " + connectionInfo + "\n");
-		}
-		catch(SQLException e) { e.printStackTrace(); }
-		catch(Exception e) { e.printStackTrace(); }
-	}
-	
-	// Use the jdbc connection to create a new database in MySQL. 
-	// (e.g. if you are connected to "jdbc:mysql://localhost:3306", the database will be created at "jdbc:mysql://localhost:3306/InventoryDB")
-	public void createDB()
-	{
-		try {
-			statement = jdbc_connection.createStatement();
-			statement.executeUpdate("CREATE DATABASE " + databaseName);
-			System.out.println("Created Database " + databaseName);
-		} 
-		catch( SQLException e)
-		{
-			e.printStackTrace();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	// Create a data table inside of the database to hold tools
-	public void createTable()
-	{
-		String sql = "CREATE TABLE " + tableName + "(" +
-				     "ID INT(4) NOT NULL, " +
-				     "TOOLNAME VARCHAR(20) NOT NULL, " + 
-				     "QUANTITY INT(4) NOT NULL, " + 
-				     "PRICE DOUBLE(5,2) NOT NULL, " + 
-				     "SUPPLIERID INT(4) NOT NULL, " + 
-				     "PRIMARY KEY ( id ))";
-		try{
-			statement = jdbc_connection.createStatement();
-			statement.executeUpdate(sql);
-			System.out.println("Created Table " + tableName);
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-	}
-
-	// Removes the data table from the database (and all the data held within it!)
-	public void removeTable()
-	{
-		String sql = "DROP TABLE " + tableName;
-		try{
-			statement = jdbc_connection.createStatement();
-			statement.executeUpdate(sql);
-			System.out.println("Removed Table " + tableName);
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
+	public DbControllerHelper() {
 	}
 
 	// Fills the data table with all the tools from the text file 'items.txt' if found
-	public void fillTable()
+	public void fillItemTable()
 	{
 		try{
-			Scanner sc = new Scanner(new FileReader(dataFile));
+			Scanner sc = new Scanner(new FileReader(ITEMFILE));
 			while(sc.hasNext())
 			{
-				String toolInfo[] = sc.nextLine().split(";");
-				addItem( new Tool( Integer.parseInt(toolInfo[0]),
-						                            toolInfo[1],
-						           Integer.parseInt(toolInfo[2]),
-						         Double.parseDouble(toolInfo[3]),
-						           Integer.parseInt(toolInfo[4])) );
+				String itemInfo[] = sc.nextLine().split(";");
+				addItem( new Item( Integer.parseInt(itemInfo[0]),
+						                            itemInfo[1],
+						           Integer.parseInt(itemInfo[2]),
+						         Double.parseDouble(itemInfo[3]),
+						           Integer.parseInt(itemInfo[4]),
+						           					itemInfo[5],
+						           Integer.parseInt(itemInfo[6]),
+						           Integer.parseInt(itemInfo[7])));
 			}
 			sc.close();
 		}
 		catch(FileNotFoundException e)
 		{
-			System.err.println("File " + dataFile + " Not Found!");
+			System.err.println("File " + ITEMFILE + " Not Found!");
 		}
 		catch(Exception e)
 		{
@@ -121,28 +49,17 @@ public class InventoryManager {
 	}
 
 	// Add a tool to the database table
-	public void addItem(Tool tool)
+	public void addItem(Item item)
 	{
-		String sql = "INSERT INTO " + tableName +
-				" VALUES ( " + tool.getID() + ", '" + 
-				tool.getName() + "', " + 
-				tool.getQuantity() + ", " + 
-				tool.getPrice() + ", " + 
-				tool.getSupplierID() + ");";
-		try{
-			statement = jdbc_connection.createStatement();
-			statement.executeUpdate(sql);
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
+		return ("INSERT INTO " + ITEMS +
+				" VALUES ( " + item.sqlInsert());
 	}
 
 	// This method should search the database table for a tool matching the toolID parameter and return that tool.
 	// It should return null if no tools matching that ID are found.
 	public Tool searchTool(int toolID)
 	{
+		// TO DO**
 		String sql = "SELECT * FROM " + tableName + " WHERE ID=" + toolID;
 		ResultSet tool;
 		try {

@@ -10,13 +10,15 @@ import java.sql.*;
 public class DbController implements IDBCredentials {
 
 	// Attributes
-	private Connection conn;// Object of type connection from the JDBC class that deals with connecting to
-	// the database
-	private Statement stmt; // object of type statement from JDBC class that enables the creation "Query
-	// statements"
-	private ResultSet rs;// object of type ResultSet from the JDBC class that stores the result of the
-							// query
+	private Connection conn;	// Object of type connection from the JDBC class that deals with connecting to the database
+	private Statement stmt; 	// object of type statement from JDBC class that enables the creation "Query statements"
+	private ResultSet rs;		// object of type ResultSet from the JDBC class that stores the result of the query
+	private DbControllerHelper helper;
 
+	public DbController() {
+		helper = new DbControllerHelper();
+	}
+	
 	public void initializeConnection() {
 		try {
 			// Register JDBC driver
@@ -28,7 +30,6 @@ public class DbController implements IDBCredentials {
 			System.out.println("Problem");
 			e.printStackTrace();
 		}
-
 	}
 
 	public void close() {
@@ -41,20 +42,9 @@ public class DbController implements IDBCredentials {
 		}
 	}
 
-	public void insertUser() {
-		try {
-			stmt = conn.createStatement();
-			String insert = "INSERT INTO STUDENT (ID, first, last) values (11, 'Joe','Jones')";
-			int rowCount = stmt.executeUpdate(insert);
-			System.out.println("row Count = " + rowCount);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void createTable() {
 
-		String sqlSupp = "CREATE TABLE Suppliers " +
+		String sqlSupp = "CREATE TABLE " + SUPPLIERS +
 				"(supplierId INTEGER not NULL, " +
 				" supplierType VARCHAR(1), " +
 				" supplierName VARCHAR(255), " +
@@ -63,7 +53,7 @@ public class DbController implements IDBCredentials {
 				" importTax DECIMAL(5,2), " +
 				" PRIMARY KEY (supplierId))";
 		
-		String sqlItems = "CREATE TABLE Items " +
+		String sqlItems = "CREATE TABLE " + ITEMS +
 				"(itemId INTEGER not NULL, " +
 				" supplierId INTEGER not NULL, " +
 				" itemType VARCHAR(1), " +
@@ -76,20 +66,20 @@ public class DbController implements IDBCredentials {
 				" PRIMARY KEY (itemId), " +
 				"  CONSTRAINT FK_SuppItem FOREIGN KEY (supplierId) REFERENCES Suppliers(supplierId))";
 		
-		String sqlOrder = "CREATE TABLE Orders " +
+		String sqlOrder = "CREATE TABLE " + ORDERS +
 				"(orderId INTEGER not NULL, " +
 				" orderDate DATE, " +
 				" PRIMARY KEY (orderId))";
 		
 				
-		String sqlOrderLine = "CREATE TABLE Order_Lines " +
+		String sqlOrderLine = "CREATE TABLE " + ORDER_LINES +
 		"( itemId INTEGER not NULL, " +
 		" orderId INTEGER not NULL, " +
 		" orderQty INTEGER, " +
 		" CONSTRAINT FK_LineItem FOREIGN KEY (itemId) REFERENCES Items(itemId), " +
 		" CONSTRAINT FK_LineOrder FOREIGN KEY (orderId) REFERENCES Orders(orderId))";
 
-		String sqlCustomer = "CREATE TABLE Customers " + 
+		String sqlCustomer = "CREATE TABLE " + CUSTOMERS + 
 		"(customerId INTEGER not NULL, " + 
 		" fName VARCHAR(20), " +
 		" lName VARCHAR(20), " + 
@@ -99,7 +89,7 @@ public class DbController implements IDBCredentials {
 		" customerType VARCHAR(1), " +
 		" PRIMARY KEY (customerId))";
 
-		String sqlPurchase = "CREATE TABLE Purchases " + "(customerId INTEGER not NULL, "
+		String sqlPurchase = "CREATE TABLE " + PURCHASES + "(customerId INTEGER not NULL, "
 		+ " itemId INTEGER not NULL, " + 
 		" CONSTRAINT FK_PurchaseCust FOREIGN KEY (customerId) REFERENCES Customers(customerId), " +
 		" CONSTRAINT FK_PurchaseItem FOREIGN KEY (itemId) REFERENCES Items(itemId))";
