@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.*;
 
-public class DbController implements IDBCredentials {
+public class DbController implements DatabaseConstants {
 
 	// Attributes
 	private Connection conn;	// Object of type connection from the JDBC class that deals with connecting to the database

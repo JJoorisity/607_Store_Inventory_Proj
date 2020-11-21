@@ -2,10 +2,13 @@ package server.serverModel;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import sharedModel.Item;
+import sharedModel.Order;
+import sharedModel.OrderLine;
 
 /**
  * Exercise 1 Code
@@ -23,6 +26,7 @@ import sharedModel.Item;
 public class Inventory {
 
 	public LinkedHashSet<Item> itemList;
+	private Order order;
 
 	public Inventory() {
 		this.itemList = new LinkedHashSet<Item>();
@@ -32,29 +36,13 @@ public class Inventory {
 		this.itemList = i;
 	}
 
-	/**
-	 * Lists all items currently in inventory
-	 */
 	public void listAllItems() {
 
-		System.out.format("+-----------------+---------+----------+-----------+%n");
-		System.out.format("| Tool Name       | Tool ID | Quantity | Price ($) |%n");
-		System.out.format("+-----------------+---------+----------+-----------+%n");
-
-		for (Item i : this.itemList) {
-			System.out.println(i);
-		}
-		System.out.format("+-----------------+---------+----------+-----------+%n");
 	}
 
-	/**
-	 * Returns current quantity of input item
-	 * 
-	 * @param input Item name or ID
-	 */
-	public void checkQty(String input) {
+	public String checkQty(String input) {
 		Item tool = returnItem(input);
-		System.out.format("Current Quantity of %s is %d \n\n", tool.getToolName(), tool.getQty());
+		return String.format("Current Quantity of %s is %d \n\n", tool.getItemDesc(), tool.getQty());
 	}
 
 	/**
@@ -63,38 +51,44 @@ public class Inventory {
 	 * @param input Item name or ID.
 	 * @param qty   Quantity to reduce by.
 	 */
-	public void decreaseItem(String input, String qty) {
-		Item tool = returnItem(input);
-		if (tool == null) {
-			System.out.println("Item not in DB\n");
-			return;
+	public boolean decrement(String ItemID, int qty) {
+		Item item = returnItem(ItemID);
+		if (item == null) {
+			return false;
 		}
-		if (qty.compareTo("nullEnter") == 0) { // set in sanitize input.
-			qty = "1";
-		}
-		if (tool.getQty() - Integer.parseInt(qty) >= 0) {
-			System.out.format("Updated Qty of %s: %d -> %d \n\n", tool.getToolName(), tool.getQty(),
-					tool.getQty() - Integer.parseInt(qty));
-			tool.setQty(tool.getQty() - Integer.parseInt(qty));
-		} else {
-			System.out.format("Too few in stock to reduce by %s. \n", qty);
-			this.checkQty(input);
 
+		if (item.getQty() - qty >= 0) {
+			item.setQty(item.getQty() - qty);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
+	// success message to GUI
 	/**
-	 * Prints item information of item in database based on passed item name.
+	 * return String.format("Updated Qty of %s: %d -> %d \n\n", item.getItemDesc(),
+	 * item.getQty(), item.getQty() - qty);
 	 * 
-	 * @param itemName Tool name of item to be found.
+	 * } else { return String.format("Cannot decrement, quantity in stock = %s. \n",
+	 * item.getQty());
+	 * 
+	 * } }
 	 */
+	private int updateOrder(Item item) {
+		// query orderline table to check for existing order id and Item. if exists
+		// update order, if not add.
+		return generateOrderID();
+
+	}
+
 	public void searchByName(String itemName) {
 
 		Iterator<Item> itr = this.itemList.iterator();
 
 		while (itr.hasNext()) {
 			Item tool = itr.next();
-			if (tool.getToolName().toLowerCase().strip().compareTo(itemName.toLowerCase().strip()) == 0) {
+			if (tool.getItemDesc().toLowerCase().strip().compareTo(itemName.toLowerCase().strip()) == 0) {
 				System.out.format("+-----------------+---------+----------+-----------+%n");
 				System.out.format("| Tool Name       | Tool ID | Quantity | Price ($) |%n");
 				System.out.format("+-----------------+---------+----------+-----------+%n");
@@ -117,7 +111,7 @@ public class Inventory {
 		int intID = Integer.parseInt(ID);
 		while (itr.hasNext()) {
 			Item tool = itr.next();
-			if (tool.getToolID() == intID) {
+			if (tool.getItemID() == intID) {
 				System.out.format("+-----------------+---------+----------+-----------+%n");
 				System.out.format("| Tool Name       | Tool ID | Quantity | Price ($) |%n");
 				System.out.format("+-----------------+---------+----------+-----------+%n");
@@ -141,10 +135,10 @@ public class Inventory {
 			Item tool = itr.next();
 			if (input.matches("-?\\d+") == true) {
 				int intID = Integer.parseInt(input);
-				if (tool.getToolID() == intID) {
+				if (tool.getItemID() == intID) {
 					return tool;
 				}
-			} else if (tool.getToolName().toLowerCase().strip().compareTo(input.toLowerCase().strip()) == 0) {
+			} else if (tool.getItemDesc().toLowerCase().strip().compareTo(input.toLowerCase().strip()) == 0) {
 				return tool;
 			}
 		}
@@ -158,14 +152,13 @@ public class Inventory {
 	 * @param input Item name or ID to return Item from inventory
 	 * @return returns 5 digit unique order ID
 	 */
-	public int generateOrderID(String input) {
+	public int generateOrderID() {
 		LocalDate now = LocalDate.now();
 		LocalDate epoch = LocalDate.ofEpochDay(0);
 		long dateHash = ChronoUnit.DAYS.between(epoch, now);
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((int) dateHash);
-		result = prime * result + (int) (this.returnItem(input).getToolID() ^ 2);
 		return result = result % 100000; // returns between 00000-99999
 	}
 

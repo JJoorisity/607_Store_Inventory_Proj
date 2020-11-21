@@ -9,9 +9,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Server class to initialize the server and run a game of Tic-Tac-Toe for two
+ * Server class to run shop inventory server
  * Client classes.
- * @author JJoorisity
+ * @author JJoorisity NJacl
  * @version 1.0
  * @since 2020-11-06
  */
@@ -21,6 +21,7 @@ public class ServerController {
 	private ObjectInputStream clientIn;
 	private ObjectOutputStream clientOut;
 	private ExecutorService pool;
+	private ModelController modelController;
 		
 	/**
 	 * Initialize the serverSocket and thread pool.

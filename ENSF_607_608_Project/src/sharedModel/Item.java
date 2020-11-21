@@ -1,5 +1,6 @@
 package sharedModel;
 
+import java.sql.PreparedStatement;
 import java.util.Objects;
 
 /**
@@ -16,44 +17,47 @@ import java.util.Objects;
  */
 public class Item {
 
-	private int toolID;
-	private String toolName;
-	private int qty;
-	private double price;
-	private String supplier;
-	private static final int ORDERQTYLIMIT = 40;
+	protected int itemID;
+	protected char itemType;
+	protected String itemDesc;
+	protected int qty;
+	protected double price;
+	protected int supplierID;
+	public final int ORDERQTYLIMIT = 40;
 
 	/**
 	 * Constructor, requires all inputs to be initialized
 	 * 
-	 * @param toolID integer tool ID from txt file
-	 * @param toolName String tool name from txt file 
-	 * @param qty integer qty from txt file
-	 * @param price double price from txt file
+	 * @param itemID     integer itemID from txt file
+	 * @param itemName   String item name from txt file
+	 * @param qty        integer qty from txt file
+	 * @param price      double price from txt file
 	 * @param supplierID String of numerical supplier id
 	 */
-	public Item(int toolID, String toolName, int qty, double price, String supplierID) {
-		this.setToolID(toolID);
-		this.setToolName(toolName);
+	public Item(int itemID, char itemType, String itemDesc, int qty, double price, int supplierID) {
+		this.setItemID(itemID);
+		this.setItemType(itemType);
+		this.setItemDesc(itemDesc);
 		this.setQty(qty);
 		this.setPrice(price);
 		this.setSupplierID(supplierID);
+
 	}
 
-	public int getToolID() {
-		return toolID;
+	public int getItemID() {
+		return itemID;
 	}
 
-	public void setToolID(int toolID) {
-		this.toolID = toolID;
+	public void setItemID(int itemID) {
+		this.itemID = itemID;
 	}
 
-	public String getToolName() {
-		return toolName;
+	public String getItemDesc() {
+		return itemDesc;
 	}
 
-	public void setToolName(String toolName) {
-		this.toolName = toolName;
+	public void setItemDesc(String itemDesc) {
+		this.itemDesc = itemDesc;
 	}
 
 	public int getQty() {
@@ -72,12 +76,20 @@ public class Item {
 		this.price = price;
 	}
 
-	public String getSupplierID() {
-		return this.supplier;
+	public int getSupplierID() {
+		return this.supplierID;
 	}
 
-	public void setSupplierID(String supplier) {
-		this.supplier = supplier;
+	public void setSupplierID(int supplier) {
+		this.supplierID = supplier;
+	}
+
+	public char getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(char itemType) {
+		this.itemType = itemType;
 	}
 
 	/**
@@ -88,7 +100,7 @@ public class Item {
 	public String toString() {
 
 		String leftAlignFormat = "| %-15s | %-7d | %-8d | %-9.2f |";
-		String res = String.format(leftAlignFormat, this.getToolName(), this.getToolID(), this.getQty(),
+		String res = String.format(leftAlignFormat, this.getItemDesc(), this.getItemID(), this.getQty(),
 				this.getPrice());
 		return res;
 
@@ -98,7 +110,7 @@ public class Item {
 	 * {@inheritDoc} ensures item objects are compared using their item ID's only
 	 * and not as a hash of all vars
 	 * 
-	 * @return boolean t/f based on toolID integer comparison
+	 * @return boolean t/f based on ItemId integer comparison
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -107,7 +119,7 @@ public class Item {
 		if (!(obj instanceof Item))
 			flag = false;
 		if (obj instanceof Item)
-			if (((Item) obj).getToolID() == this.getToolID()) {
+			if (((Item) obj).getItemID() == this.getItemID()) {
 				flag = true;
 			} else {
 				flag = false;
@@ -121,11 +133,20 @@ public class Item {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(this.getToolID());
+		return Objects.hashCode(this.getItemID());
 	}
 
-	public static int getOrderqtylimit() {
-		return ORDERQTYLIMIT;
+	/**
+	 * "(itemId + " supplierId INTEGER not NULL, " + " itemType VARCHAR(1), " + "
+	 * itemDesc VARCHAR(255), " + " itemPrice DECIMAL(5,2), " + " itemQty INTEGER, "
+	 * + " powerType VARCHAR(10), " + " V INTEGER, " + " Ph INTEGER, " +
+	 * 
+	 * @return
+	 */
+	public String sqlInsert() {
+		return this.itemID + ", " + this.supplierID + ", " + this.itemType + ", " + this.itemDesc + ", " + this.price
+				+ ", " + this.qty + ",NULL,NULL,NULL";
+
 	}
 
 }

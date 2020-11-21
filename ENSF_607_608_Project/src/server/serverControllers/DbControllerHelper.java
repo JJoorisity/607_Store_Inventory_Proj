@@ -12,7 +12,7 @@ import java.util.Scanner;
 // Pre-Project Exercise 
 
 // This program allows you to create and manage a store inventory database.
-// It creates a database and datatable, then populates that table with tools from
+// It creates a database and data table, then populates that table with tools from
 // items.txt.
 public class DbControllerHelper implements DatabaseConstants {
 	

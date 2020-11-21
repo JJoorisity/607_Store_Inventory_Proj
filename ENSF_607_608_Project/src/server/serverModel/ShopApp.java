@@ -25,8 +25,7 @@ public class ShopApp {
 
 	private Inventory inventory;
 	private LinkedHashSet<Supplier> supplierList;
-	private HashMap<Integer, Order> orderlist = new HashMap<Integer, Order>();
-	private FileManager fileMgr;
+	private FileManager fileMgr; // goes to dbcontroller
 
 	public ShopApp() throws IOException {
 		this.fileMgr = new FileManager("items.txt", "suppliers.txt");
@@ -253,6 +252,10 @@ public class ShopApp {
 		} else {
 			return false;
 		}
+	}
+	
+	public Inventory getInventory() {
+		return this.inventory;
 	}
 
 	public static void main(String[] args) throws IOException {
