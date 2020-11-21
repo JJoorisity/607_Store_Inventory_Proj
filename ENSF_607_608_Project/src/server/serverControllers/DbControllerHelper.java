@@ -1,148 +1,106 @@
 package server.serverControllers;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
+import sharedModel.*;
 
 // Pre-Project Exercise 
 
 // This program allows you to create and manage a store inventory database.
 // It creates a database and data table, then populates that table with tools from
 // items.txt.
-public class DbControllerHelper implements DatabaseConstants {
+public class DbControllerHelper implements DatabaseTables {
 	
 	public DbControllerHelper() {
 	}
-
-	// Fills the data table with all the tools from the text file 'items.txt' if found
-	public void fillItemTable()
-	{
-		try{
-			Scanner sc = new Scanner(new FileReader(ITEMFILE));
-			while(sc.hasNext())
-			{
-				String itemInfo[] = sc.nextLine().split(";");
-				addItem( new Item( Integer.parseInt(itemInfo[0]),
-						                            itemInfo[1],
-						           Integer.parseInt(itemInfo[2]),
-						         Double.parseDouble(itemInfo[3]),
-						           Integer.parseInt(itemInfo[4]),
-						           					itemInfo[5],
-						           Integer.parseInt(itemInfo[6]),
-						           Integer.parseInt(itemInfo[7])));
+	
+	// Fills the data table with all the tools from the text file 'items.txt' if
+	// found
+	public ArrayList<Object> importFromTxt(Object obj, String filename) {
+		ArrayList<Object> list = new ArrayList<Object>();
+		try {
+			Scanner sc = new Scanner(new FileReader(filename));
+			while (sc.hasNext()) {
+				String fileInfo[] = sc.nextLine().split(";");
+				if (filename == ITEMS)
+					list.add(getItemFromTxt(fileInfo));
+				else if (filename == SUPPLIERS)
+					list.add(getSupplierFromTxt(fileInfo));
+				else if (filename == CUSTOMERS)
+					list.add(getCustomerFromTxt(fileInfo));
 			}
 			sc.close();
-		}
-		catch(FileNotFoundException e)
-		{
-			System.err.println("File " + ITEMFILE + " Not Found!");
-		}
-		catch(Exception e)
-		{
+		} catch (FileNotFoundException e) {
+			System.err.println("File " + filename + " Not Found!");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return list;
 	}
-
-	// Add a tool to the database table
-	public void addItem(Item item)
-	{
-		return ("INSERT INTO " + ITEMS +
-				" VALUES ( " + item.sqlInsert());
-	}
-
-	// This method should search the database table for a tool matching the toolID parameter and return that tool.
-	// It should return null if no tools matching that ID are found.
-	public Tool searchTool(int toolID)
-	{
-		// TO DO**
-		String sql = "SELECT * FROM " + tableName + " WHERE ID=" + toolID;
-		ResultSet tool;
-		try {
-			statement = jdbc_connection.createStatement();
-			tool = statement.executeQuery(sql);
-			if(tool.next())
-			{
-				return new Tool(tool.getInt("ID"),
-								tool.getString("TOOLNAME"), 
-								tool.getInt("QUANTITY"), 
-								tool.getDouble("PRICE"), 
-								tool.getInt("SUPPLIERID"));
-			}
 		
-		} catch (SQLException e) { e.printStackTrace(); }
-		
-		return null;
-	}
-
-	// Prints all the items in the database to console
-	public void printTable()
-	{
-		try {
-			String sql = "SELECT * FROM " + tableName;
-			statement = jdbc_connection.createStatement();
-			ResultSet tools = statement.executeQuery(sql);
-			System.out.println("Tools:");
-			while(tools.next())
-			{
-				System.out.println(tools.getInt("ID") + " " + 
-								   tools.getString("TOOLNAME") + " " + 
-								   tools.getInt("QUANTITY") + " " + 
-								   tools.getDouble("PRICE") + " " + 
-								   tools.getInt("SUPPLIERID"));
-			}
-			tools.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	public Item getItemFromTxt(String fileInfo[]) {
+		// non-electric item:
+		if (fileInfo[5] != "NULL") {
+			return new Item_Elec( Integer.parseInt(fileInfo[0]),
+					fileInfo[1].charAt(0),
+					fileInfo[2],
+					Integer.parseInt(fileInfo[3]),
+					Double.parseDouble(fileInfo[4]),
+					Integer.parseInt(fileInfo[5]),
+					fileInfo[6],
+					Integer.parseInt(fileInfo[7]),
+					Integer.parseInt(fileInfo[8]));
+		} else {
+			return new Item( Integer.parseInt(fileInfo[0]),
+					fileInfo[1].charAt(0),
+					fileInfo[2],
+					Integer.parseInt(fileInfo[3]),
+					Double.parseDouble(fileInfo[4]),
+					Integer.parseInt(fileInfo[5]));
 		}
+	}
+		
+	public Supplier getSupplierFromTxt(String fileInfo[]) {
+		if (fileInfo[5] != "NULL") {
+			return new Int_Supplier( Integer.parseInt(fileInfo[0]),
+					fileInfo[1].charAt(0),
+					fileInfo[2],
+					fileInfo[3],
+					fileInfo[4],
+					Double.parseDouble(fileInfo[5]));
+		} else {
+			return new Supplier( Integer.parseInt(fileInfo[0]),
+					fileInfo[1].charAt(0),
+					fileInfo[2],
+					fileInfo[3],
+					fileInfo[4]);
+		}
+	}
+		
+	public Customer getCustomerFromTxt(String fileInfo[]) {
+		return new Customer(Integer.parseInt(fileInfo[0]),
+											 fileInfo[1],
+											 fileInfo[2],
+											 fileInfo[3],
+											 fileInfo[4],
+											 fileInfo[5],
+											 fileInfo[6].charAt(0));
 	}
 	
-	public static void main(String args[])
-	{
-		InventoryManager inventory = new InventoryManager();
-		
-		// You should comment this line out once the first database is created (either here or in MySQL workbench)
-		inventory.createDB();
-
-		inventory.createTable();
-		
-		System.out.println("\nFilling the table with tools");
-		inventory.fillTable();
-
-		System.out.println("Reading all tools from the table:");
-		inventory.printTable();
-
-		System.out.println("\nSearching table for tool 1002: should return 'Grommets'");
-		int toolID = 1002;
-		Tool searchResult = inventory.searchTool(toolID);
-		if(searchResult == null)
-			System.out.println("Search Failed to find a tool matching ID: " + toolID);
-		else
-			System.out.println("Search Result: " + searchResult.toString());
-
-		System.out.println("\nSearching table for tool 9000: should fail to find a tool");
-		toolID = 9000;
-		searchResult = inventory.searchTool(toolID);
-		if(searchResult == null)
-			System.out.println("Search Failed to find a tool matching ID: " + toolID);
-		else
-			System.out.println("Search Result: " + searchResult.toString());
-		
-		System.out.println("\nTrying to remove the table");
-		inventory.removeTable();
-		
-		try {
-			inventory.statement.close();
-			inventory.jdbc_connection.close();
-		} 
-		catch (SQLException e) { e.printStackTrace(); }
-		finally
-		{
-			System.out.println("\nThe program is finished running");
-		}
+	public String insert() {
+		return ("INSERT INTO $tablename VALUES (?)");
+	}
+	
+	public String updateOrderLine() {
+		return ("UPDATE " + ORDER_LINES + " SET orderQty = ? WHERE itemId = ? AND orderId= ?");
+	}
+	
+	public String queryOrderLine() {
+		return ("SELECT * FROM " + ORDER_LINES + " WHERE itemId = ? AND orderId = ?");
+	}
+	
+	public String queryOrder() {
+		return ("SELECT * FROM " + ORDERS + " WHERE orderId = ?");
 	}
 }

@@ -59,13 +59,13 @@ public class Order {
 	/**
 	 * Generates orderline string based on Order member variables
 	 */
-	private String addOrderLine(Item item, int qty) {
-		OrderLine temp = new OrderLine(item, qty);		
+	public String addOrderLine(int itemId, int qty) {
+		OrderLine temp = new OrderLine(itemId, qty);		
 		return this.orderLineSqlInsert(temp);
 	}
 
 	public String orderLineSqlInsert(OrderLine temp) {
-		return temp.getItem().getItemID() + ", " + this.getOrderID() + ", " + temp.getOrderQty();
+		return temp.getItemId() + ", " + this.getOrderID() + ", " + temp.getOrderQty();
 	}
 	
 	public String orderSqlInsert() {

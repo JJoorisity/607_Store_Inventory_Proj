@@ -5,9 +5,12 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import sharedModel.*;
 import java.sql.*;
 
-public class DbController implements DatabaseConstants {
+public class DbController implements DatabaseConstants, DatabaseTables {
 
 	// Attributes
 	private Connection conn;	// Object of type connection from the JDBC class that deals with connecting to the database
@@ -109,22 +112,92 @@ public class DbController implements DatabaseConstants {
 		}
 		System.out.println("Created table in given database...");
 	}
-
-	private void insertUserPreparedStatment(int i, String fName, String lName) {
-		// TODO Auto-generated method stub
+	
+	public void initializeItemTable() {
+		ArrayList<Item> newItems = helper.getItemsFromTxt();
+		for (Item item: newItems) {
+			this.insert(ITEMS, item.sqlInsert());
+		}
+	}
+	
+	public void initializeSupplierTable() {
+		ArrayList<Supplier> newSuppliers = helper.getSuppliersFromTxt();
+		for (Supplier supplier: newSuppliers) {
+			this.insert(ITEMS, supplier.sqlInsert());
+		}
+	}
+	
+	public void initializeCustomerTable() {
+		ArrayList<Item> newItems = helper.getItemsFromTxt();
+		for (Item item: newItems) {
+			this.insert(ITEMS, item.sqlInsert());
+		}
+	}
+	
+	public void insert(String tableName, String sqlString) {
 		try {
-			String query = "INSERT INTO STUDENT (ID, first, last) values (?,?,?)";
+			String query = helper.insert();
+			query = query.replace("$tablename", tableName);
 			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setInt(1, i);
-			pStat.setString(2, fName);
-			pStat.setString(3, lName);
+			pStat.setString(1, sqlString);
 			int rowCount = pStat.executeUpdate();
 			System.out.println("row Count = " + rowCount);
 			pStat.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.err.println("insert failed with " + tableName + " and " + sqlString);
 		}
-
+	}
+	
+	public void updateOrderLine(String sqlString) {
+		String[] res = sqlString.split(",");
+		try {
+			String query = helper.updateOrderLine();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setString(1, res[2]);
+			pStat.setString(2, res[0]);
+			pStat.setString(3, res[1]);
+			int rowCount = pStat.executeUpdate();
+			System.out.println("row Count = " + rowCount);
+			pStat.close();
+		} catch (SQLException e) {
+			System.err.println("updateOrderLine failed with " + sqlString);
+		}
+	}
+	
+	public OrderLine queryOrderLine(int itemId, int orderId) {
+		try {
+			String query = helper.queryOrderLine();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, itemId);
+			pStat.setInt(2, orderId);
+			ResultSet results = pStat.executeQuery();
+			pStat.close();
+			
+			if(results.next()) {
+				return new OrderLine(results.getInt("itemId"),
+								results.getInt("orderId"));
+			}
+		} catch (SQLException e) {
+			System.err.println("queryOrderLine failed with " + itemId + " and " + orderId);
+		}
+		return null;
+	}
+	
+	public Order queryOrder(int orderId) {
+		try {
+			String query = helper.queryOrder();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, orderId);
+			ResultSet results = pStat.executeQuery();
+			pStat.close();
+			
+			if(results.next()) {
+				return new Order(results.getInt("orderId"));
+			}
+		} catch (SQLException e) {
+			System.err.println("queryOrder failed with " + orderId);
+		}
+		return null;
 	}
 
 	public static void main(String[] args0) {

@@ -3,16 +3,14 @@ package server.serverControllers;
 import server.serverModel.*;
 import sharedModel.*;
 
-public class ModelController implements Runnable {
+public class ModelController implements Runnable, DatabaseTables {
 
 	private DbController dbController;
 	private ShopApp shop;
 
 	// serlize item into object
 	// need int qty for item order
-
-	public boolean executePurchase() {
-
+	public boolean executePurchase(Item item, int qty) {
 		// uses dbcontroller to query db
 		// uses ShopApp to provide info to query with
 		if (shop.getInventory().decrement(item, qty)) {
@@ -20,20 +18,21 @@ public class ModelController implements Runnable {
 			int i = shop.getInventory().generateOrderID();
 			Order temp = this.dbController.queryOrder(i);
 			if (temp == null) {
-				temp = shop.getInventory().createOrder(item, qty, i);
-				dbController.insertOrder(temp.orderSqlInsert());
+				temp = new Order(i);
+				dbController.insert(ORDERS, temp.orderSqlInsert());
 			}
 			OrderLine templine = this.dbController.queryOrderLine(item.getItemID(), temp.getOrderID());
-			String sqlLine = temp.addOrderLine(item, qty);
+			String sqlLine = temp.addOrderLine(item.getItemID(), qty);
 
 			if (templine == null) {
-				dbController.insertOrderLine(sqlLine);
+				dbController.insert(ORDER_LINES, sqlLine);
+				return true;
 			} else {
-				dbController.updateOrderLine(sqlLine, templine); // sqlline = new data, templine = old object
+				dbController.updateOrderLine(sqlLine); // sqlline = new data
+				return true;
 			}
-
 		}
-
+		return false;
 	}
 
 	@Override

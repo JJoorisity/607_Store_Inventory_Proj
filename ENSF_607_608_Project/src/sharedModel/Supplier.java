@@ -15,7 +15,8 @@ import java.util.Objects;
  */
 public class Supplier {
 
-	private String supplierID;
+	private int supplierID;
+	private char supplierType;
 	private String companyName;
 	private String address;
 	private String salesContact;
@@ -28,8 +29,9 @@ public class Supplier {
 	 * @param address
 	 * @param salesContact
 	 */
-	public Supplier(String supplierID, String companyName, String address, String salesContact) {
+	public Supplier(int supplierID, char supplierType, String companyName, String address, String salesContact) {
 		this.setSupplierID(supplierID);
+		this.setSupplierType(supplierType);
 		this.setCompanyName(companyName);
 		this.setAddress(address);
 		this.setSalesContact(salesContact);
@@ -51,12 +53,12 @@ public class Supplier {
 		this.salesContact = salesContact;
 	}
 
-	public String getSupplierID() {
+	public int getSupplierID() {
 		return supplierID;
 	}
 
-	public void setSupplierID(String supplierID) {
-		this.supplierID = supplierID;
+	public void setSupplierID(int supplierID2) {
+		this.supplierID = supplierID2;
 	}
 
 	public String getCompanyName() {
@@ -65,6 +67,14 @@ public class Supplier {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public char getSupplierType() {
+		return supplierType;
+	}
+
+	public void setSupplierType(char supplierType) {
+		this.supplierType = supplierType;
 	}
 
 	/**

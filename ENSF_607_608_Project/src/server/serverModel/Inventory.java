@@ -51,8 +51,7 @@ public class Inventory {
 	 * @param input Item name or ID.
 	 * @param qty   Quantity to reduce by.
 	 */
-	public boolean decrement(String ItemID, int qty) {
-		Item item = returnItem(ItemID);
+	public boolean decrement(Item item, int qty) {
 		if (item == null) {
 			return false;
 		}
