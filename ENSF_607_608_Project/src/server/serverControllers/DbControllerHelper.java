@@ -17,17 +17,17 @@ public class DbControllerHelper implements DatabaseTables {
 	
 	// Fills the data table with all the tools from the text file 'items.txt' if
 	// found
-	public ArrayList<Object> importFromTxt(Object obj, String filename) {
+	public ArrayList<Object> importFromTxt(String filename) {
 		ArrayList<Object> list = new ArrayList<Object>();
 		try {
 			Scanner sc = new Scanner(new FileReader(filename));
 			while (sc.hasNext()) {
 				String fileInfo[] = sc.nextLine().split(";");
-				if (filename == ITEMS)
+				if (filename.equals(ITEMFILE))
 					list.add(getItemFromTxt(fileInfo));
-				else if (filename == SUPPLIERS)
+				else if (filename.equals(SUPPLIERFILE))
 					list.add(getSupplierFromTxt(fileInfo));
-				else if (filename == CUSTOMERS)
+				else if (filename.equals(CUSTOMERFILE))
 					list.add(getCustomerFromTxt(fileInfo));
 			}
 			sc.close();

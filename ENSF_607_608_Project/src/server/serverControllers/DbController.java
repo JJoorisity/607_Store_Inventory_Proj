@@ -114,25 +114,25 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	}
 	
 	public void initializeItemTable() {
-		ArrayList<Item> newItems = helper.getItemsFromTxt();
-		for (Item item: newItems) {
-			this.insert(ITEMS, item.sqlInsert());
+		ArrayList<Object> newItems = helper.importFromTxt(ITEMFILE);
+		for (Object item: newItems) {
+			this.insert(ITEMS, ((Item) item).sqlInsert());
 		}
 	}
 	
-	public void initializeSupplierTable() {
-		ArrayList<Supplier> newSuppliers = helper.getSuppliersFromTxt();
-		for (Supplier supplier: newSuppliers) {
-			this.insert(ITEMS, supplier.sqlInsert());
-		}
-	}
-	
-	public void initializeCustomerTable() {
-		ArrayList<Item> newItems = helper.getItemsFromTxt();
-		for (Item item: newItems) {
-			this.insert(ITEMS, item.sqlInsert());
-		}
-	}
+//	public void initializeSupplierTable() {
+//		ArrayList<Supplier> newSuppliers = helper.getSuppliersFromTxt();
+//		for (Supplier supplier: newSuppliers) {
+//			this.insert(ITEMS, supplier.sqlInsert());
+//		}
+//	}
+//	
+//	public void initializeCustomerTable() {
+//		ArrayList<Item> newItems = helper.getItemsFromTxt();
+//		for (Item item: newItems) {
+//			this.insert(ITEMS, item.sqlInsert());
+//		}
+//	}
 	
 	public void insert(String tableName, String sqlString) {
 		try {
@@ -203,10 +203,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	public static void main(String[] args0) {
 		DbController myApp = new DbController();
 		myApp.initializeConnection();
+		myApp.initializeItemTable();
 		// myApp.createTable();
 		// myApp.insertUser();
 		// myApp.insertUserPreparedStatment(1, "sam", "Smith");
-		// myApp.close();
+		myApp.close();
 	}
 
 }
