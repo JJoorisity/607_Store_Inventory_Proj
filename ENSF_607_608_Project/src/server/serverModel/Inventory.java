@@ -74,12 +74,6 @@ public class Inventory {
 	 * 
 	 * } }
 	 */
-	private int updateOrder(Item item) {
-		// query orderline table to check for existing order id and Item. if exists
-		// update order, if not add.
-		return generateOrderID();
-
-	}
 
 	public void searchByName(String itemName) {
 

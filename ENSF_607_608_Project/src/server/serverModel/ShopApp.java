@@ -25,10 +25,8 @@ public class ShopApp {
 
 	private Inventory inventory;
 	private LinkedHashSet<Supplier> supplierList;
-	private FileManager fileMgr; // goes to dbcontroller
 
 	public ShopApp() throws IOException {
-		this.fileMgr = new FileManager("items.txt", "suppliers.txt");
 		this.inventory = new Inventory();
 	}
 

@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import server.serverModel.ShopApp;
+
 /**
  * Server class to run shop inventory server
  * Client classes.
@@ -46,8 +48,12 @@ public class ServerController {
 				System.out.println("Server has accepted a connection.");
 				clientIn = new ObjectInputStream(clientSocket.getInputStream());
 				clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
-
-				ModelController newShop = new ModelController(clientIn, clientOut);
+				
+				DbController myDB = new DbController();
+				myDB.initializeConnection();
+				ShopApp myShop = new ShopApp();
+				ModelController newShop = new ModelController(clientIn, clientOut,myDB,myShop);
+				
 
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
