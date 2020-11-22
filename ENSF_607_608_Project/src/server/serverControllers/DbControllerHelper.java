@@ -40,42 +40,14 @@ public class DbControllerHelper implements DatabaseTables {
 	}
 		
 	public Item getItemFromTxt(String fileInfo[]) {
-		// non-electric item:
-		if (fileInfo[5] != "NULL") {
-			return new Item_Elec( Integer.parseInt(fileInfo[0]),
-					fileInfo[1].charAt(0),
-					fileInfo[2],
-					Integer.parseInt(fileInfo[3]),
-					Double.parseDouble(fileInfo[4]),
-					Integer.parseInt(fileInfo[5]),
-					fileInfo[6],
-					Integer.parseInt(fileInfo[7]),
-					Integer.parseInt(fileInfo[8]));
-		} else {
-			return new Item( Integer.parseInt(fileInfo[0]),
-					fileInfo[1].charAt(0),
-					fileInfo[2],
-					Integer.parseInt(fileInfo[3]),
-					Double.parseDouble(fileInfo[4]),
-					Integer.parseInt(fileInfo[5]));
-		}
+		return new Item_Elec(Integer.parseInt(fileInfo[0]), fileInfo[1].charAt(0), fileInfo[2],
+				Integer.parseInt(fileInfo[3]), Double.parseDouble(fileInfo[4]), Integer.parseInt(fileInfo[5]),
+				fileInfo[6], Integer.parseInt(fileInfo[7]), Integer.parseInt(fileInfo[8]));
 	}
 		
 	public Supplier getSupplierFromTxt(String fileInfo[]) {
-		if (fileInfo[5] != "NULL") {
-			return new Int_Supplier( Integer.parseInt(fileInfo[0]),
-					fileInfo[1].charAt(0),
-					fileInfo[2],
-					fileInfo[3],
-					fileInfo[4],
-					Double.parseDouble(fileInfo[5]));
-		} else {
-			return new Supplier( Integer.parseInt(fileInfo[0]),
-					fileInfo[1].charAt(0),
-					fileInfo[2],
-					fileInfo[3],
-					fileInfo[4]);
-		}
+		return new Int_Supplier(Integer.parseInt(fileInfo[0]), fileInfo[1].charAt(0), fileInfo[2], fileInfo[3],
+				fileInfo[4], Double.parseDouble(fileInfo[5]));
 	}
 		
 	public Customer getCustomerFromTxt(String fileInfo[]) {
@@ -88,8 +60,16 @@ public class DbControllerHelper implements DatabaseTables {
 											 fileInfo[6].charAt(0));
 	}
 	
-	public String insert() {
-		return ("INSERT INTO $tablename VALUES (?)");
+	public String insertItem() {
+		return ("INSERT INTO " + ITEMS + " VALUES (?,?,?,?,?,?,?,?,?)");
+	}
+	
+	public String insertSupplier() {
+		return ("INSERT INTO " + SUPPLIERS + " VALUES (?,?,?,?,?,?)");
+	}
+	
+	public String insertCustomer() {
+		return ("INSERT INTO " + CUSTOMERS + " VALUES (?)");
 	}
 	
 	public String updateOrderLine() {

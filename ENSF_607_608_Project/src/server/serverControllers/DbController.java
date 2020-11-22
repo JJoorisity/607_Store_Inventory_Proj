@@ -116,35 +116,82 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	public void initializeItemTable() {
 		ArrayList<Object> newItems = helper.importFromTxt(ITEMFILE);
 		for (Object item: newItems) {
-			this.insert(ITEMS, ((Item) item).sqlInsert());
+			this.insertItem((Item_Elec) item);
 		}
 	}
 	
-//	public void initializeSupplierTable() {
-//		ArrayList<Supplier> newSuppliers = helper.getSuppliersFromTxt();
-//		for (Supplier supplier: newSuppliers) {
-//			this.insert(ITEMS, supplier.sqlInsert());
-//		}
-//	}
-//	
-//	public void initializeCustomerTable() {
-//		ArrayList<Item> newItems = helper.getItemsFromTxt();
-//		for (Item item: newItems) {
-//			this.insert(ITEMS, item.sqlInsert());
-//		}
-//	}
+	public void initializeSupplierTable() {
+		ArrayList<Object> newSuppliers = helper.importFromTxt(SUPPLIERFILE);
+		for (Object s: newSuppliers) {
+			this.insertSupplier((Int_Supplier) s);
+		}
+	}
 	
-	public void insert(String tableName, String sqlString) {
+	public void initializeCustomerTable() {
+		ArrayList<Object> newCustomers = helper.importFromTxt(CUSTOMERFILE);
+		for (Object c: newCustomers) {
+			this.insertCustomer((Customer) c);
+		}
+	}
+	
+	public void insertItem(Item_Elec item) {
 		try {
-			String query = helper.insert();
-			query = query.replace("$tablename", tableName);
+			String query = helper.insertItem();
 			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setString(1, sqlString);
+			pStat.setInt(1, item.getItemID());
+			pStat.setInt(2, item.getSupplierID());
+			pStat.setString(3, String.valueOf(item.getItemType()));
+			pStat.setString(4, item.getItemDesc());
+			pStat.setDouble(5, item.getPrice());
+			pStat.setInt(6, item.getQty());
+			pStat.setString(7, item.getPowerType());
+			pStat.setInt(8, item.getVoltage());
+			pStat.setInt(9, item.getPhase());
 			int rowCount = pStat.executeUpdate();
 			System.out.println("row Count = " + rowCount);
 			pStat.close();
 		} catch (SQLException e) {
-			System.err.println("insert failed with " + tableName + " and " + sqlString);
+			System.err.println("insert failed with " + ITEMS + " and " + item.getItemID());
+			e.printStackTrace();
+		}
+	}
+	
+	public void insertSupplier(Int_Supplier supplier) {
+		try {
+			String query = helper.insertSupplier();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, supplier.getSupplierID());
+			pStat.setString(2, String.valueOf(supplier.getSupplierType()));
+			pStat.setString(3, supplier.getCompanyName());
+			pStat.setString(4, supplier.getSalesContact());
+			pStat.setString(5, supplier.getAddress());
+			pStat.setDouble(6, supplier.getImportTax());
+			int rowCount = pStat.executeUpdate();
+			System.out.println("row Count = " + rowCount);
+			pStat.close();
+		} catch (SQLException e) {
+			System.err.println("insert failed with " + SUPPLIERS + " and " + supplier.getSupplierID());
+			e.printStackTrace();
+		}
+	}
+	
+	public void insertCustomer(Customer customer) {
+		try {
+			String query = helper.insertCustomer();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, customer.getCustomerId());
+			pStat.setString(2, customer.getFirstName());
+			pStat.setString(3, customer.getLastName());
+			pStat.setString(4, customer.getAddress());
+			pStat.setString(5, customer.getPostalCode());
+			pStat.setString(6, customer.getPhoneNum());
+			pStat.setString(7, String.valueOf(customer.getCustomerType()));
+			int rowCount = pStat.executeUpdate();
+			System.out.println("row Count = " + rowCount);
+			pStat.close();
+		} catch (SQLException e) {
+			System.err.println("insert failed with " + CUSTOMERS + " and " + customer.getCustomerId());
+			e.printStackTrace();
 		}
 	}
 	
@@ -204,6 +251,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		DbController myApp = new DbController();
 		myApp.initializeConnection();
 		myApp.initializeItemTable();
+		//myApp.initializeSupplierTable();
 		// myApp.createTable();
 		// myApp.insertUser();
 		// myApp.insertUserPreparedStatment(1, "sam", "Smith");
