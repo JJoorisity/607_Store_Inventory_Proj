@@ -69,7 +69,7 @@ public class DbControllerHelper implements DatabaseTables {
 	}
 	
 	public String insertCustomer() {
-		return ("INSERT INTO " + CUSTOMERS + " VALUES (?)");
+		return ("INSERT INTO " + CUSTOMERS + " VALUES (?,?,?,?,?,?,?)");
 	}
 	
 	public String updateOrderLine() {
