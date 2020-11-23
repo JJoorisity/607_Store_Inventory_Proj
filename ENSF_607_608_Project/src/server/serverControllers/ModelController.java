@@ -3,6 +3,7 @@ package server.serverControllers;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedHashSet;
 
 import server.serverModel.*;
 import sharedModel.*;
@@ -15,16 +16,12 @@ public class ModelController implements Runnable, DatabaseTables {
 	private ObjectOutputStream clientOut;
 
 	// TODO
-	// add/update/remove customers from customer list
-	// search for customer based on name id or type.
 	// add/update/remove suppliers from suppliers list
-	// remove Items from Items list requires sql database to update referential
-	// constraints
 	// Query order by ID. print to reasonable format
 	// Query order by most recent. print to reasonable format
 	// Print all Items/Suppliers in list
-	// print Item by ID, print Item byName
-	//
+	// print Item
+	// serialize everything
 
 	public ModelController(ObjectInputStream clientIn, ObjectOutputStream clientOut, DbController dbController,
 			ShopApp shop) {
@@ -33,9 +30,47 @@ public class ModelController implements Runnable, DatabaseTables {
 		this.clientIn = clientIn;
 		this.clientOut = clientOut;
 	}
-
-	public ModelController() {
-		// TODO Auto-generated constructor stub
+	
+	public ModelController(DbController dbController,
+			ShopApp shop) {
+		this.dbController = dbController;
+		this.shop = shop;
+	}
+	
+	/**
+	 * Save new or modify existing customer.
+	 * @param customer
+	 * @return
+	 */
+	public void saveCustomer(Customer customer) {
+		// check if customer exists already.
+		if (dbController.queryCustomer(customer.getCustomerId()) == null) {
+			// insert
+			dbController.insertCustomer(customer);
+		} else {
+			// modify
+			dbController.updateCustomer(customer);
+		}
+	}
+	
+	public boolean removeCustomer(Customer customer) {
+		if (dbController.queryCustomer(customer.getCustomerId()) != null) {
+			dbController.removeCustomer(customer);
+			return true;
+		}
+		return false;
+	}
+	
+	public LinkedHashSet<Customer> queryCustomer(char type) {
+		return dbController.queryCustomer(type);
+	}
+	
+	public LinkedHashSet<Customer> queryCustomer(String name) {
+		return dbController.queryCustomer(name);
+	}
+	
+	public Customer queryCustomer(int id) {
+		return dbController.queryCustomer(id);
 	}
 
 	public boolean executePurchase(int itemID, int qty, int customerID) {
@@ -51,6 +86,18 @@ public class ModelController implements Runnable, DatabaseTables {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean removeItem(Item item) {
+		if (dbController.queryItem(item.getItemID()) != null) {
+			dbController.removeItem(item);
+			return true;
+		}
+		return false;
+	}
+	
+	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
+		return dbController.queryItem(itemDesc);
 	}
 
 	private void updateOrders(Item_Elec item, int qty) {
@@ -81,4 +128,10 @@ public class ModelController implements Runnable, DatabaseTables {
 
 	}
 
+	public static void main(String[] args) throws IOException {
+		DbController testDB = new DbController();
+		testDB.initializeConnection();
+		ModelController test = new ModelController(testDB, new ShopApp());
+		test.executePurchase(1002, 1, 15);
+	}
 }

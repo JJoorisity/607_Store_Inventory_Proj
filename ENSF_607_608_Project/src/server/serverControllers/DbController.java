@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 import sharedModel.*;
 import java.sql.*;
@@ -48,6 +49,18 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	public void resetDatabase() {
+		String sqlDropTables = "DROP TABLES PURCHASES, ITEMS, SUPPLIERS, ORDER_LINES, ORDERS, CUSTOMERS";
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(sqlDropTables);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("All tables deleted...");
+	}
+	
 	public void createTable() {
 
 		String sqlSupp = "CREATE TABLE " + SUPPLIERS + "(supplierId INTEGER not NULL, " + " supplierType VARCHAR(1), "
@@ -58,15 +71,15 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 				+ " itemType VARCHAR(1), " + " itemDesc VARCHAR(255), " + " itemPrice DECIMAL(5,2), "
 				+ " itemQty INTEGER, " + " powerType VARCHAR(10), " + " V INTEGER, " + " Ph INTEGER, "
 				+ " PRIMARY KEY (itemId), "
-				+ "  CONSTRAINT FK_SuppItem FOREIGN KEY (supplierId) REFERENCES Suppliers(supplierId))";
+				+ "  CONSTRAINT FK_SuppItem FOREIGN KEY (supplierId) REFERENCES Suppliers(supplierId) ON UPDATE CASCADE ON DELETE CASCADE)";
 
 		String sqlOrder = "CREATE TABLE " + ORDERS + "(orderId INTEGER not NULL, " + " orderDate DATE, "
 				+ " PRIMARY KEY (orderId))";
 
 		String sqlOrderLine = "CREATE TABLE " + ORDER_LINES + "( itemId INTEGER not NULL, "
 				+ " orderId INTEGER not NULL, " + " orderQty INTEGER, "
-				+ " CONSTRAINT FK_LineItem FOREIGN KEY (itemId) REFERENCES Items(itemId), "
-				+ " CONSTRAINT FK_LineOrder FOREIGN KEY (orderId) REFERENCES Orders(orderId))";
+				+ " CONSTRAINT FK_LineItem FOREIGN KEY (itemId) REFERENCES Items(itemId) ON UPDATE CASCADE ON DELETE CASCADE, "
+				+ " CONSTRAINT FK_LineOrder FOREIGN KEY (orderId) REFERENCES Orders(orderId) ON UPDATE CASCADE ON DELETE CASCADE)";
 
 		String sqlCustomer = "CREATE TABLE " + CUSTOMERS + "(customerId INTEGER not NULL, " + " fName VARCHAR(20), "
 				+ " lName VARCHAR(20), " + " address VARCHAR(50), " + " postalCode VARCHAR(7), "
@@ -74,15 +87,15 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 
 		String sqlPurchase = "CREATE TABLE " + PURCHASES + "(customerId INTEGER not NULL, "
 				+ " itemId INTEGER not NULL, "
-				+ " CONSTRAINT FK_PurchaseCust FOREIGN KEY (customerId) REFERENCES Customers(customerId), "
-				+ " CONSTRAINT FK_PurchaseItem FOREIGN KEY (itemId) REFERENCES Items(itemId))";
+				+ " CONSTRAINT FK_PurchaseCust FOREIGN KEY (customerId) REFERENCES Customers(customerId) ON UPDATE CASCADE ON DELETE CASCADE, "
+				+ " CONSTRAINT FK_PurchaseItem FOREIGN KEY (itemId) REFERENCES Items(itemId) ON UPDATE CASCADE ON DELETE CASCADE)";
 
 		try {
 			stmt = conn.createStatement();
-			// stmt.executeUpdate(sqlSupp);
-			// stmt.executeUpdate(sqlItems);
-			// stmt.executeUpdate(sqlCustomer);
-			// stmt.executeUpdate(sqlPurchase);
+			stmt.executeUpdate(sqlSupp);
+			stmt.executeUpdate(sqlItems);
+			stmt.executeUpdate(sqlCustomer);
+			stmt.executeUpdate(sqlPurchase);
 			stmt.executeUpdate(sqlOrder);
 			stmt.executeUpdate(sqlOrderLine);
 
@@ -139,7 +152,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	public Item_Elec queryItem(int itemID) {
 		Item_Elec queryRes = null;
 		try {
-			String query = helper.queryItem();
+			String query = helper.queryItemId();
 			PreparedStatement pStat = conn.prepareStatement(query);
 			pStat.setInt(1, itemID);
 			ResultSet results = pStat.executeQuery();
@@ -152,7 +165,28 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 				pStat.close();
 			}
 		} catch (SQLException e) {
-			System.err.println("queryItem failed with " + itemID);
+			System.err.println("queryItem by ID failed with " + itemID);
+			e.printStackTrace();
+		}
+		return queryRes;
+	}
+	
+	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
+		LinkedHashSet<Item_Elec> queryRes = null;
+		try {
+			String query = helper.queryItemDesc();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setString(1, itemDesc);
+			ResultSet results = pStat.executeQuery();
+			while (results.next()) {
+				queryRes.add(new Item_Elec(results.getInt("itemId"), results.getString("itemType").charAt(0),
+						results.getString("itemDesc"), results.getInt("itemQty"), results.getDouble("itemPrice"),
+						results.getInt("supplierId"), results.getString("powerType"), results.getInt("V"),
+						results.getInt("Ph")));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("queryItem by Desc failed with " + itemDesc);
 			e.printStackTrace();
 		}
 		return queryRes;
@@ -174,6 +208,19 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 
 	}
 
+	public void removeItem(Item item) {
+		try {
+			String query = helper.removeItem();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, item.getItemID());
+			int rowCount = pStat.executeUpdate();
+			System.out.println("row Count = " + rowCount);
+			pStat.close();
+		} catch (SQLException e) {
+			System.err.println("removeItem failed with " + item);
+		}
+	}
+	
 	public void insertSupplier(Int_Supplier supplier) {
 		try {
 			String query = helper.insertSupplier();
@@ -213,7 +260,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
-	public Object queryCustomer(int customerID) {
+	public Customer queryCustomer(int customerID) {
 		Customer queryRes = null;
 		try {
 			String query = helper.queryCustomer();
@@ -231,6 +278,80 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			System.err.println("queryCustomer failed with " + customerID);
 		}
 		return queryRes;
+	}
+	
+	public LinkedHashSet<Customer> queryCustomer(char type) {
+		LinkedHashSet<Customer> queryRes = null;
+		try {
+			String query = helper.queryCustomerType();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, type);
+			ResultSet results = pStat.executeQuery();
+
+			while (results.next()) {
+				queryRes.add(new Customer(results.getInt("customerId"), results.getString("fName"),
+						results.getString("lName"), results.getString("address"), results.getString("postalCode"),
+						results.getString("phoneNumber"), results.getString("customerType").charAt(0)));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("queryCustomer failed with " + type);
+		}
+		return queryRes;
+	}
+		
+	
+	public LinkedHashSet<Customer> queryCustomer(String name) {
+		LinkedHashSet<Customer> queryRes = null;
+		try {
+			String query = helper.queryCustomerType();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setString(1, name);
+			pStat.setString(2, name);
+			ResultSet results = pStat.executeQuery();
+
+			while (results.next()) {
+				queryRes.add(new Customer(results.getInt("customerId"), results.getString("fName"),
+						results.getString("lName"), results.getString("address"), results.getString("postalCode"),
+						results.getString("phoneNumber"), results.getString("customerType").charAt(0)));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("queryCustomer failed with " + name);
+		}
+		return queryRes;
+	}
+	
+	public void updateCustomer(Customer customer) {
+		try {
+			String query = helper.updateCustomer();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setString(1, customer.getFirstName());
+			pStat.setString(2, customer.getLastName());
+			pStat.setString(3, customer.getAddress());
+			pStat.setString(4, customer.getPostalCode());
+			pStat.setString(5, customer.getPhoneNum());
+			pStat.setString(6, String.valueOf(customer.getCustomerType()));
+			pStat.setInt(7, customer.getCustomerId());
+			int rowCount = pStat.executeUpdate();
+			System.out.println("row Count = " + rowCount);
+			pStat.close();
+		} catch (SQLException e) {
+			System.err.println("updateCustomer failed with " + customer);
+		}
+	}
+	
+	public void removeCustomer(Customer customer) {
+		try {
+			String query = helper.removeCustomer();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, customer.getCustomerId());
+			int rowCount = pStat.executeUpdate();
+			System.out.println("row Count = " + rowCount);
+			pStat.close();
+		} catch (SQLException e) {
+			System.err.println("removeCustomer failed with " + customer);
+		}
 	}
 
 	public void insertOrder(Order order) {
@@ -336,14 +457,20 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	public static void main(String[] args0) {
 		DbController myApp = new DbController();
 		myApp.initializeConnection();
-		// myApp.initializeSupplierTable();
-		// myApp.initializeItemTable();
-		// myApp.initializeCustomerTable();
-
+		myApp.resetDatabase();
 		myApp.createTable();
-		// myApp.insertUser();
-		// myApp.insertUserPreparedStatment(1, "sam", "Smith");
+		myApp.initializeSupplierTable();
+		myApp.initializeItemTable();
+		myApp.initializeCustomerTable();
 		myApp.close();
 	}
+
+	
+
+	
+
+	
+
+	
 
 }

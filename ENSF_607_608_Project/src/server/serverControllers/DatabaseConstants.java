@@ -8,5 +8,5 @@ public interface DatabaseConstants {
 
 	// Database credentials
 	static final String USERNAME = "root";
-	static final String PASSWORD = "craven-stomp-husband-learn";
+	static final String PASSWORD = "WornOutPlaces_1";
 }
