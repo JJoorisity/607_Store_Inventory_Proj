@@ -172,7 +172,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	}
 	
 	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
-		LinkedHashSet<Item_Elec> queryRes = null;
+		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
 		try {
 			String query = helper.queryItemDesc();
 			PreparedStatement pStat = conn.prepareStatement(query);
@@ -281,7 +281,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	}
 	
 	public LinkedHashSet<Customer> queryCustomer(char type) {
-		LinkedHashSet<Customer> queryRes = null;
+		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
 			String query = helper.queryCustomerType();
 			PreparedStatement pStat = conn.prepareStatement(query);
@@ -302,7 +302,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		
 	
 	public LinkedHashSet<Customer> queryCustomer(String name) {
-		LinkedHashSet<Customer> queryRes = null;
+		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
 			String query = helper.queryCustomerType();
 			PreparedStatement pStat = conn.prepareStatement(query);
