@@ -191,6 +191,26 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
+	
+	public LinkedHashSet<Item_Elec> queryItem() {
+		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
+		try {
+			String query = helper.queryItemAll();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			ResultSet results = pStat.executeQuery();
+			while (results.next()) {
+				queryRes.add(new Item_Elec(results.getInt("itemId"), results.getString("itemType").charAt(0),
+						results.getString("itemDesc"), results.getInt("itemQty"), results.getDouble("itemPrice"),
+						results.getInt("supplierId"), results.getString("powerType"), results.getInt("V"),
+						results.getInt("Ph")));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("queryItem all failed.");
+			e.printStackTrace();
+		}
+		return queryRes;
+	}
 
 	public void updateItem(int itemID, int qty) {
 		try {
@@ -208,18 +228,18 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 
 	}
 
-	public void removeItem(Item item) {
-		try {
-			String query = helper.removeItem();
-			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setInt(1, item.getItemID());
-			int rowCount = pStat.executeUpdate();
-			System.out.println("row Count = " + rowCount);
-			pStat.close();
-		} catch (SQLException e) {
-			System.err.println("removeItem failed with " + item);
-		}
-	}
+//	public void removeItem(Item item) {
+//		try {
+//			String query = helper.removeItem();
+//			PreparedStatement pStat = conn.prepareStatement(query);
+//			pStat.setInt(1, item.getItemID());
+//			int rowCount = pStat.executeUpdate();
+//			System.out.println("row Count = " + rowCount);
+//			pStat.close();
+//		} catch (SQLException e) {
+//			System.err.println("removeItem failed with " + item);
+//		}
+//	}
 	
 	public void insertSupplier(Int_Supplier supplier) {
 		try {
@@ -432,8 +452,27 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 				queryRes = new Order(results.getInt("orderId"));
 				pStat.close();
 			}
+			queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID()));
 		} catch (SQLException e) {
 			System.err.println("queryOrder failed with " + orderId);
+		}
+		return queryRes;
+	}
+
+	private LinkedHashSet<OrderLine> queryAllOrderLines(int orderId) {
+		LinkedHashSet<OrderLine> queryRes = new LinkedHashSet<OrderLine>();
+		try {
+			String query = helper.queryAllOrderLine();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, orderId);
+			ResultSet results = pStat.executeQuery();
+
+			while (results.next()) {
+				queryRes.add(new OrderLine(results.getInt("itemId"), results.getInt("orderQty")));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("queryAllOrderLine failed with " + orderId);
 		}
 		return queryRes;
 	}

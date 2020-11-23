@@ -71,5 +71,9 @@ public class Order {
 	public String orderSqlInsert() {
 		return this.getOrderID() + ", " + this.getDate();
 	}
+	
+	public void setOrderLines(LinkedHashSet<OrderLine> orderlines) {
+		this.OrderLines = orderlines;
+	}
 
 }

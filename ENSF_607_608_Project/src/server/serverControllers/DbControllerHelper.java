@@ -93,13 +93,17 @@ public class DbControllerHelper implements DatabaseTables {
 		return ("SELECT * FROM " + ITEMS + " WHERE itemDesc = (?)");
 	}
 	
+	public String queryItemAll() {
+		return ("SELECT * FROM " + ITEMS);
+	}
+	
 	public String updateItem() {
 		return ("UPDATE " + ITEMS + " SET itemQty = ? WHERE itemId = ?");
 	}
 	
-	public String removeItem() {
-		return ("DELETE FROM " + ITEMS + " WHERE itemId = ?");
-	}
+//	public String removeItem() {
+//		return ("DELETE FROM " + ITEMS + " WHERE itemId = ?");
+//	}
 
 	public String insertSupplier() {
 		return ("INSERT INTO " + SUPPLIERS + " VALUES (?,?,?,?,?,?)");
@@ -111,6 +115,10 @@ public class DbControllerHelper implements DatabaseTables {
 
 	public String queryOrderLine() {
 		return ("SELECT * FROM " + ORDER_LINES + " WHERE itemId = ? AND orderId = ?");
+	}
+	
+	public String queryAllOrderLine() {
+		return ("SELECT * FROM " + ORDER_LINES + " WHERE orderId = ?");
 	}
 
 	public String queryOrder() {
@@ -129,6 +137,9 @@ public class DbControllerHelper implements DatabaseTables {
 		return ("INSERT INTO " + PURCHASES + " VALUES (?,?)");
 
 	}
+	
+	// Nested query: option to query supplier name using item Id.
+	// Join query: option to join item table and orderline for print.
 
 	
 

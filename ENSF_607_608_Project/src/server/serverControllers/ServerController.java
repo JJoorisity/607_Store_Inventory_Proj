@@ -23,7 +23,6 @@ public class ServerController {
 	private ObjectInputStream clientIn;
 	private ObjectOutputStream clientOut;
 	private ExecutorService pool;
-	private ModelController modelController;
 		
 	/**
 	 * Initialize the serverSocket and thread pool.
@@ -78,5 +77,6 @@ public class ServerController {
 	public static void main (String [] args) throws IOException{
 		ServerController myServer = new ServerController ();
 		myServer.runServer();
+		myServer.close();
 	}
 }
