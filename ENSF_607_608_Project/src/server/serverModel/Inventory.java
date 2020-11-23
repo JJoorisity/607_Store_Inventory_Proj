@@ -26,7 +26,6 @@ import sharedModel.OrderLine;
 public class Inventory {
 
 	public LinkedHashSet<Item> itemList;
-	private Order order;
 
 	public Inventory() {
 		this.itemList = new LinkedHashSet<Item>();
@@ -34,15 +33,6 @@ public class Inventory {
 
 	public void setItemList(LinkedHashSet<Item> i) {
 		this.itemList = i;
-	}
-
-	public void listAllItems() {
-
-	}
-
-	public String checkQty(String input) {
-		Item tool = returnItem(input);
-		return String.format("Current Quantity of %s is %d \n\n", tool.getItemDesc(), tool.getQty());
 	}
 
 	/**
@@ -64,80 +54,6 @@ public class Inventory {
 		}
 	}
 
-	// success message to GUI
-	/**
-	 * return String.format("Updated Qty of %s: %d -> %d \n\n", item.getItemDesc(),
-	 * item.getQty(), item.getQty() - qty);
-	 * 
-	 * } else { return String.format("Cannot decrement, quantity in stock = %s. \n",
-	 * item.getQty());
-	 * 
-	 * } }
-	 */
-
-	public void searchByName(String itemName) {
-
-		Iterator<Item> itr = this.itemList.iterator();
-
-		while (itr.hasNext()) {
-			Item tool = itr.next();
-			if (tool.getItemDesc().toLowerCase().strip().compareTo(itemName.toLowerCase().strip()) == 0) {
-				System.out.format("+-----------------+---------+----------+-----------+%n");
-				System.out.format("| Tool Name       | Tool ID | Quantity | Price ($) |%n");
-				System.out.format("+-----------------+---------+----------+-----------+%n");
-				System.out.println(tool);
-				return;
-			}
-		}
-		System.out.println("Tool not found. Returning to menu <<");
-		return;
-
-	}
-
-	/**
-	 * Prints item information of item in database based on passed item ID.
-	 * 
-	 * @param ID Tool ID of item to be found
-	 */
-	public void searchByID(String ID) {
-		Iterator<Item> itr = this.itemList.iterator();
-		int intID = Integer.parseInt(ID);
-		while (itr.hasNext()) {
-			Item tool = itr.next();
-			if (tool.getItemID() == intID) {
-				System.out.format("+-----------------+---------+----------+-----------+%n");
-				System.out.format("| Tool Name       | Tool ID | Quantity | Price ($) |%n");
-				System.out.format("+-----------------+---------+----------+-----------+%n");
-				System.out.println(tool);
-				return;
-			}
-		}
-		System.out.println("Tool not found. Returning to menu <<");
-		return;
-	}
-
-	/**
-	 * Helper function. Returns Item object from inventory.
-	 * 
-	 * @param input Tool ID or Name to be returned.
-	 * @return returns Item if found in inventory or null.
-	 */
-	public Item returnItem(String input) {
-		Iterator<Item> itr = this.itemList.iterator();
-		while (itr.hasNext()) {
-			Item tool = itr.next();
-			if (input.matches("-?\\d+") == true) {
-				int intID = Integer.parseInt(input);
-				if (tool.getItemID() == intID) {
-					return tool;
-				}
-			} else if (tool.getItemDesc().toLowerCase().strip().compareTo(input.toLowerCase().strip()) == 0) {
-				return tool;
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * Generates unit hash ID based on todays date and tool ID. Hash ID is unique to
 	 * the inputs. ie same inputs = same hashID
@@ -156,15 +72,3 @@ public class Inventory {
 	}
 
 }
-
-// public void addItem(String itemName) {
-//// not required by assignment
-// }
-
-// public void deleteItem(String itemName) {
-//// not required by assignment
-// }
-
-// public void editItem(String itemName) {
-//// not required by assignment
-// }

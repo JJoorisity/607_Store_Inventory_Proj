@@ -1,12 +1,10 @@
 package server.serverModel;
+
 import sharedModel.*;
 
 import java.io.IOException;
 import java.util.*;
-
-import sharedModel.Order;
-import sharedModel.Supplier;
-
+import server.serverControllers.ModelController;
 
 /**
  * Exercise 1 Code
@@ -18,259 +16,243 @@ import sharedModel.Supplier;
  *        Sources: Code requirements from assignment
  * 
  *        Description: FrontEnd user interface. Handles all interactions with
- *        uses. Auto Generates an order if check quantity or decrease item
- *        reads a qty less than 40 as required by assignment details
+ *        uses. Auto Generates an order if check quantity or decrease item reads
+ *        a qty less than 40 as required by assignment details
  */
 public class ShopApp {
 
+	private ModelController modelController;
 	private Inventory inventory;
-	private LinkedHashSet<Supplier> supplierList;
 
 	public ShopApp() throws IOException {
 		this.inventory = new Inventory();
 	}
 
-	/**
-	 * Prints menu to screen and handles user input and calling desired functions
-	 */
-	public void Menu() {
-
-		Scanner scan = new Scanner(System.in);
-
-		while (true) {
-
-			this.printMenuChoices();
-
-			String choice = null;
-			while (choice == null) {
-				choice = this.sanitizeInput(scan.nextLine(), "menu");
-			}
-
-			switch (choice) {
-			case "1": { // list all items
-				this.inventory.listAllItems();
-				break;
-			}
-			case "2": { // Search by name
-				System.out.println("Enter Tool Name >> ");
-				this.inventory.searchByName((scan.nextLine()));
-				break;
-			}
-			case "3": { // search by id
-				System.out.println("Enter Tool ID >> ");
-				String input = null;
-				while (input == null) {
-					input = this.sanitizeInput(scan.nextLine(), "");
-				}
-				this.inventory.searchByID(input);
-				break;
-
-			}
-			case "4": { // check item qty (auto order if below defined limit)
-				System.out.println("Check Quantity Item by ID or Name >> ");
-				String input = (scan.nextLine());
-				this.inventory.checkQty(input);
-				if (this.inventory.returnItem(input).getQty() < Item.getOrderqtylimit()) {
-					boolean flag = this.generateOrder(input);
-					if (flag == true) {
-						this.printOrderList();
-					}
-				}
-				break;
-			}
-			case "5": { // decrease item quantity (auto order if below defined limit)
-				System.out.println("Decrease stock of an item. Enter an ID or Name >> ");
-				String input = scan.nextLine();
-				System.out.println("Enter value to decrease by or hit enter to decrease by one >> ");
-				String qty = this.sanitizeInput(scan.nextLine(), "");
-				if (qty != null) {
-					this.inventory.decreaseItem(input, qty);
-					if (this.inventory.returnItem(input).getQty() < Item.getOrderqtylimit()) {
-						boolean flag = this.generateOrder(input); // if this is the first time this item has been
-																	// ordered today print the current order list.
-						if (flag == true) {
-							this.printOrderList();
-						}
-					}
-				}
-				break;
-
-			}
-			case "6": { // print current order list for the day.
-				this.printOrderList();
-				break;
-			}
-			case "7": {
-				scan.close();
-				return;
-			}
-
-			}
-
-		}
-	}
-
-	/**
-	 * Prints menu options list for user.
-	 */
-	private void printMenuChoices() {
-
-		System.out.println("\nWelcome to theShopApp, please select one of the following options: ");
-		System.out.format("+-----------------+---------+----------+-----------+%n");
-		System.out.println("1. List all items in inventory");
-		System.out.println("2. Search for tool by tool name");
-		System.out.println("3. Search for tool by tool ID");
-		System.out.println("4. Check item quantity");
-		System.out.println("5. Decrease item quantity");
-		System.out.println("6. Print Current Order List");
-		System.out.println("7. Quit");
-		System.out.println("\nInput Selection >>");
-	}
-
-	/**
-	 * Sanitizes user inputs for type. Accepts a string input. If input is numerical
-	 * ensures value is 0 or greater. If menu flag is selected ensures input falls
-	 * between 1-7.
-	 * 
-	 * @param s    user input string
-	 * @param menu flag for if input is for menu options.
-	 * @return returns the string if input is a string. returns null if input does
-	 *         not fall within integer requirements.
-	 */
-	private String sanitizeInput(String s, String menu) {
-
-		String errMsg = s + " Was an invalid input. Please try again >>";
-		if (s.isEmpty()) {
-			s = "nullEnter";
-			return s;
-		}
-		try {
-			int r = Integer.valueOf(s);
-			if (r < 0) { // no negative values allowed
-				System.out.println(errMsg);
-				return null;
-			}
-			if (menu.compareTo("menu") == 0) {
-				if (r > 0 && r < 8) {
-					return s;
-				} else {
-					System.out.println(errMsg);
-					return null;
-				}
-			} else {
-				return s;
-			}
-
-		} catch (NumberFormatException e) {
-			System.out.println(errMsg);
-			return null;
-		}
-	}
-
-	/**
-	 * Initializes supplier list
-	 * 
-	 * @param sList LinkedHashSet of Supplier items
-	 */
-	private void setSupplierList(LinkedHashSet<Supplier> sList) {
-		this.supplierList = sList;
-	}
-
-	/**
-	 * Returns supplierID from item object based on user input string.
-	 * 
-	 * @param supplierID
-	 * @return
-	 */
-	private String getSupplierName(String supplierID) {
-		Iterator<Supplier> itr = this.supplierList.iterator();
-		while (itr.hasNext()) {
-			Supplier sup = itr.next();
-			if (sup.getSupplierID().strip().compareTo(supplierID.strip()) == 0) {
-				return sup.getCompanyName();
-			}
-		}
-		return null;
-
-	}
-
-	/**
-	 * Generates Order object from input item name/ID if item has not been ordered
-	 * today.
-	 * 
-	 * @param Input tool name or ID
-	 * @return Returns true if item was added to list. Returns false if item has
-	 *         already been ordered today.
-	 */
-	private boolean generateOrder(String input) {
-		int Hash = this.inventory.generateOrderID(input);
-		if (this.inOrderList(input) == false) { // requires supplier name from supplier list
-			Order newOrder = new Order(this.inventory.returnItem(input),
-					this.getSupplierName(this.inventory.returnItem(input).getSupplierID()), Hash);
-			this.addToOrderList(Hash, newOrder);
-			return true;
-		} else {
-			System.out.println("Item has already been ordered today\n");
-			return false;
-		}
-	}
-
-	/**
-	 * Prints current order list.
-	 */
-	private void printOrderList() {
-		System.out.println("Daily Order List:\n");
-		System.out.println("+*****************+*********+**********+***********+*");
-		this.orderlist.entrySet().forEach(entry -> {
-			System.out.println(entry.getValue().getOrderString());
-		});
-	}
-
-	/**
-	 * Adds Order to shop orderlist.
-	 * 
-	 * @param orderID Unique hash ID Integer generated from tool ID
-	 * @param order   Order object
-	 */
-	private void addToOrderList(int orderID, Order order) {
-		this.orderlist.put(orderID, order);
-	}
-
-	/**
-	 * Checks if tool has been ordered today and is in the list. Allows for tools to
-	 * be ordered if days are different.
-	 * 
-	 * @param input input tool ID or name
-	 * @return returns true if item is in list. False otherwise
-	 */
-	private boolean inOrderList(String input) {
-		int Hash = this.inventory.generateOrderID(input);
-		if (this.orderlist.containsKey(Hash)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
 	public Inventory getInventory() {
 		return this.inventory;
 	}
 
-	public static void main(String[] args) throws IOException {
+	/**
+	 * Save new or modify existing customer.
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	public boolean saveCustomer(Customer customer) {
+		// check if customer exists already.
+		if (modelController.getDbController().queryCustomer(customer.getCustomerId()) == null) {
+			// insert
+			modelController.getDbController().insertCustomer(customer);
+		} else {
+			// modify
+			modelController.getDbController().updateCustomer(customer);
+		}
+		return true;
+	}
 
-		// Initialize app
-		ShopApp s = new ShopApp();
+	public boolean removeCustomer(Customer customer) {
+		if (modelController.getDbController().queryCustomer(customer.getCustomerId()) != null) {
+			modelController.getDbController().removeCustomer(customer);
+			return true;
+		}
+		return false;
+	}
 
-		// set inventory and supplier list
-		s.inventory.setItemList(s.fileMgr.getItems());
-		s.setSupplierList(s.fileMgr.getSupplierList());
+	public LinkedHashSet<Customer> queryCustomer(char type) {
+		return modelController.getDbController().queryCustomer(type);
+	}
 
-		// run user input menu loop
-		s.Menu();
+	public LinkedHashSet<Customer> queryCustomer(String name) {
+		return modelController.getDbController().queryCustomer(name);
+	}
 
-		System.out.println("Quitting");
+	public Customer queryCustomer(int id) {
+		return modelController.getDbController().queryCustomer(id);
+	}
 
-		return;
+	public boolean executePurchase(int itemID, int qty, int customerID) {
+		// TODO update purchase Table
+		Item_Elec item = modelController.getDbController().queryItem(itemID);
+		if (modelController.getDbController().queryCustomer(customerID) == null) {
+			return false;
+		}
+		if (this.getInventory().decrement(item, qty)) {
+			modelController.getDbController().updateItem(itemID, item.getQty()); // updates Item in db with new qty
+			this.updateOrders(item, qty);
+			modelController.getDbController().insertPurchases(itemID, customerID);
+			return true;
+		}
+		return false;
+	}
+
+//	public boolean removeItem(Item item) {
+//		if (dbController.queryItem(item.getItemID()) != null) {
+//			dbController.removeItem(item);
+//			return true;
+//		}
+//		return false;
+//	}
+
+	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
+		return modelController.getDbController().queryItem(itemDesc);
+	}
+
+	public LinkedHashSet<Item_Elec> queryItem() {
+		return modelController.getDbController().queryItem();
+	}
+
+	public Item_Elec queryItem(int itemId) {
+		return modelController.getDbController().queryItem(itemId);
+	}
+
+	private void updateOrders(Item_Elec item, int qty) {
+		if (item.getQty() < item.ORDERQTYLIMIT) {
+			int i = this.getInventory().generateOrderID();
+			Order temp = this.modelController.getDbController().queryOrder(i);
+			if (temp == null) {
+				temp = new Order(i);
+				modelController.getDbController().insertOrder(temp);
+			}
+			updateOrderLines(item, temp, qty);
+		}
+		return; // output to gui that order succeeded or failed
+	}
+
+	public void updateOrderLines(Item_Elec item, Order temp, int qty) {
+		OrderLine templine = this.modelController.getDbController().queryOrderLine(item.getItemID(), temp.getOrderID());
+
+		if (templine == null) {
+			modelController.getDbController().insertOrderLine(
+					new OrderLine(item.getItemID(), item.ORDERQTYLIMIT - item.getQty()), temp.getOrderID());
+			return;
+		} else {
+			modelController.getDbController().updateOrderLine(templine, qty, temp.getOrderID());
+			return;
+		}
+	}
+
+	// Included items as an option for extensibility but implementation is not
+	// required.
+	private void deleteObject(ObjectWrapper request) {
+		String type = request.getMessage()[1];
+		ObjectWrapper ow = new ObjectWrapper();
+		boolean success = false;
+		switch (type) {
+		case "CUSTOMER":
+			success = this.removeCustomer((Customer) request.getPassedObj(0));
+
+			// case "ITEM_ELEC": this.removeItem((Item_Elec)request.getPassedObj(0));
+		}
+		if (success)
+			ow.setMessage("COMPLETE", null);
+		else
+			ow.setMessage("FAILED", null);
+		try {
+			this.modelController.getOutputStream().writeObject(ow);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// Included items as an option for extensibility but implementation is not
+	// required.
+	private void saveObject(ObjectWrapper request) {
+		String type = request.getMessage()[1];
+		ObjectWrapper ow = new ObjectWrapper();
+		boolean success = false;
+		switch (type) {
+		case "CUSTOMER":
+			success = this.saveCustomer((Customer) request.getPassedObj(0));
+
+			// case "ITEM_ELEC": this.saveItem((Item_Elec)request.getPassedObj(0));
+		}
+		if (success)
+			ow.setMessage("COMPLETE", null);
+		else
+			ow.setMessage("FAILED", null);
+		try {
+			this.modelController.getOutputStream().writeObject(ow);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void searchObject(ObjectWrapper request) {
+		String type = request.getMessage()[1];
+		String command = request.getMessage()[0];
+		ArrayList<Object> searchObject = new ArrayList<Object>();
+		ObjectWrapper ow = new ObjectWrapper();
+		switch (type) {
+		case "CUSTOMER": {
+			Customer c = (Customer) request.getPassedObj(0);
+			if (command.equals("*ID"))
+				searchObject.add(this.queryCustomer(c.getCustomerId()));
+			else if (command.equals("*NAME"))
+				searchObject.addAll(this.queryCustomer(c.getLastName()));
+			else if (command.equals("*TYPE"))
+				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
+			ow.setMessage("DISPLAY", "CUSTOMER");
+		}
+
+		case "ITEM_ELEC": {
+			Item_Elec item = (Item_Elec) request.getPassedObj(0);
+			if (command.equals("*ID"))
+				searchObject.add(this.queryItem(item.getItemID()));
+			else if (command.equals("*NAME"))
+				searchObject.addAll(this.queryItem(item.getItemDesc()));
+			else if (command.equals("*ALL"))
+				searchObject.addAll(this.queryItem());
+			ow.setMessage("DISPLAY", "ITEM_ELEC");
+		}
+		case "ORDER": {
+			// will only generate today's order for printing
+			int id = this.getInventory().generateOrderID();
+			searchObject.add(modelController.getDbController().queryOrder(id));
+			ow.setMessage("DISPLAY", "ORDER");
+		}
+			ow.addPassedObj(searchObject);
+			try {
+				this.modelController.getOutputStream().writeObject(ow);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void runShop() {
+		ObjectWrapper request;
+		try {
+			while (true) {
+				request = (ObjectWrapper) this.modelController.getInputStream().readObject();
+				String command = request.getMessage()[0];
+				if (request != null && !command.equals("")) {
+					System.out.println("command : " + command);
+
+					switch (command) {
+					case "SAVE":
+						this.saveObject(request);
+
+					case "SEARCH*":
+						this.searchObject(request);
+
+					case "DELETE":
+						this.deleteObject(request);
+
+					case "PURCHASE":
+						this.executePurchase((Integer) request.getPassedObj(0), (Integer) request.getPassedObj(1),
+								(Integer) request.getPassedObj(2));
+					}
+				} else if (command.contentEquals("QUIT")) {
+					break;
+				}
+				request.resetWrapper();
+			}
+		} catch (ClassNotFoundException | IOException ex) {
+			System.err.println(ex.getStackTrace());
+		}
 
 	}
 

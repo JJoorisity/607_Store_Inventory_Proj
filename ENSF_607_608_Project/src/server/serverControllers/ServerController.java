@@ -11,8 +11,8 @@ import java.util.concurrent.Executors;
 import server.serverModel.ShopApp;
 
 /**
- * Server class to run shop inventory server
- * Client classes.
+ * Server class to run shop inventory server Client classes.
+ * 
  * @author JJoorisity NJacl
  * @version 1.0
  * @since 2020-11-06
@@ -23,7 +23,7 @@ public class ServerController {
 	private ObjectInputStream clientIn;
 	private ObjectOutputStream clientOut;
 	private ExecutorService pool;
-		
+
 	/**
 	 * Initialize the serverSocket and thread pool.
 	 */
@@ -35,10 +35,10 @@ public class ServerController {
 			e.printStackTrace();
 		}
 	}
-		
+
 	/**
-	 * Run server and allow communication with client package.
-	 * Initialize a modelController.
+	 * Run server and allow communication with client package. Initialize a
+	 * modelController.
 	 */
 	public void runServer() {
 		try {
@@ -47,12 +47,11 @@ public class ServerController {
 				System.out.println("Server has accepted a connection.");
 				clientIn = new ObjectInputStream(clientSocket.getInputStream());
 				clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
-				
+
 				DbController myDB = new DbController();
 				myDB.initializeConnection();
 				ShopApp myShop = new ShopApp();
-				ModelController newShop = new ModelController(clientIn, clientOut,myDB,myShop);
-				
+				ModelController newShop = new ModelController(clientIn, clientOut, myDB, myShop);
 
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
@@ -61,7 +60,7 @@ public class ServerController {
 			System.err.println(e.getStackTrace() + " Server connection failed in runServer().");
 		}
 	}
-	
+
 	/**
 	 * Close connections to the command line and clients.
 	 */
@@ -73,9 +72,9 @@ public class ServerController {
 			System.err.println(e.getStackTrace() + " Server connection failed in close().");
 		}
 	}
-	
-	public static void main (String [] args) throws IOException{
-		ServerController myServer = new ServerController ();
+
+	public static void main(String[] args) throws IOException {
+		ServerController myServer = new ServerController();
 		myServer.runServer();
 		myServer.close();
 	}

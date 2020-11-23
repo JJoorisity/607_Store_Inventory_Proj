@@ -62,4 +62,8 @@ public class Customer {
 	public void setCustomerType(char customerType) {
 		this.customerType = customerType;
 	}
+	
+	public void toString() {
+		
+	}
 }

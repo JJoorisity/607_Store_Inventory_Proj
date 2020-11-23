@@ -60,7 +60,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		System.out.println("All tables deleted...");
 	}
-	
+
 	public void createTable() {
 
 		String sqlSupp = "CREATE TABLE " + SUPPLIERS + "(supplierId INTEGER not NULL, " + " supplierType VARCHAR(1), "
@@ -170,7 +170,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
-	
+
 	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
 		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
 		try {
@@ -191,7 +191,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
-	
+
 	public LinkedHashSet<Item_Elec> queryItem() {
 		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
 		try {
@@ -240,7 +240,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 //			System.err.println("removeItem failed with " + item);
 //		}
 //	}
-	
+
 	public void insertSupplier(Int_Supplier supplier) {
 		try {
 			String query = helper.insertSupplier();
@@ -299,7 +299,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
-	
+
 	public LinkedHashSet<Customer> queryCustomer(char type) {
 		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
@@ -319,8 +319,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
-		
-	
+
 	public LinkedHashSet<Customer> queryCustomer(String name) {
 		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
@@ -341,7 +340,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
-	
+
 	public void updateCustomer(Customer customer) {
 		try {
 			String query = helper.updateCustomer();
@@ -360,7 +359,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			System.err.println("updateCustomer failed with " + customer);
 		}
 	}
-	
+
 	public void removeCustomer(Customer customer) {
 		try {
 			String query = helper.removeCustomer();
@@ -503,13 +502,5 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		myApp.initializeCustomerTable();
 		myApp.close();
 	}
-
-	
-
-	
-
-	
-
-	
 
 }
