@@ -2,50 +2,56 @@ package server.serverModel;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
-
-import sharedModel.Item;
-import sharedModel.Order;
-import sharedModel.OrderLine;
+import sharedModel.*;
 
 /**
- * Exercise 1 Code
- * 
- * @author Nathan Jack
- * @version 1.0
- * @since Oct 9th, 2020
- * 
- *        Sources: Code requirements from assignment
- * 
- *        Description: ShopDB holds an inventory of items and allows for queries
- *        to be made to that list. Duplicate items are not allowed (based on
- *        item ID)
+ * Inventory holds an inventory of items and the daily order. Allows the following operations:
+ * - generation of daily order id.
+ * - printing of daily order and orderlines.
+ * - printing of inventory items.
+ * - decrement of items being purchased.
+ * @author NJack & JJoorisity
+ * @version	1.0
+ * @since 2020-11-26
  */
 public class Inventory {
 
-	public LinkedHashSet<Item> itemList;
+	private LinkedHashSet<Item> itemList;
+	private Order order;
 
+	/**
+	 * Constructor. Create an empty LinkedHashSet of items.
+	 */
 	public Inventory() {
 		this.itemList = new LinkedHashSet<Item>();
 	}
 
-	public void setItemList(LinkedHashSet<Item> i) {
-		this.itemList = i;
+	/**
+	 * @param items (LinkedHashSet<Item>) assign a new LinkedHashSet of items to inventory.
+	 */
+	public void setItemList(LinkedHashSet<Item> items) {
+		this.itemList = items;
+	}
+	
+	/**
+	 * @param items (LinkedHashSet<Item>) assign a new LinkedHashSet of items to inventory.
+	 */
+	public void addItems(Item item) {
+		this.itemList.add(item);
 	}
 
 	/**
-	 * Decrease qty of item in inventory by 1 or by user input value.
-	 * 
-	 * @param input Item name or ID.
-	 * @param qty   Quantity to reduce by.
+	 * Decrease quantity of item in inventory user input value.
+	 * @param item (Item) the item being purchased.
+	 * @param qty (int) the quantity of being purchased.
+	 * @return (boolean) true if purchase was successful.
 	 */
 	public boolean decrement(Item item, int qty) {
 		if (item == null) {
 			return false;
 		}
-
+		// check to see if item inventory is high enough to allow purchase.
 		if (item.getQty() - qty >= 0) {
 			item.setQty(item.getQty() - qty);
 			return true;
@@ -55,11 +61,8 @@ public class Inventory {
 	}
 
 	/**
-	 * Generates unit hash ID based on todays date and tool ID. Hash ID is unique to
-	 * the inputs. ie same inputs = same hashID
-	 * 
-	 * @param input Item name or ID to return Item from inventory
-	 * @return returns 5 digit unique order ID
+	 * Generates unit hash ID based on todays date.
+	 * @return (int) 5 digit unique order ID for current day.
 	 */
 	public int generateOrderID() {
 		LocalDate now = LocalDate.now();
@@ -70,5 +73,14 @@ public class Inventory {
 		result = prime * result + ((int) dateHash);
 		return result = result % 100000; // returns between 00000-99999
 	}
+	
+	public String toString() {
+		// TO DO: print item list.
+		return "";
+	}
 
+	public String printOrder() {
+		// TO DO: print Order and OrderLines
+		return "";
+	}
 }

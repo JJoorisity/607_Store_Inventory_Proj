@@ -70,7 +70,7 @@ public class DbControllerHelper implements DatabaseTables {
 	}
 	
 	public String queryCustomerName() {
-		return ("SELECT * FROM " + CUSTOMERS + " WHERE fName = ? OR lName = ? ORDER BY lName, fName");
+		return ("SELECT * FROM " + CUSTOMERS + " WHERE lName = ? ORDER BY lName, fName");
 	}
 	
 	public String insertCustomer() {

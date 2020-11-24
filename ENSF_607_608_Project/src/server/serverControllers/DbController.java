@@ -326,7 +326,6 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			String query = helper.queryCustomerType();
 			PreparedStatement pStat = conn.prepareStatement(query);
 			pStat.setString(1, name);
-			pStat.setString(2, name);
 			ResultSet results = pStat.executeQuery();
 
 			while (results.next()) {

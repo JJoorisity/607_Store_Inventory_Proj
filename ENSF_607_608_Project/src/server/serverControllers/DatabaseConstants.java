@@ -1,5 +1,11 @@
 package server.serverControllers;
 
+/**
+ * Hold the connection information for the local mySQL database.
+ * @author NJack & JJoorisity
+ * @version	1.0
+ * @since 2020-11-26
+ */
 public interface DatabaseConstants {
 	
 	// JDBC driver name and database URL
@@ -9,4 +15,5 @@ public interface DatabaseConstants {
 	// Database credentials
 	static final String USERNAME = "root";
 	static final String PASSWORD = "WornOutPlaces_1";
+	//static final String PASSWORD = "";
 }
