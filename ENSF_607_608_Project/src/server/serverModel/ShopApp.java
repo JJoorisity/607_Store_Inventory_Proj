@@ -7,27 +7,30 @@ import java.util.*;
 import server.serverControllers.ModelController;
 
 /**
- * Back end connection point to model controller. Handles all interactions with the
- * inventory and sharedModel package to the database controller and client.
- * - executes a client purchase.
- * - customer modification commands.
- * - provides access to sharedModel classes for client queries.
- * - runs communication loop with client and ModelController
+ * Back end connection point to model controller. Handles all interactions with
+ * the inventory and sharedModel package to the database controller and client.
+ * - executes a client purchase. - customer modification commands. - provides
+ * access to sharedModel classes for client queries. - runs communication loop
+ * with client and ModelController
+ * 
  * @author NJack & JJoorisity
- * @version	1.0
+ * @version 1.0
  * @since 2020-11-26
  */
 public class ShopApp {
 
 	private ModelController modelController;
 	private Inventory inventory;
-	private ObjectWrapper request;
 
 	/**
 	 * Constructor: initialize inventory class.
 	 */
 	public ShopApp() {
 		this.inventory = new Inventory();
+	}
+
+	public void setModelController(ModelController m) {
+		this.modelController = m;
 	}
 
 	/**
@@ -38,9 +41,9 @@ public class ShopApp {
 	}
 
 	/**
-	 * Save new or modify existing customer.
-	 * If customer id is not found in database: create new
-	 * else update.
+	 * Save new or modify existing customer. If customer id is not found in
+	 * database: create new else update.
+	 * 
 	 * @param customer (Customer) the customer being adjusted
 	 * @return (boolean) returns true that change was successful.
 	 */
@@ -55,6 +58,7 @@ public class ShopApp {
 
 	/**
 	 * Remove customer from the shop database.
+	 * 
 	 * @param customer (Customer) the customer being removed from the database.
 	 * @return (boolean) true if removal was successful.
 	 */
@@ -68,8 +72,10 @@ public class ShopApp {
 
 	/**
 	 * Query a list of customers by the customer type.
+	 * 
 	 * @param type (char) type of customer being searched.
-	 * @return (LinkedHashSet<Customer>) list of customers returned from mySQL query.
+	 * @return (LinkedHashSet<Customer>) list of customers returned from mySQL
+	 *         query.
 	 */
 	public LinkedHashSet<Customer> queryCustomer(char type) {
 		return modelController.getDbController().queryCustomer(type);
@@ -77,8 +83,10 @@ public class ShopApp {
 
 	/**
 	 * Query a list of customers by customer last name.
+	 * 
 	 * @param name (String) last name of customers being searched.
-	 * @return (LinkedHashSet<Customer>) list of customers returned from mySQL query.
+	 * @return (LinkedHashSet<Customer>) list of customers returned from mySQL
+	 *         query.
 	 */
 	public LinkedHashSet<Customer> queryCustomer(String name) {
 		return modelController.getDbController().queryCustomer(name);
@@ -86,6 +94,7 @@ public class ShopApp {
 
 	/**
 	 * Query a customers by customer id.
+	 * 
 	 * @param id (int) id of customer being searched.
 	 * @return (Customer) customer returned from query.
 	 */
@@ -95,8 +104,9 @@ public class ShopApp {
 
 	/**
 	 * Execute a purchase by a customer for a specified quantity of an item.
-	 * @param itemID (int) id of item that was purchased.
-	 * @param qty (int) quantity purchased of item.
+	 * 
+	 * @param itemID     (int) id of item that was purchased.
+	 * @param qty        (int) quantity purchased of item.
 	 * @param customerID (int) id of customer executing the purchase.
 	 * @return (boolean) true if the purchase was successful.
 	 */
@@ -113,11 +123,12 @@ public class ShopApp {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Update the daily order with any new items that need to be ordered.
+	 * 
 	 * @param item (Item_Elec) item that needs to be ordered.
-	 * @param qty (int) quantity of item that needs to be ordered.
+	 * @param qty  (int) quantity of item that needs to be ordered.
 	 */
 	private void updateOrders(Item_Elec item, int qty) {
 		if (item.getQty() < item.ORDERQTYLIMIT) {
@@ -127,23 +138,38 @@ public class ShopApp {
 				temp = new Order(i);
 				modelController.getDbController().insertOrder(temp);
 			}
+
 			updateOrderLines(item, temp.getOrderID(), qty);
 		}
 		return; // output to gui that order succeeded or failed
 	}
 
 	/**
-	 * Update the daily order's orderlines by adding a new line or updating existing line's quantity.
-	 * @param item (Item_Elec) item that needs to be ordered.
-	 * @param orderId (int) order id that the orderline is being added to. 
-	 * @param qty (int) quantity of item needing to be ordered.
+	 * Return a supplier from the database based on the passed ID
+	 * @param supplierID (int) 4 digit supplier ID to return
+	 * @return (Supplier) retunrs single queried supplier or null if ID does not match DB
+	 */
+	public Int_Supplier querySupplier(int supplierID) {
+		return this.modelController.getDbController().querySupplier(supplierID);
+	}
+
+	/**
+	 * Update the daily order's orderlines by adding a new line or updating existing
+	 * line's quantity.
+	 * 
+	 * @param item    (Item_Elec) item that needs to be ordered.
+	 * @param orderId (int) order id that the orderline is being added to.
+	 * @param qty     (int) quantity of item needing to be ordered.
 	 */
 	public void updateOrderLines(Item_Elec item, int orderId, int qty) {
 		OrderLine templine = this.modelController.getDbController().queryOrderLine(item.getItemID(), orderId);
 
 		if (templine == null) {
+			Item_Elec tempItem = this.queryItem(item.getItemID());
+			Int_Supplier tempSupp = this.querySupplier(tempItem.getSupplierID());
 			modelController.getDbController().insertOrderLine(
-					new OrderLine(item.getItemID(), item.ORDERQTYLIMIT - item.getQty()), orderId);
+					new OrderLine(item.getItemID(), item.ORDERQTYLIMIT - item.getQty(), tempSupp.getCompanyName()),
+					orderId);
 			return;
 		} else {
 			modelController.getDbController().updateOrderLine(templine, qty, orderId);
@@ -151,18 +177,14 @@ public class ShopApp {
 		}
 	}
 
-//	public boolean removeItem(Item item) {
-//		if (dbController.queryItem(item.getItemID()) != null) {
-//			dbController.removeItem(item);
-//			return true;
-//		}
-//		return false;
-//	}
+
 
 	/**
 	 * Query an item by the item name/description.
+	 * 
 	 * @param itemDesc (String) description of item being searched.
-	 * @return (LinkedHashSet<Item_Elec>) list of items matching the item description.
+	 * @return (LinkedHashSet<Item_Elec>) list of items matching the item
+	 *         description.
 	 */
 	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
 		return modelController.getDbController().queryItem(itemDesc);
@@ -170,6 +192,7 @@ public class ShopApp {
 
 	/**
 	 * Query all items listed in the database
+	 * 
 	 * @return (LinkedHashSet<Item_Elec>) list of all items.
 	 */
 	public LinkedHashSet<Item_Elec> queryItem() {
@@ -178,14 +201,13 @@ public class ShopApp {
 
 	/**
 	 * Query an item from the database by its id.
+	 * 
 	 * @param itemId (int) id of item being searched.
 	 * @return (Item_Elec) item matching the item id.
 	 */
 	public Item_Elec queryItem(int itemId) {
 		return modelController.getDbController().queryItem(itemId);
 	}
-
-	
 
 	// Included items as an option for extensibility but implementation is not
 	// required.
@@ -272,10 +294,19 @@ public class ShopApp {
 			try {
 				this.modelController.getOutputStream().writeObject(ow);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public String printOrder() {
+		int i = this.getInventory().generateOrderID();
+		Order temp = this.modelController.getDbController().queryOrder(i);
+		return this.getInventory().printOrder(temp);
+	}
+	
+	public String printItems() {
+		return this.getInventory().toString();
 	}
 
 	public void runShop() {
@@ -313,3 +344,11 @@ public class ShopApp {
 	}
 
 }
+
+//public boolean removeItem(Item item) {
+//if (dbController.queryItem(item.getItemID()) != null) {
+//	dbController.removeItem(item);
+//	return true;
+//}
+//return false;
+//}

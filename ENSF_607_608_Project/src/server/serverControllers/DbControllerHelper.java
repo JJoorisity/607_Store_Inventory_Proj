@@ -137,6 +137,10 @@ public class DbControllerHelper implements DatabaseTables {
 		return ("INSERT INTO " + PURCHASES + " VALUES (?,?)");
 
 	}
+
+	public String querySupplier() {
+		return ("SELECT * FROM " + SUPPLIERS + " WHERE supplierId = ?");
+	}
 	
 	// Nested query: option to query supplier name using item Id.
 	// Join query: option to join item table and orderline for print.

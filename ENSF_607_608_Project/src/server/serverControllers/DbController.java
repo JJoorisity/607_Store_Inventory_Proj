@@ -203,8 +203,8 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 						results.getString("itemDesc"), results.getInt("itemQty"), results.getDouble("itemPrice"),
 						results.getInt("supplierId"), results.getString("powerType"), results.getInt("V"),
 						results.getInt("Ph")));
-				pStat.close();
 			}
+			pStat.close();
 		} catch (SQLException e) {
 			System.err.println("queryItem all failed.");
 			e.printStackTrace();
@@ -429,7 +429,10 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			ResultSet results = pStat.executeQuery();
 
 			if (results.next()) {
-				queryRes = new OrderLine(results.getInt("itemId"), results.getInt("orderQty"));
+				Item_Elec tempItem = this.queryItem(results.getInt("itemId"));
+				Int_Supplier tempSupp = this.querySupplier(tempItem.getSupplierID());
+				queryRes = new OrderLine(results.getInt("itemId"), results.getInt("orderQty"),
+						tempSupp.getCompanyName());
 				pStat.close();
 			}
 		} catch (SQLException e) {
@@ -449,8 +452,9 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			if (results.next()) {
 				queryRes = new Order(results.getInt("orderId"));
 				pStat.close();
+				queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID()));
 			}
-			queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID()));
+			
 		} catch (SQLException e) {
 			System.err.println("queryOrder failed with " + orderId);
 		}
@@ -466,13 +470,37 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			ResultSet results = pStat.executeQuery();
 
 			while (results.next()) {
-				queryRes.add(new OrderLine(results.getInt("itemId"), results.getInt("orderQty")));
-				pStat.close();
+				Item_Elec tempItem = this.queryItem(results.getInt("itemId"));
+				Int_Supplier tempSupp = this.querySupplier(tempItem.getSupplierID());
+				queryRes.add(
+						new OrderLine(results.getInt("itemId"), results.getInt("orderQty"), tempSupp.getCompanyName()));
 			}
+			pStat.close();
 		} catch (SQLException e) {
 			System.err.println("queryAllOrderLine failed with " + orderId);
 		}
 		return queryRes;
+	}
+
+	public Int_Supplier querySupplier(int supplierID) {
+		Int_Supplier queryRes = null;
+		try {
+			String query = helper.querySupplier();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, supplierID);
+			ResultSet results = pStat.executeQuery();
+
+			if (results.next()) {
+				queryRes = new Int_Supplier(results.getInt("supplierID"), results.getString("supplierType").charAt(0),
+						results.getString("supplierName"), results.getString("salesContact"),
+						results.getString("address"), results.getDouble("importTax"));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("querySupplier failed with " + supplierID);
+		}
+		return queryRes;
+
 	}
 
 	public void insertPurchases(int itemID, int customerID) {

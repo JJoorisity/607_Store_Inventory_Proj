@@ -99,7 +99,7 @@ public class Item {
 	@Override
 	public String toString() {
 
-		String leftAlignFormat = "| %-15s | %-7d | %-8d | %-9.2f |";
+		String leftAlignFormat = "| %-15s | %-7d | %-8d | %-13.2f |\n";
 		String res = String.format(leftAlignFormat, this.getItemDesc(), this.getItemID(), this.getQty(),
 				this.getPrice());
 		return res;
@@ -134,19 +134,6 @@ public class Item {
 	@Override
 	public int hashCode() {
 		return Objects.hashCode(this.getItemID());
-	}
-
-	/**
-	 * "(itemId + " supplierId INTEGER not NULL, " + " itemType VARCHAR(1), " + "
-	 * itemDesc VARCHAR(255), " + " itemPrice DECIMAL(5,2), " + " itemQty INTEGER, "
-	 * + " powerType VARCHAR(10), " + " V INTEGER, " + " Ph INTEGER, " +
-	 * 
-	 * @return
-	 */
-	public String sqlInsert() {
-		return this.itemID + ", " + this.supplierID + ", " + this.itemType + ", " + this.itemDesc + ", " + this.price
-				+ ", " + this.qty + ",NULL,NULL,NULL";
-
 	}
 
 }

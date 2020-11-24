@@ -16,11 +16,11 @@ public interface DatabaseTables {
 	static final String ORDER_LINES = "Order_Lines";
 	
 	// Text files for Mac:
-//	static final String ITEMFILE = "./items.txt";
-//	static final String SUPPLIERFILE = "./suppliers.txt";
-//	static final String CUSTOMERFILE = "./customers.txt";
+	static final String ITEMFILE = "./items.txt";
+	static final String SUPPLIERFILE = "./suppliers.txt";
+	static final String CUSTOMERFILE = "./customers.txt";
 	// Text files for Windows:
-	static final String ITEMFILE = "ENSF_607_608_Project/items.txt";
-	static final String SUPPLIERFILE = "ENSF_607_608_Project/suppliers.txt";
-	static final String CUSTOMERFILE = "ENSF_607_608_Project/customers.txt";
+//	static final String ITEMFILE = "ENSF_607_608_Project/items.txt";
+//	static final String SUPPLIERFILE = "ENSF_607_608_Project/suppliers.txt";
+//	static final String CUSTOMERFILE = "ENSF_607_608_Project/customers.txt";
 }

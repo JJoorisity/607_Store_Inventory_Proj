@@ -1,24 +1,14 @@
 package sharedModel;
 
-public class OrderLine {
+public class OrderLine implements PrintTableConstants{
 	private int itemId;
 	private int orderQty;
+	private String supplierName;
 
-	public OrderLine(int itemId, int qty) {
+	public OrderLine(int itemId, int qty, String suppName) {
 		this.itemId = itemId;
 		this.orderQty = qty;
-	}
-	
-	public String printOrderLine(Item item) {
-		String valueAlignFormat = "| %-20s  %-27d |%n";
-		String stringAlignFormat = "| %-20s  %-27s |%n";
-		String res = "";
-		
-		res += String.format(stringAlignFormat, "Item Description:", item.getItemDesc());
-		res += String.format(valueAlignFormat, "Amount Ordered:", (this.orderQty));
-		res += String.format(stringAlignFormat, "Supplier:", item.getSupplierID());
-		res += "+*****************+*********+**********+***********+*";
-		return res;
+		this.supplierName = suppName;
 	}
 
 	public int getItemId() {
@@ -36,9 +26,25 @@ public class OrderLine {
 	public void setOrderQty(int orderQty) {
 		this.orderQty = orderQty;
 	}
-	
-	
-	
-	
-	
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
+	}
+
+	public String printOrderLine(Item item) {
+		String valueAlignFormat = "| %-20s  %-30d |%n";
+		String stringAlignFormat = "| %-20s  %-30s |%n";
+		String res = "";
+
+		res += String.format(stringAlignFormat, "Item Description:", item.getItemDesc());
+		res += String.format(valueAlignFormat, "Amount Ordered:", (this.orderQty));
+		res += String.format(stringAlignFormat, "Supplier:", this.getSupplierName());
+		res += TABLEBREAK;
+		return res;
+	}
+
 }

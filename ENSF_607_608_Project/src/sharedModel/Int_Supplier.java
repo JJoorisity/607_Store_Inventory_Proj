@@ -16,5 +16,14 @@ public class Int_Supplier extends Supplier{
 	public void setImportTax(double importTax) {
 		this.importTax = importTax;
 	}
+	
+	@Override
+	public String toString() {
+
+		String leftAlignFormat = "| %-15s | %-7d | %-8d | %-9.2f | %-9.2f |%n";
+		String res = String.format(leftAlignFormat, this.getSupplierID(), this.getCompanyName(), this.getAddress(),
+				this.getSalesContact(),this.getImportTax());
+		return res;
+	}
 
 }

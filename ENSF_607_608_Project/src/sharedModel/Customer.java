@@ -63,7 +63,5 @@ public class Customer {
 		this.customerType = customerType;
 	}
 	
-	public void toString() {
-		
-	}
+
 }
