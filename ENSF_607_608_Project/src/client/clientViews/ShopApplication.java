@@ -59,14 +59,11 @@ public class ShopApplication {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public void startGui(ShopApplication shop) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CmsController customerController = new CmsController();
-					ImsController inventoryController = new ImsController();
-					ShopApplication window = new ShopApplication(customerController.getApp(),inventoryController.getApp());
-					window.frame.setVisible(true);
+					shop.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -30,7 +30,7 @@ public class ClientController {
 		inventoryController = new ImsController();
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
-		this.shopClient.communicate();
+		//this.shopClient.communicate();
 
 		// construct gui. pass actionlisters as required.
 	}
@@ -43,10 +43,11 @@ public class ClientController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() != null) {
-				System.out.println(e);
-			}
-
+			String query = customerController.getApp().getSearchFieldText();
+			String type = customerController.getApp().getSelectedRadioButton();
+			this.shopClient.
+			// execute query
+			// print to results text field
 		}
 
 	}
@@ -54,7 +55,8 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController cc = new ClientController();
-		cc.shopApplication.main(null);
+		cc.addRadioButtonActionListeners();
+		cc.shopApplication.startGui(cc.shopApplication);
 	}
 
 

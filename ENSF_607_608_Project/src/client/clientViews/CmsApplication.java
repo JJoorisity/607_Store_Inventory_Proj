@@ -48,6 +48,7 @@ public class CmsApplication {
 	private final JLabel cTypeLbl = new JLabel("Customer Type:");
 	private final JComboBox<String> cTypeCBox = new JComboBox<String>();
 	private final JPanel ImsApplication = new JPanel();
+	private ButtonGroup radioGroup = new ButtonGroup();
 
 	/**
 	 * Create the application.
@@ -324,10 +325,13 @@ public class CmsApplication {
 		panel_custInfoBtn.add(clearCustBtn, gbc_clearCustBtn);
 		clearCustBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
 		
-		ButtonGroup radioGroup = new ButtonGroup();
-		radioGroup.add(custtIdBttn);
-		radioGroup.add(custTypeBttn);
-		radioGroup.add(lastNameBttn);
+		
+		this.radioGroup.add(custtIdBttn);
+		custtIdBttn.setActionCommand("customerId");
+		this.radioGroup.add(custTypeBttn);
+		custTypeBttn.setActionCommand("customerType");
+		this.radioGroup.add(lastNameBttn);
+		lastNameBttn.setActionCommand("lNAme");
 	}
 	
 	public JPanel getCmsFrame() {
@@ -335,9 +339,15 @@ public class CmsApplication {
 	}
 	
 	public void addSearchAction(ActionListener action) {
-		this.clearSearchCust.addActionListener(action);
-		
+		this.searchCust.addActionListener(action);
 	}
 	
+	public String getSearchFieldText() {
+		return textField.getText();
+	}
+	
+	public String getSelectedRadioButton() {
+		return this.radioGroup.getSelection().getActionCommand();
+	}
 	
 }
