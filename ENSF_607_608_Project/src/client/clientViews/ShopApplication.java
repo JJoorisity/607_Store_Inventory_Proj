@@ -5,8 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 
+import client.clientControllers.CmsController;
+import client.clientControllers.ImsController;
+
 public class ShopApplication {
 
+	private CmsApplication CmsApp;
+	private ImsApplication ImsApp;
+	
 	private JFrame frame;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private final JPanel CmsApplication = new JPanel();
@@ -57,7 +63,9 @@ public class ShopApplication {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ShopApplication window = new ShopApplication();
+					CmsController customerController = new CmsController();
+					ImsController inventoryController = new ImsController();
+					ShopApplication window = new ShopApplication(customerController.getApp(),inventoryController.getApp());
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,26 +77,27 @@ public class ShopApplication {
 	/**
 	 * Create the application.
 	 */
-	public ShopApplication() {
-		initialize();
+	public ShopApplication(CmsApplication cms, ImsApplication ims) {
+		initialize(cms, ims);
+	}
+	
+	public CmsApplication getCms() {
+		return this.CmsApp;
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(CmsApplication cms, ImsApplication Ims) {
 		textField.setColumns(10);
 		frame = new JFrame();
 		frame.setBounds(100, 100, 813, 490);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		
-		tabbedPane.addTab("Inventory", null, ImsApplication, null);
-		
-		tabbedPane.addTab("Customers", null, new CmsApplication().getCmsApplication(), null);
-		
-		
+
+		//tabbedPane.addTab("Inventory", null, ims.getImsFrame(), null);
+		tabbedPane.addTab("Customers", null, cms.getCmsFrame(), null);
 	}
 
 }

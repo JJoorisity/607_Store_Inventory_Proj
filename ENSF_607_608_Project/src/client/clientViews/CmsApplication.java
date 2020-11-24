@@ -2,6 +2,8 @@ package client.clientViews;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+
 import javax.swing.border.*;
 
 public class CmsApplication {
@@ -321,9 +323,21 @@ public class CmsApplication {
 		gbc_clearCustBtn.gridy = 0;
 		panel_custInfoBtn.add(clearCustBtn, gbc_clearCustBtn);
 		clearCustBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
+		
+		ButtonGroup radioGroup = new ButtonGroup();
+		radioGroup.add(custtIdBttn);
+		radioGroup.add(custTypeBttn);
+		radioGroup.add(lastNameBttn);
 	}
 	
-	public JPanel getCmsApplication() {
+	public JPanel getCmsFrame() {
 		return this.cmsApplication;
 	}
+	
+	public void addSearchAction(ActionListener action) {
+		this.clearSearchCust.addActionListener(action);
+		
+	}
+	
+	
 }
