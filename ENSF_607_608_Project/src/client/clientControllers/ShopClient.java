@@ -63,8 +63,6 @@ public class ShopClient implements Commands {
 					case DISPLAY: // trigger gui response
 						// need to send repsonse object wrapper to controller
 						this.clientController.updateSearchResults(answer.getPassedObj(0).toString());
-
-						// System.out.println(answer.getPassedObj(0).toString());
 						break;
 					}
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui

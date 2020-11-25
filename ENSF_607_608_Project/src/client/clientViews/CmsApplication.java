@@ -51,8 +51,9 @@ public class CmsApplication {
 	private final JComboBox<String> cTypeCBox = new JComboBox<String>();
 	private final JPanel ImsApplication = new JPanel();
 	private ButtonGroup radioGroup = new ButtonGroup();
-	private final JTextArea clientDisplay = new JTextArea();
-
+	private DefaultListModel listModel1 = new DefaultListModel();
+	private final JList resultsList = new JList(listModel1);
+	
 	/**
 	 * Create the application.
 	 */
@@ -93,8 +94,11 @@ public class CmsApplication {
 		scrollPane.setBackground(Color.WHITE);
 
 		panel_SearchResults.add(scrollPane, BorderLayout.CENTER);
+		resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		resultsList.setVisibleRowCount(100);
+		resultsList.setLayoutOrientation(JList.VERTICAL);
 		
-		scrollPane.setViewportView(clientDisplay);
+		scrollPane.setColumnHeaderView(resultsList);
 		panel_SearchCust.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_left.setLeftComponent(panel_SearchCust);
@@ -349,6 +353,7 @@ public class CmsApplication {
 		custTypeBttn.setActionCommand("customerType");
 		this.radioGroup.add(lastNameBttn);
 		lastNameBttn.setActionCommand("lName");
+		
 	}
 
 	public JPanel getCmsFrame() {
@@ -368,7 +373,10 @@ public class CmsApplication {
 	}
 
 	public void setSearchResultText(String output) {
-		this.clientDisplay.append(output); // need a textarea here
+		int i = this.listModel1.getSize();
+		this.resultsList.ensureIndexIsVisible(i - 1);
+		this.listModel1.add(i, output);
+		
 		
 	}
 
