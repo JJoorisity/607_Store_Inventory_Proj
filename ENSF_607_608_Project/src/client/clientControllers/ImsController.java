@@ -9,7 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import client.clientViews.ImsApplication;
 import sharedModel.*;
 
-public class ImsController {
+public class ImsController implements Commands {
 
 	private ImsApplication app;
 	private ClientController cc;
@@ -38,12 +38,12 @@ public class ImsController {
 	}
 	
 	public void executeSearch() {
+		this.app.setSearchResultText("");
 		String command = "";
 		String searchText = this.app.getSearchItemTxt();
 		String type = app.getSelectedRadioButton();
-
 		// create temp customer object with searchable attribute set.
-		Item item = new Item();
+		Item_Elec item = new Item_Elec();
 		switch (type) {
 		case "itemId": {
 			try {
@@ -60,9 +60,21 @@ public class ImsController {
 			break;
 		}
 		}
+		wrapMessage(command, ITEM_ELEC, item);
+	}
+	
+	public void executeClear() {
+		this.app.setSearchItemTxt("");		
+	}
+	
+	public void executePurchase() {
+		
+	}
+	
+	public void wrapMessage(String command, String type, Object newObj) {
 		ObjectWrapper request = new ObjectWrapper();
-		request.addPassedObj(c);
-		request.setMessage(command, "CUSTOMER");
+		request.addPassedObj(newObj);
+		request.setMessage(command, type);
 
 		Runnable runner = new Runnable() {
 			public void run() {
@@ -70,15 +82,6 @@ public class ImsController {
 			}
 		};
 		EventQueue.invokeLater(runner);
-	}
-	
-	public void executeClear() {
-		
-		
-	}
-	
-	public void executePurchase() {
-		
 	}
 
 //	public void updateSearchResults(ArrayList<Object> objectList) {

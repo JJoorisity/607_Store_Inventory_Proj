@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import server.serverModel.Commands;
+import sharedModel.Commands;
 import sharedModel.ObjectWrapper;
 
 public class ShopClient implements Commands {

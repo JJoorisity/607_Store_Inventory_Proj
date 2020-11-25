@@ -1,4 +1,4 @@
-package server.serverModel;
+package sharedModel;
 
 public interface Commands {
 
