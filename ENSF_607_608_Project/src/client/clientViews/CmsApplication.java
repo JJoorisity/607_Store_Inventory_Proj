@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionListener;
+
+import sharedModel.Customer;
 
 // Need to restrict string lengths.
 
@@ -368,6 +371,14 @@ public class CmsApplication {
 		this.clearSearchCust.addActionListener(clearAction);
 	}
 
+	public void addListSelectionAction(ListSelectionListener selectListAction) {
+		this.resultsList.addListSelectionListener(selectListAction);
+	}
+
+	public void addClearCustInfoAction(ActionListener clearCustInfoAction) {
+		this.clearCustBtn.addActionListener(clearCustInfoAction);
+	}
+
 	public String getSearchFieldText() {
 		return textField.getText();
 	}
@@ -376,20 +387,51 @@ public class CmsApplication {
 		textField.setText(set);
 	}
 
+	public JList getResultList() {
+		return this.resultsList;
+	}
+
 	public String getSelectedRadioButton() {
 		return this.radioGroup.getSelection().getActionCommand();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setSearchResultText(String output) {
 		int i = this.listModel1.getSize();
 		this.resultsList.ensureIndexIsVisible(i - 1);
 		this.listModel1.add(i, output);
-
 	}
 
 	public void resetSearchResultText(String output) {
 		this.listModel1.removeAllElements();
+	}
 
+	public void updateCustInfoPane(Object object) {
+		Customer c = (Customer) object;
+		this.clientIdTxt.setText(Integer.toString(c.getCustomerId()));
+		this.fNameTxt.setText(c.getFirstName());
+		this.lNameTxt.setText(c.getLastName());
+		this.addressTxt.setText(c.getAddress());
+		this.pcTxt.setText(c.getPostalCode());
+		this.pnTxt.setText(c.getPhoneNum());
+		
+		String item;
+		for (int i = 0; i < cTypeCBox.getItemCount(); i++) {
+			item = (String) cTypeCBox.getItemAt(i);
+			if (item.equalsIgnoreCase(String.valueOf(c.getCustomerType()))) {
+				cTypeCBox.setSelectedIndex(i);
+				break;
+			}
+		}
+	}
+
+	public void resetCustInfoPane() {
+		this.clientIdTxt.setText("");
+		this.fNameTxt.setText("");
+		this.lNameTxt.setText("");
+		this.addressTxt.setText("");
+		this.pcTxt.setText("");
+		this.pnTxt.setText("");
 	}
 
 }

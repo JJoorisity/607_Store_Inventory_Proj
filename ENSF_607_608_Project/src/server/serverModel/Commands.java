@@ -17,4 +17,5 @@ public interface Commands {
 	static final String DELETE = "DELETE";
 	static final String PURCHASE = "PURCHASE";
 	static final String QUIT = "QUIT";
+	static final String DISPLAYEDIT = "DISPLAYEDIT";
 }

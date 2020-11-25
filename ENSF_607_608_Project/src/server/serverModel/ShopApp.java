@@ -265,9 +265,13 @@ public class ShopApp implements Commands {
 		switch (type) {
 		case CUSTOMER: {
 			Customer c = (Customer) request.getPassedObj(0);
-			if (command.equals(ID) || command.contains(ID))
+			if (command.equals(ID) || command.contains(ID)) {
 				searchObject.add(this.queryCustomer(c.getCustomerId()));
-			else if (command.equals(NAME) || command.contains(NAME))
+				if (command.contains("EDIT")) {
+					ow.setMessage(DISPLAYEDIT, CUSTOMER); // special case for customer edit pane
+					break;
+				}
+			} else if (command.equals(NAME) || command.contains(NAME))
 				searchObject.addAll(this.queryCustomer(c.getLastName()));
 			else if (command.equals(TYPE) || command.contains(TYPE))
 				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
@@ -297,8 +301,7 @@ public class ShopApp implements Commands {
 		try {
 			if (searchObject.isEmpty() == true) {
 				ow.setMessage(FAILED, CUSTOMER);
-			}
-			else if (searchObject.get(0) == null) {
+			} else if (searchObject.get(0) == null) {
 				ow.setMessage(FAILED, CUSTOMER); // if query returns a null, set the outgoing message to failed
 			}
 			ow.addPassedObj(searchObject);

@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import client.clientViews.CmsApplication;
 import sharedModel.Customer;
@@ -31,7 +33,9 @@ public class CmsController {
 
 	public void addActionListeners() {
 		this.app.addSearchAction(new searchAction());
-		this.app.addClearSearchAction(new clearAction());
+		this.app.addClearSearchAction(new clearSearchAction());
+		this.app.addListSelectionAction(new selectListAction());
+		this.app.addClearCustInfoAction(new clearCustInfoAction());
 	}
 
 	public void updateSearchResults(ArrayList<Object> objectList) {
@@ -39,6 +43,17 @@ public class CmsController {
 			Runnable runner = new Runnable() {
 				public void run() {
 					app.setSearchResultText(o.toString());
+				}
+			};
+			EventQueue.invokeLater(runner);
+		}
+	}
+
+	public void updateCustInfoPane(ArrayList<Object> objectList) {
+		for (Object o : objectList) {
+			Runnable runner = new Runnable() {
+				public void run() {
+					app.updateCustInfoPane(o);
 				}
 			};
 			EventQueue.invokeLater(runner);
@@ -59,9 +74,9 @@ public class CmsController {
 			case "customerId": {
 				try {
 					c.setCustomerId(Integer.parseInt(searchText));
-		        } catch (NumberFormatException nfe) {
-		        	c.setCustomerId(-1); // if user passes string instead of int set to sentinal value
-		        }
+				} catch (NumberFormatException nfe) {
+					c.setCustomerId(-1); // if user passes string instead of int set to sentinal value
+				}
 				command = "SEARCHID";
 				break;
 			}
@@ -86,11 +101,10 @@ public class CmsController {
 				}
 			};
 			EventQueue.invokeLater(runner);
-
 		}
 	}
-	
-	private class clearAction implements ActionListener {
+
+	private class clearSearchAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -99,10 +113,50 @@ public class CmsController {
 				public void run() {
 					app.setSearchFieldText("");
 					app.resetSearchResultText("");
+					app.resetCustInfoPane();
 				}
 			};
 			EventQueue.invokeLater(runner);
+		}
+	}
 
+	private class selectListAction implements ListSelectionListener {
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if (e.getValueIsAdjusting()) {
+				String selection = app.getResultList().getSelectedValue().toString();
+				String temp = (selection.substring(selection.lastIndexOf("ID")));
+				int customerID = Integer.parseInt(temp.replaceAll("[^0-9]", ""));
+
+				Customer c = new Customer();
+				c.setCustomerId(customerID);
+
+				ObjectWrapper request = new ObjectWrapper();
+				request.addPassedObj(c);
+				request.setMessage("SEARCHIDEDIT", "CUSTOMER");
+
+				Runnable runner = new Runnable() {
+					public void run() {
+						cc.getShopClient().triggerOutput(request);
+					}
+				};
+				EventQueue.invokeLater(runner);
+			} 
+		}
+	}
+	
+	private class clearCustInfoAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			Runnable runner = new Runnable() {
+				public void run() {
+					app.resetCustInfoPane();
+				}
+			};
+			EventQueue.invokeLater(runner);
 		}
 	}
 

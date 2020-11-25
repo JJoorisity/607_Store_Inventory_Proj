@@ -60,10 +60,16 @@ public class ShopClient implements Commands {
 						System.out.println("Action Failed");
 						break;
 					}
-					case DISPLAY: // trigger gui response
+					case DISPLAY: {// trigger search display
 						this.clientController.getCmsController().updateSearchResults(answer.getPassedObj());
 						break;
 					}
+					case DISPLAYEDIT: {// trigger edit display
+						this.clientController.getCmsController().updateCustInfoPane(answer.getPassedObj());
+						break;
+					}
+					}
+
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
 					break;
 				}
@@ -88,7 +94,6 @@ public class ShopClient implements Commands {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void close() {
 		try {
