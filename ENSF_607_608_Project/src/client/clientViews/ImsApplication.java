@@ -43,9 +43,6 @@ public class ImsApplication {
 	private final JButton searchAllBtn = new JButton("Search All");
 	private DefaultListModel listModel1 = new DefaultListModel();
 	private final JList itemList = new JList();
-	
-
-	// Add customer Id to purchase section.
 
 	/**
 	 * Create the application.
