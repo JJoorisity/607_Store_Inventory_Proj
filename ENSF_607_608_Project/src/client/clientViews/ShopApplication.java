@@ -38,14 +38,14 @@ public class ShopApplication {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(CmsApplication cms, ImsApplication Ims) {
+	private void initialize(CmsApplication cms, ImsApplication ims) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 813, 490);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-		//tabbedPane.addTab("Inventory", null, ims.getImsFrame(), null);
+		tabbedPane.addTab("Inventory", null, ims.getImsFrame(), null);
 		tabbedPane.addTab("Customers", null, cms.getCmsFrame(), null);
 	}
 

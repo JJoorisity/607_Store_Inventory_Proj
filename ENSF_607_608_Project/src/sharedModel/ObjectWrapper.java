@@ -34,6 +34,10 @@ public class ObjectWrapper implements Serializable {
 		this.passedObj.addAll(passedObj);
 	}
 	
+	public void addPassedObj(Object passedObj) {
+		this.passedObj.add(passedObj);
+	}
+	
 	public void resetWrapper() {
 		this.message[0] = "";
 		this.message[1] = "";

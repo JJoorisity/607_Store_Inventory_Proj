@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import client.clientViews.ShopApplication;
+import sharedModel.Customer;
+import sharedModel.ObjectWrapper;
 
 public class ClientController {
 
@@ -29,8 +31,12 @@ public class ClientController {
 		customerController = new CmsController();
 		inventoryController = new ImsController();
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
-
-		//this.shopClient.communicate();
+		
+		this.addRadioButtonActionListeners();
+		this.shopApplication.startGui(this.shopApplication);
+		
+		this.shopClient = new ShopClient("localhost",8088);
+		this.shopClient.communicate();
 
 		// construct gui. pass actionlisters as required.
 	}
@@ -43,9 +49,33 @@ public class ClientController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String query = customerController.getApp().getSearchFieldText();
+			String command = "";
+			
+			String searchText = customerController.getApp().getSearchFieldText();
 			String type = customerController.getApp().getSelectedRadioButton();
-			this.shopClient.
+			System.out.println(searchText + " " + type);
+			
+			// create temp customer object with searchable attribute set.
+			Customer c = new Customer();
+			switch (type) {
+			case "customerId": {
+				c.setCustomerId(Integer.parseInt(searchText));
+				command = "SEARCHID";
+			}
+			case "customerType": {
+				c.setCustomerType(searchText.charAt(0));
+				command = "SEARCHTYPE";
+			}
+			case "lName": {
+				c.setLastName(searchText);
+				command = "SEARCHNAME";
+			}
+			}
+			ObjectWrapper request = new ObjectWrapper();
+			request.addPassedObj(c);
+			request.setMessage(command, "CUSTOMER");
+
+			shopClient.triggerSearch(request);
 			// execute query
 			// print to results text field
 		}
@@ -55,9 +85,7 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController cc = new ClientController();
-		cc.addRadioButtonActionListeners();
-		cc.shopApplication.startGui(cc.shopApplication);
+		
 	}
-
 
 }

@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import sharedModel.ObjectWrapper;
 
 public class ShopClient {
-	
+
 	private Socket aSocket;
 	private ObjectInputStream clientIn;
 	private ObjectOutputStream clientOut;
@@ -41,10 +41,9 @@ public class ShopClient {
 				// need input from IMS or CMS from gui
 				// write command to wrapper to send to server
 				// returns wrapper with data requested or triggers print to screen
-			
 
 				// end of client action loop
-				
+
 				answer = (ObjectWrapper) clientIn.readObject(); // wait for server response
 				String command = answer.getMessage()[0];
 				if (answer != null && !command.equals("")) {
@@ -73,17 +72,23 @@ public class ShopClient {
 		this.close();
 	}
 
-	public void triggerSearch() {
-		ObjectWrapper request = new ObjectWrapper();
+	public void triggerSearch(ObjectWrapper request) {
+
 		// send object wrapper with command
-		// clientOut.writeObject(request)
+		try {
+			clientOut.writeObject(request);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public void triggerPurchase() {}
-	
-	public void triggerCustomerUpdate() {}
-	
-	
+
+	public void triggerPurchase() {
+	}
+
+	public void triggerCustomerUpdate() {
+	}
+
 	public void close() {
 		try {
 			clientIn.close();
@@ -92,5 +97,5 @@ public class ShopClient {
 			System.out.println("Closing error: " + e.getMessage());
 		}
 	}
-	
+
 }

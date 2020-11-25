@@ -20,6 +20,9 @@ public class Customer {
 		this.setCustomerType(type);
 	}
 	
+	public Customer() {
+	}
+
 	public int getCustomerId() {
 		return customerId;
 	}

@@ -30,6 +30,7 @@ public class ImsApplication {
 	private final JTextField searchItemTxt = new JTextField();
 	private final JButton searchItemBtn = new JButton("Search");
 	private final JButton clearItemBtn = new JButton("Clear");
+	private ButtonGroup radioGroup = new ButtonGroup();
 
 	/**
 	 * Create the application.
@@ -190,6 +191,18 @@ public class ImsApplication {
 
 		rightPanel.add(itemResultLbl, BorderLayout.NORTH);
 		rightPanel.add(itemSearchPane, BorderLayout.CENTER);
+		
+	
+		this.radioGroup.add(itemIdRBtn);
+		itemIdRBtn.setActionCommand("itemId");
+		itemIdRBtn.setSelected(true); // first radio button should always be selected. No null searches allowed
+		this.radioGroup.add(itemDRBtn);
+		itemDRBtn.setActionCommand("itemDesc");
+
+	}
+
+	public JPanel getImsFrame() {
+		return this.ImsFrame;
 	}
 
 }

@@ -8,7 +8,7 @@ import javax.swing.border.*;
 
 public class CmsApplication {
 
-	private final JPanel cmsApplication = new JPanel();
+	private final JPanel CmsFrame = new JPanel();
 	private final JPanel panel = new JPanel();
 	private final JSplitPane splitPane_right = new JSplitPane();
 	private final JSplitPane splitPane_left = new JSplitPane();
@@ -62,9 +62,9 @@ public class CmsApplication {
 	 */
 	private void initialize() {
 		textField.setColumns(10);
-		cmsApplication.setBackground(Color.WHITE);
-		cmsApplication.setLayout(new BorderLayout(0, 0));
-		cmsApplication.add(panel, BorderLayout.CENTER);
+		CmsFrame.setBackground(Color.WHITE);
+		CmsFrame.setLayout(new BorderLayout(0, 0));
+		CmsFrame.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 		splitPane_right.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		splitPane_right.setBackground(Color.WHITE);
@@ -324,30 +324,30 @@ public class CmsApplication {
 		gbc_clearCustBtn.gridy = 0;
 		panel_custInfoBtn.add(clearCustBtn, gbc_clearCustBtn);
 		clearCustBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
-		
-		
+
 		this.radioGroup.add(custtIdBttn);
 		custtIdBttn.setActionCommand("customerId");
+		custtIdBttn.setSelected(true); // first radio button should always be selected. No null searches allowed
 		this.radioGroup.add(custTypeBttn);
 		custTypeBttn.setActionCommand("customerType");
 		this.radioGroup.add(lastNameBttn);
-		lastNameBttn.setActionCommand("lNAme");
+		lastNameBttn.setActionCommand("lName");
 	}
-	
+
 	public JPanel getCmsFrame() {
-		return this.cmsApplication;
+		return this.CmsFrame;
 	}
-	
+
 	public void addSearchAction(ActionListener action) {
 		this.searchCust.addActionListener(action);
 	}
-	
+
 	public String getSearchFieldText() {
 		return textField.getText();
 	}
-	
+
 	public String getSelectedRadioButton() {
 		return this.radioGroup.getSelection().getActionCommand();
 	}
-	
+
 }
