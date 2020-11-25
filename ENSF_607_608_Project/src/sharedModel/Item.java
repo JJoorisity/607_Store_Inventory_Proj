@@ -1,5 +1,6 @@
 package sharedModel;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.util.Objects;
 
@@ -15,8 +16,9 @@ import java.util.Objects;
  *        Description: Item object that holds all information related to the
  *        individual tool.
  */
-public class Item {
+public class Item implements Serializable{
 
+	private static final long serialVersionUID = 2L;
 	protected int itemID;
 	protected char itemType;
 	protected String itemDesc;
@@ -42,6 +44,10 @@ public class Item {
 		this.setPrice(price);
 		this.setSupplierID(supplierID);
 
+	}
+	
+	public Item() {
+		
 	}
 
 	public int getItemID() {

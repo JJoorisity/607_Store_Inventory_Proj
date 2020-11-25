@@ -281,11 +281,11 @@ public class ShopApp implements Commands {
 
 		case ITEM_ELEC: {
 			Item_Elec item = (Item_Elec) request.getPassedObj(0);
-			if (command.equals(ID))
+			if (command.contains(ID))
 				searchObject.add(this.queryItem(item.getItemID()));
-			else if (command.equals(NAME))
+			else if (command.contains(NAME))
 				searchObject.addAll(this.queryItem(item.getItemDesc()));
-			else if (command.equals(ALL))
+			else if (command.contains(ALL))
 				searchObject.addAll(this.queryItem());
 			ow.setMessage(DISPLAY, ITEM_ELEC);
 			break;

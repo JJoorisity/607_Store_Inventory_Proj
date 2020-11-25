@@ -2,7 +2,10 @@ package client.clientViews;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionListener;
 
 public class ImsApplication {
 	private final JPanel ImsFrame = new JPanel();
@@ -11,15 +14,19 @@ public class ImsApplication {
 	private final JPanel rightPanel = new JPanel();
 	private final JLabel itemResultLbl = new JLabel("Search Results");
 	private JScrollPane itemSearchPane;
+	
 	private final JPanel purchasePanel = new JPanel();
 	private final JLabel purchaseLbl = new JLabel("Purchase Item");
 	private final JPanel purchaseInfoPanel = new JPanel();
+	private final JLabel custIdLbl = new JLabel("Customer ID:");
+	private final JTextField custIdTxt = new JTextField();
 	private final JLabel itemIdLbl = new JLabel("Item ID:");
 	private final JTextField itemIdTxt = new JTextField();
 	private final JLabel purchaseQtyLbl = new JLabel("Purchase Qty:");
 	private final JTextField purchaseQtyTxt = new JTextField();
-	private final JTextField pMssgeTxt = new JTextField();
 	private final JLabel pMssgLbl = new JLabel("Purchase Executed:");
+	private final JTextField pMssgeTxt = new JTextField();
+	
 	private final JPanel searchItemPane = new JPanel();
 	private final JLabel searchItemLbl = new JLabel("Search Item");
 	private final JPanel itemSearchPanel = new JPanel();
@@ -31,9 +38,9 @@ public class ImsApplication {
 	private final JButton searchItemBtn = new JButton("Search");
 	private final JButton clearItemBtn = new JButton("Clear");
 	private ButtonGroup radioGroup = new ButtonGroup();
+	private DefaultListModel listModel1 = new DefaultListModel();
 	private final JList itemList = new JList();
-	private final JLabel custIdLbl = new JLabel("Customer ID:");
-	private final JTextField custIdTxt = new JTextField();
+	
 	private final JButton purchaseBtn = new JButton("Purchase");
 
 	
@@ -45,6 +52,87 @@ public class ImsApplication {
 	public ImsApplication() {
 		initialize();
 		//fix
+	}
+	
+	public void addActionListeners(ActionListener listener) {
+		searchItemBtn.addActionListener(listener);
+		clearItemBtn.addActionListener(listener);
+		purchaseBtn.addActionListener(listener);
+	}
+	
+	public void addSelectionListeners(ListSelectionListener listener) {
+		itemList.addListSelectionListener(listener);
+	}
+	
+	public JButton getClearItemBtn() {
+		return this.clearItemBtn;
+	}
+	
+	public JButton getSearchItemBtn() {
+		return this.searchItemBtn;
+	}
+	
+	public JButton getPurchaseBtn() {
+		return this.purchaseBtn;
+	}
+	
+	public JList getItemList() {
+		return this.itemList;
+	}
+	
+	public String getSearchItemTxt() {
+		return searchItemTxt.getText();
+	}
+
+	public void setSearchItemTxt(String set) {
+		searchItemTxt.setText(set);
+	}
+	
+	public String getItemIdTxt() {
+		return itemIdTxt.getText();
+	}
+
+	public void setItemIdTxt(String set) {
+		itemIdTxt.setText(set);
+	}
+	
+	public String getPurchaseQtyTxt() {
+		return purchaseQtyTxt.getText();
+	}
+
+	public void setPurchaseQtyTxt(String set) {
+		purchaseQtyTxt.setText(set);
+	}
+	
+	public String getcustIdTxt() {
+		return custIdTxt.getText();
+	}
+
+	public void setcustIdTxt(String set) {
+		custIdTxt.setText(set);
+	}
+	
+	public String getPMssgeTxt() {
+		return pMssgeTxt.getText();
+	}
+
+	public void setPMssgeTxt(String set) {
+		pMssgeTxt.setText(set);
+	}
+
+	public String getSelectedRadioButton() {
+		return this.radioGroup.getSelection().getActionCommand();
+	}
+
+	public void setSearchResultText(String output) {
+		int i = this.listModel1.getSize();
+		this.itemList.ensureIndexIsVisible(i - 1);
+		this.listModel1.add(i, output);
+	}
+
+	public void resetSearchResultText(String output) {
+		this.listModel1.removeAllElements();
+
 	}
 
 	/**

@@ -2,6 +2,7 @@ package sharedModel;
 
 public class Item_Elec extends Item {
 
+	private static final long serialVersionUID = 2L;
 	private String powerType;
 	private int voltage;
 	private int phase;
@@ -12,6 +13,10 @@ public class Item_Elec extends Item {
 		this.setPowerType(ptype);
 		this.setVoltage(volts);
 		this.setPhase(phase);
+	}
+	
+	public Item_Elec() {
+		
 	}
 
 	public String getPowerType() {
