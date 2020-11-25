@@ -3,6 +3,7 @@ package client.clientControllers;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
@@ -10,7 +11,7 @@ import client.clientViews.CmsApplication;
 import sharedModel.Customer;
 import sharedModel.ObjectWrapper;
 
-public class CmsController{
+public class CmsController {
 
 	private CmsApplication app;
 	private ClientController cc;
@@ -19,7 +20,6 @@ public class CmsController{
 		app = new CmsApplication();
 		this.cc = cc;
 	}
-
 
 	public CmsApplication getApp() {
 		return app;
@@ -32,15 +32,16 @@ public class CmsController{
 	public void addSearcActionListeners() {
 		this.app.addSearchAction(new searchAction());
 	}
-	
-	public void updateSearchResults(String result) {
-		
-		Runnable runner = new Runnable() {
-			public void run() {
-				app.setSearchResultText(result);
-			}
-		};
-		EventQueue.invokeLater(runner);
+
+	public void updateSearchResults(ArrayList<Object> objectList) {
+		for (Object o : objectList) {
+			Runnable runner = new Runnable() {
+				public void run() {
+					app.setSearchResultText(o.toString());
+				}
+			};
+			EventQueue.invokeLater(runner);
+		}
 	}
 
 	private class searchAction implements ActionListener {
@@ -82,8 +83,8 @@ public class CmsController{
 				}
 			};
 			EventQueue.invokeLater(runner);
-			
+
 		}
 	}
-	
+
 }

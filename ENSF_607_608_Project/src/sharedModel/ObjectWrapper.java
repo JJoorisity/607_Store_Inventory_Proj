@@ -11,7 +11,7 @@ public class ObjectWrapper implements Serializable {
 	private static final long serialVersionUID = 3L;
 	private String[] message = new String[2];
 	private ArrayList<Object> passedObj = new ArrayList<Object>();
-	
+
 	public ObjectWrapper() {
 	}
 
@@ -30,14 +30,18 @@ public class ObjectWrapper implements Serializable {
 		return passedObj.get(i);
 	}
 
+	public ArrayList<Object> getPassedObj() {
+		return passedObj;
+	}
+
 	public void addPassedObj(ArrayList<Object> passedObj) {
 		this.passedObj.addAll(passedObj);
 	}
-	
+
 	public void addPassedObj(Object passedObj) {
 		this.passedObj.add(passedObj);
 	}
-	
+
 	public void resetWrapper() {
 		this.message[0] = "";
 		this.message[1] = "";

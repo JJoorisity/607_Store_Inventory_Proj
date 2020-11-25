@@ -305,15 +305,15 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		try {
 			String query = helper.queryCustomerType();
 			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setInt(1, type);
+			pStat.setString(1, String.valueOf(type));
 			ResultSet results = pStat.executeQuery();
 
 			while (results.next()) {
 				queryRes.add(new Customer(results.getInt("customerId"), results.getString("fName"),
 						results.getString("lName"), results.getString("address"), results.getString("postalCode"),
 						results.getString("phoneNumber"), results.getString("customerType").charAt(0)));
-				pStat.close();
 			}
+			pStat.close();
 		} catch (SQLException e) {
 			System.err.println("queryCustomer failed with " + type);
 		}
@@ -323,7 +323,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	public LinkedHashSet<Customer> queryCustomer(String name) {
 		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
-			String query = helper.queryCustomerType();
+			String query = helper.queryCustomerName();
 			PreparedStatement pStat = conn.prepareStatement(query);
 			pStat.setString(1, name);
 			ResultSet results = pStat.executeQuery();
@@ -332,8 +332,8 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 				queryRes.add(new Customer(results.getInt("customerId"), results.getString("fName"),
 						results.getString("lName"), results.getString("address"), results.getString("postalCode"),
 						results.getString("phoneNumber"), results.getString("customerType").charAt(0)));
-				pStat.close();
 			}
+			pStat.close();
 		} catch (SQLException e) {
 			System.err.println("queryCustomer failed with " + name);
 		}

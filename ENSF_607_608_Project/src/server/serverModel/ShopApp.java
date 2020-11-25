@@ -295,6 +295,9 @@ public class ShopApp implements Commands {
 		}
 		}
 		try {
+			if (searchObject.get(0) == null) {
+				ow.setMessage(FAILED, CUSTOMER); // if query returns a null, set the outgoing message to failed
+			}
 			ow.addPassedObj(searchObject);
 			this.modelController.getOutputStream().writeObject(ow);
 		} catch (IOException e) {
