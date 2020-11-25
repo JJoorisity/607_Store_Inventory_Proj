@@ -24,6 +24,9 @@ public class ClientController {
 		inventoryController = new ImsController();
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
+		this.addRadioButtonActionListeners();
+		shopApplication.startGui(shopApplication);
+
 		this.shopClient.communicate();
 
 		// construct gui. pass actionlisters as required.
@@ -36,10 +39,14 @@ public class ClientController {
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
 		this.addRadioButtonActionListeners();
-		this.shopApplication.startGui(this.shopApplication);
 
 		this.shopClient = new ShopClient("localhost", 8088);
-		this.shopClient.communicate();
+
+	
+		shopApplication.startGui(shopApplication);
+		
+
+		shopClient.communicate();
 
 		// construct gui. pass actionlisters as required.
 	}

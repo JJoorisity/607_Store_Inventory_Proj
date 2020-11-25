@@ -3,6 +3,7 @@ package server.serverControllers;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -29,7 +30,7 @@ public class ServerController {
 	 */
 	public ServerController() {
 		try {
-			serverSocket = new ServerSocket(8088);
+			serverSocket = new ServerSocket(8088, 0, InetAddress.getByName("localhost"));
 			pool = Executors.newFixedThreadPool(10);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -41,23 +42,29 @@ public class ServerController {
 	 * modelController.
 	 */
 	public void runServer() {
-		try {
-			while (true) {
+
+		while (true) {
+			try {
 				clientSocket = serverSocket.accept();
+
 				System.out.println("Server has accepted a connection.");
-				clientIn = new ObjectInputStream(clientSocket.getInputStream());
+
 				clientOut = new ObjectOutputStream(clientSocket.getOutputStream());
+				clientIn = new ObjectInputStream(clientSocket.getInputStream());
 
 				DbController myDB = new DbController();
 				myDB.initializeConnection();
 				ShopApp myShop = new ShopApp();
+				
 				ModelController newShop = new ModelController(clientIn, clientOut, myDB, myShop);
-
+				myShop.setModelController(newShop);
+				
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
+
+			} catch (IOException e) {
+				System.err.println(e.getStackTrace() + " Server connection failed in runServer().");
 			}
-		} catch (IOException e) {
-			System.err.println(e.getStackTrace() + " Server connection failed in runServer().");
 		}
 	}
 

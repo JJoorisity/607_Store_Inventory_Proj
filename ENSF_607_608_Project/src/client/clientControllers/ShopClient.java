@@ -18,8 +18,9 @@ public class ShopClient {
 		try {
 			aSocket = new Socket(serverName, portNumber);
 			// initialize client socket
-			clientIn = new ObjectInputStream(aSocket.getInputStream()); // Server receiving stream
 			clientOut = new ObjectOutputStream(aSocket.getOutputStream()); // Server sending stream
+			clientIn = new ObjectInputStream(aSocket.getInputStream()); // Server receiving stream
+			
 
 		} catch (UnknownHostException uhExc) {
 			System.err.println("Server host was not found.");

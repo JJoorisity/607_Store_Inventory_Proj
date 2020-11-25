@@ -313,10 +313,10 @@ public class ShopApp {
 	}
 
 	public void runShop() {
-		ObjectWrapper request;
+		//ObjectWrapper request;
 		try {
 			while (true) {
-				request = (ObjectWrapper) this.modelController.getInputStream().readObject();
+				ObjectWrapper request = (ObjectWrapper) this.modelController.getInputStream().readObject();
 				String command = request.getMessage()[0];
 				if (request != null && !command.equals("")) {
 					System.out.println("command : " + command);
