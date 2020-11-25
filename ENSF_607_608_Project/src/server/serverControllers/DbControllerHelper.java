@@ -86,7 +86,7 @@ public class DbControllerHelper implements DatabaseTables {
 	}
 
 	public String queryItemId() {
-		return ("SELECT * FROM " + ITEMS + " WHERE itemId = (?)");
+		return ("SELECT * FROM " + ITEMS + " WHERE itemId = ?");
 	}
 
 	public String queryItemDesc() {

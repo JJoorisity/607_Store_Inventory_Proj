@@ -344,8 +344,9 @@ public class ShopApp implements Commands {
 						break;
 					}
 					case PURCHASE: {
-						this.executePurchase((Integer) request.getPassedObj(0), (Integer) request.getPassedObj(1),
-								(Integer) request.getPassedObj(2));
+						ArrayList <Integer> purchase = (ArrayList<Integer>) request.getPassedObj(0);
+						this.executePurchase(purchase.get(0), purchase.get(1),
+								purchase.get(2));
 						break;
 					}
 

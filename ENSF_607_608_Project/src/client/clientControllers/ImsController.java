@@ -3,6 +3,8 @@ package client.clientControllers;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -68,7 +70,21 @@ public class ImsController implements Commands {
 	}
 	
 	public void executePurchase() {
-		
+		this.app.setSearchResultText("");
+		String command = PURCHASE;
+		ArrayList<Object> purchases = new ArrayList<Object>();
+		purchases.add(Integer.parseInt(app.getItemIdTxt()));
+		purchases.add(Integer.parseInt(app.getPurchaseQtyTxt()));
+		purchases.add(Integer.parseInt(app.getcustIdTxt()));
+		wrapMessage(command, ITEM_ELEC, purchases);
+	}
+	
+	public void executeSearchAll() {
+		this.app.setSearchResultText("");
+		String command = SEARCH + ALL;
+		// create temp customer object with searchable attribute set.
+		Item_Elec item = new Item_Elec();
+		wrapMessage(command, ITEM_ELEC, item);
 	}
 	
 	public void wrapMessage(String command, String type, Object newObj) {
@@ -105,48 +121,10 @@ public class ImsController implements Commands {
 				executeClear();
 			else if (e.getSource() == getApp().getPurchaseBtn())
 				executePurchase();
-			
-			
-//			String command = "";
-//			String searchText = app.getSearchFieldText();
-//			String type = app.getSelectedRadioButton();
-//
-//			// create temp customer object with searchable attribute set.
-//			Customer c = new Customer();
-//			switch (type) {
-//			case "customerId": {
-//				try {
-//					c.setCustomerId(Integer.parseInt(searchText));
-//		        } catch (NumberFormatException nfe) {
-//		        	c.setCustomerId(-1); // if user passes string instead of int set to sentinal value
-//		        }
-//				command = "SEARCHID";
-//				break;
-//			}
-//			case "customerType": {
-//				c.setCustomerType(searchText.charAt(0));
-//				command = "SEARCHTYPE";
-//				break;
-//			}
-//			case "lName": {
-//				c.setLastName(searchText);
-//				command = "SEARCHNAME";
-//				break;
-//			}
-//			}
-//			ObjectWrapper request = new ObjectWrapper();
-//			request.addPassedObj(c);
-//			request.setMessage(command, "CUSTOMER");
-//
-//			Runnable runner = new Runnable() {
-//				public void run() {
-//					cc.getShopClient().triggerOutput(request);
-//				}
-//			};
-//			EventQueue.invokeLater(runner);
-
+			else if (e.getSource() == getApp().getSearchAllBtn())
+				executeSearchAll();
 		}
-
+		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if (e.getSource() == getApp().getItemList()) {
