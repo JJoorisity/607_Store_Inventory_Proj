@@ -355,7 +355,8 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			System.out.println("row Count = " + rowCount);
 			pStat.close();
 		} catch (SQLException e) {
-			System.err.println("updateCustomer failed with " + customer);
+			System.err.println("updateCustomer failed with " + customer + e);
+			
 		}
 	}
 

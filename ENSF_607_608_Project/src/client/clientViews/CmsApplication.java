@@ -379,6 +379,14 @@ public class CmsApplication {
 		this.clearCustBtn.addActionListener(clearCustInfoAction);
 	}
 
+	public void addSaveCustInfoAction(ActionListener saveCustInfoAction) {
+		this.saveCustBtn.addActionListener(saveCustInfoAction);
+	}
+
+	public void addDeleteCustAction(ActionListener deleteCustAction) {
+		this.deleteCustBtn.addActionListener(deleteCustAction);
+	}
+
 	public String getSearchFieldText() {
 		return textField.getText();
 	}
@@ -402,7 +410,7 @@ public class CmsApplication {
 		this.listModel1.add(i, output);
 	}
 
-	public void resetSearchResultText(String output) {
+	public void resetSearchResultText() {
 		this.listModel1.removeAllElements();
 	}
 
@@ -414,7 +422,7 @@ public class CmsApplication {
 		this.addressTxt.setText(c.getAddress());
 		this.pcTxt.setText(c.getPostalCode());
 		this.pnTxt.setText(c.getPhoneNum());
-		
+
 		String item;
 		for (int i = 0; i < cTypeCBox.getItemCount(); i++) {
 			item = (String) cTypeCBox.getItemAt(i);
@@ -432,6 +440,20 @@ public class CmsApplication {
 		this.addressTxt.setText("");
 		this.pcTxt.setText("");
 		this.pnTxt.setText("");
+	}
+
+	public Customer getEditedCustInfo() {
+		if (!this.clientIdTxt.getText().isBlank()) {
+			int id = Integer.parseInt(this.clientIdTxt.getText());
+			String fname = this.fNameTxt.getText();
+			String lname = this.lNameTxt.getText();
+			String address = this.addressTxt.getText();
+			String postalcode = this.pcTxt.getText();
+			String phone = this.pnTxt.getText();
+			char type = ((String) this.cTypeCBox.getSelectedItem()).charAt(0);
+			return new Customer(id, fname, lname, address, postalcode, phone, type);
+		}
+		return null;
 	}
 
 }

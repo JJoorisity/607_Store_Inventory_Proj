@@ -55,32 +55,32 @@ public class DbControllerHelper implements DatabaseTables {
 		return new Customer(Integer.parseInt(fileInfo[0]), fileInfo[1], fileInfo[2], fileInfo[3], fileInfo[4],
 				fileInfo[5], fileInfo[6].charAt(0));
 	}
-	
+
 	public String updateCustomer() {
-		return ("UPDATE " + CUSTOMERS + " fName = ?, lName = ?, address = ?, postalCode = ?, phoneNumber = ?, " +
-				"customerType = ? WHERE customerId= ?");
+		return ("UPDATE " + CUSTOMERS + " SET fName = ?, lName = ?, address = ?, postalCode = ?, phoneNumber = ?, "
+				+ "customerType = ? WHERE customerId= ?");
 	}
-	
+
 	public String queryCustomer() {
 		return ("SELECT * FROM " + CUSTOMERS + " WHERE customerId = ?");
 	}
-	
+
 	public String queryCustomerType() {
 		return ("SELECT * FROM " + CUSTOMERS + " WHERE customerType = ? ORDER BY lName, fName");
 	}
-	
+
 	public String queryCustomerName() {
 		return ("SELECT * FROM " + CUSTOMERS + " WHERE lName = ? ORDER BY lName, fName");
 	}
-	
+
 	public String insertCustomer() {
 		return ("INSERT INTO " + CUSTOMERS + " VALUES (?,?,?,?,?,?,?)");
 	}
-	
+
 	public String removeCustomer() {
 		return ("DELETE FROM " + CUSTOMERS + " WHERE customerId = ?");
 	}
-	
+
 	public String insertItem() {
 		return ("INSERT INTO " + ITEMS + " VALUES (?,?,?,?,?,?,?,?,?)");
 	}
@@ -88,19 +88,19 @@ public class DbControllerHelper implements DatabaseTables {
 	public String queryItemId() {
 		return ("SELECT * FROM " + ITEMS + " WHERE itemId = (?)");
 	}
-	
+
 	public String queryItemDesc() {
 		return ("SELECT * FROM " + ITEMS + " WHERE CONTAINS(itemDesc, ?)");
 	}
-	
+
 	public String queryItemAll() {
 		return ("SELECT * FROM " + ITEMS);
 	}
-	
+
 	public String updateItem() {
 		return ("UPDATE " + ITEMS + " SET itemQty = ? WHERE itemId = ?");
 	}
-	
+
 //	public String removeItem() {
 //		return ("DELETE FROM " + ITEMS + " WHERE itemId = ?");
 //	}
@@ -116,7 +116,7 @@ public class DbControllerHelper implements DatabaseTables {
 	public String queryOrderLine() {
 		return ("SELECT * FROM " + ORDER_LINES + " WHERE itemId = ? AND orderId = ?");
 	}
-	
+
 	public String queryAllOrderLine() {
 		return ("SELECT * FROM " + ORDER_LINES + " WHERE orderId = ?");
 	}
@@ -141,16 +141,8 @@ public class DbControllerHelper implements DatabaseTables {
 	public String querySupplier() {
 		return ("SELECT * FROM " + SUPPLIERS + " WHERE supplierId = ?");
 	}
-	
+
 	// Nested query: option to query supplier name using item Id.
 	// Join query: option to join item table and orderline for print.
-
-	
-
-	
-
-	
-
-	
 
 }

@@ -1,14 +1,7 @@
 package client.clientControllers;
 
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.SwingUtilities;
-
 import client.clientViews.ShopApplication;
-import sharedModel.Customer;
-import sharedModel.ObjectWrapper;
+
 
 public class ClientController {
 

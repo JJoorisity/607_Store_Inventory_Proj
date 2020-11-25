@@ -36,6 +36,8 @@ public class CmsController {
 		this.app.addClearSearchAction(new clearSearchAction());
 		this.app.addListSelectionAction(new selectListAction());
 		this.app.addClearCustInfoAction(new clearCustInfoAction());
+		this.app.addSaveCustInfoAction(new saveCustInfoAction());
+		this.app.addDeleteCustAction(new deleteCustAction());
 	}
 
 	public void updateSearchResults(ArrayList<Object> objectList) {
@@ -68,39 +70,40 @@ public class CmsController {
 			String searchText = app.getSearchFieldText();
 			String type = app.getSelectedRadioButton();
 
-			// create temp customer object with searchable attribute set.
-			Customer c = new Customer();
-			switch (type) {
-			case "customerId": {
-				try {
-					c.setCustomerId(Integer.parseInt(searchText));
-				} catch (NumberFormatException nfe) {
-					c.setCustomerId(-1); // if user passes string instead of int set to sentinal value
+			if (!searchText.isBlank()) {
+				Customer c = new Customer();
+				switch (type) {
+				case "customerId": {
+					try {
+						c.setCustomerId(Integer.parseInt(searchText));
+					} catch (NumberFormatException nfe) {
+						c.setCustomerId(-1); // if user passes string instead of int set to sentinal value
+					}
+					command = "SEARCHID";
+					break;
 				}
-				command = "SEARCHID";
-				break;
-			}
-			case "customerType": {
-				c.setCustomerType(searchText.charAt(0));
-				command = "SEARCHTYPE";
-				break;
-			}
-			case "lName": {
-				c.setLastName(searchText);
-				command = "SEARCHNAME";
-				break;
-			}
-			}
-			ObjectWrapper request = new ObjectWrapper();
-			request.addPassedObj(c);
-			request.setMessage(command, "CUSTOMER");
+				case "customerType": {
+					c.setCustomerType(searchText.charAt(0));
+					command = "SEARCHTYPE";
+					break;
+				}
+				case "lName": {
+					c.setLastName(searchText);
+					command = "SEARCHNAME";
+					break;
+				}
+				}
+				ObjectWrapper request = new ObjectWrapper();
+				request.addPassedObj(c);
+				request.setMessage(command, "CUSTOMER");
 
-			Runnable runner = new Runnable() {
-				public void run() {
-					cc.getShopClient().triggerOutput(request);
-				}
-			};
-			EventQueue.invokeLater(runner);
+				Runnable runner = new Runnable() {
+					public void run() {
+						cc.getShopClient().triggerOutput(request);
+					}
+				};
+				EventQueue.invokeLater(runner);
+			}
 		}
 	}
 
@@ -112,7 +115,7 @@ public class CmsController {
 			Runnable runner = new Runnable() {
 				public void run() {
 					app.setSearchFieldText("");
-					app.resetSearchResultText("");
+					app.resetSearchResultText();
 					app.resetCustInfoPane();
 				}
 			};
@@ -142,10 +145,10 @@ public class CmsController {
 					}
 				};
 				EventQueue.invokeLater(runner);
-			} 
+			}
 		}
 	}
-	
+
 	private class clearCustInfoAction implements ActionListener {
 
 		@Override
@@ -158,6 +161,50 @@ public class CmsController {
 			};
 			EventQueue.invokeLater(runner);
 		}
+	}
+
+	private class saveCustInfoAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Customer c = app.getEditedCustInfo();
+			if (c != null) {
+				ObjectWrapper request = new ObjectWrapper();
+				request.addPassedObj(c);
+				request.setMessage("SAVE", "CUSTOMER");
+
+				Runnable runner = new Runnable() {
+					public void run() {
+						cc.getShopClient().triggerOutput(request);
+					}
+				};
+				EventQueue.invokeLater(runner);
+			}
+		}
+	}
+
+	private class deleteCustAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Customer c = app.getEditedCustInfo();
+			if (c != null) {
+				ObjectWrapper request = new ObjectWrapper();
+				request.addPassedObj(c);
+				request.setMessage("DELETE", "CUSTOMER");
+
+				Runnable runner = new Runnable() {
+					public void run() {
+						cc.getShopClient().triggerOutput(request);
+					}
+				};
+				EventQueue.invokeLater(runner);
+
+				app.resetCustInfoPane();
+				app.resetSearchResultText();
+			}
+		}
+
 	}
 
 }
