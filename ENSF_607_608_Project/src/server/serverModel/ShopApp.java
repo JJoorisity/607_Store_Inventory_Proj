@@ -146,8 +146,10 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Return a supplier from the database based on the passed ID
+	 * 
 	 * @param supplierID (int) 4 digit supplier ID to return
-	 * @return (Supplier) retunrs single queried supplier or null if ID does not match DB
+	 * @return (Supplier) retunrs single queried supplier or null if ID does not
+	 *         match DB
 	 */
 	public Int_Supplier querySupplier(int supplierID) {
 		return this.modelController.getDbController().querySupplier(supplierID);
@@ -176,8 +178,6 @@ public class ShopApp implements Commands {
 			return;
 		}
 	}
-
-
 
 	/**
 	 * Query an item by the item name/description.
@@ -219,7 +219,7 @@ public class ShopApp implements Commands {
 		case CUSTOMER:
 			success = this.removeCustomer((Customer) request.getPassedObj(0));
 			break;
-			// case "ITEM_ELEC": this.removeItem((Item_Elec)request.getPassedObj(0));
+		// case "ITEM_ELEC": this.removeItem((Item_Elec)request.getPassedObj(0));
 		}
 		if (success)
 			ow.setMessage(COMPLETE, null);
@@ -243,7 +243,7 @@ public class ShopApp implements Commands {
 		case CUSTOMER:
 			success = this.saveCustomer((Customer) request.getPassedObj(0));
 			break;
-			// case "ITEM_ELEC": this.saveItem((Item_Elec)request.getPassedObj(0));
+		// case "ITEM_ELEC": this.saveItem((Item_Elec)request.getPassedObj(0));
 		}
 		if (success)
 			ow.setMessage(COMPLETE, null);
@@ -265,7 +265,7 @@ public class ShopApp implements Commands {
 		switch (type) {
 		case CUSTOMER: {
 			Customer c = (Customer) request.getPassedObj(0);
-			if (command.equals(ID))
+			if (command.equals(ID) || command.contains(ID))
 				searchObject.add(this.queryCustomer(c.getCustomerId()));
 			else if (command.equals(NAME))
 				searchObject.addAll(this.queryCustomer(c.getLastName()));
@@ -291,56 +291,57 @@ public class ShopApp implements Commands {
 			int id = this.getInventory().generateOrderID();
 			searchObject.add(modelController.getDbController().queryOrder(id));
 			ow.setMessage(DISPLAY, ORDER);
-		}
-			ow.addPassedObj(searchObject);
-			try {
-				this.modelController.getOutputStream().writeObject(ow);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			break;
 		}
+		}
+		try {
+			ow.addPassedObj(searchObject);
+			this.modelController.getOutputStream().writeObject(ow);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public String printOrder() {
 		int i = this.getInventory().generateOrderID();
 		Order temp = this.modelController.getDbController().queryOrder(i);
 		return this.getInventory().printOrder(temp);
 	}
-	
+
 	public String printItems() {
 		return this.getInventory().toString();
 	}
 
 	public void runShop() {
-		//ObjectWrapper request;
+		// ObjectWrapper request;
 		try {
 			while (true) {
 				ObjectWrapper request = (ObjectWrapper) this.modelController.getInputStream().readObject();
 				String command = request.getMessage()[0];
 				if (command.contains(SEARCH)) {
-					this.saveObject(request);
+					this.searchObject(request); // search not save
 				} else if (command.contentEquals(QUIT)) {
 					break;
-				}else if (request != null && !command.equals("")) {
+				} else if (request != null && !command.equals("")) {
 					System.out.println("command : " + command);
 
-					switch  (command) {
-					case SAVE:{
+					switch (command) {
+					case SAVE: {
 						this.saveObject(request);
 						break;
 					}
-					case DELETE:{
+					case DELETE: {
 						this.deleteObject(request);
 						break;
 					}
-					case PURCHASE:{
+					case PURCHASE: {
 						this.executePurchase((Integer) request.getPassedObj(0), (Integer) request.getPassedObj(1),
 								(Integer) request.getPassedObj(2));
 						break;
 					}
+
 					}
-				} 
+				}
 				request.resetWrapper();
 			}
 		} catch (ClassNotFoundException | IOException ex) {

@@ -364,4 +364,9 @@ public class CmsApplication {
 		return this.radioGroup.getSelection().getActionCommand();
 	}
 
+	public void setSearchResultText() {
+		this.panel_SearchCust.set // need a textarea here
+		
+	}
+
 }

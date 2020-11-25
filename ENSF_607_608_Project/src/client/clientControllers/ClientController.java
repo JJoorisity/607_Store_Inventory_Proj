@@ -96,8 +96,6 @@ public class ClientController {
 			};
 			EventQueue.invokeLater(runner);
 
-			// execute query
-			// print to results text field
 		}
 	}
 

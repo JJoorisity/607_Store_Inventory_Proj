@@ -6,9 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import server.serverModel.Commands;
 import sharedModel.ObjectWrapper;
 
-public class ShopClient {
+public class ShopClient implements Commands{
 
 	private Socket aSocket;
 	private ObjectInputStream clientIn;
@@ -51,15 +52,16 @@ public class ShopClient {
 					System.out.println("command : " + command);
 
 					switch (command) {
-					case "COMPLETE":{
+					case COMPLETE:{
 						System.out.println("Action Completed");
 						break;
 					}
-					case "FAILED": {
+					case FAILED: {
 						System.out.println("Action Completed");
 						break;
 					}
-					case "DISPLAY": // trigger gui response
+					case DISPLAY: // trigger gui response
+						System.out.println(answer.getPassedObj(0).toString());
 						break;
 					}
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
