@@ -1,6 +1,7 @@
 package sharedModel;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Customer implements Serializable, PrintTableConstants {
 
@@ -91,5 +92,28 @@ public class Customer implements Serializable, PrintTableConstants {
 		//res += TABLEBREAK;
 		return res;
 
+	}
+	@Override
+	public boolean equals(Object obj) {
+		boolean flag = false;
+
+		if (!(obj instanceof Customer))
+			flag = false;
+		if (obj instanceof Customer)
+			if (((Customer) obj).getCustomerId() == this.getCustomerId()) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+		return flag;
+	}
+
+	/**
+	 * {@inheritDoc} ensures item objects are compared using their item ID's only
+	 * and not as a hash of the obj itselg
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(this.getCustomerId());
 	}
 }

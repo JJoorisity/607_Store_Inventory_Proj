@@ -20,11 +20,11 @@ public class ClientController {
 	public ClientController(ShopClient shopClient) {
 		this.shopClient = shopClient;
 		customerController = new CmsController(this);
-		//inventoryController = new ImsController(this);
+		inventoryController = new ImsController();
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
 		// replace with generic add all listenrs options
-		customerController.addSearcActionListeners();
+		customerController.addActionListeners();
 		
 		shopApplication.startGui(shopApplication);
 
@@ -40,7 +40,7 @@ public class ClientController {
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
 		// replace with generic add all listenrs options
-		customerController.addSearcActionListeners();
+		customerController.addActionListeners();
 
 		this.shopClient = new ShopClient("localhost", 8088);
 		shopClient.setController(this);

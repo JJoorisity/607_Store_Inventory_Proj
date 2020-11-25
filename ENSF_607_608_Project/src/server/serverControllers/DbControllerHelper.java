@@ -62,7 +62,7 @@ public class DbControllerHelper implements DatabaseTables {
 	}
 	
 	public String queryCustomer() {
-		return ("SELECT * FROM " + CUSTOMERS + " WHERE customerId = (?)");
+		return ("SELECT * FROM " + CUSTOMERS + " WHERE customerId = ?");
 	}
 	
 	public String queryCustomerType() {

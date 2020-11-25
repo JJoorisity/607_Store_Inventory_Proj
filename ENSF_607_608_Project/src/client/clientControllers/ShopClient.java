@@ -57,12 +57,11 @@ public class ShopClient implements Commands {
 						break;
 					}
 					case FAILED: {
-						System.out.println("Action Completed");
+						System.out.println("Action Failed");
 						break;
 					}
 					case DISPLAY: // trigger gui response
-						// need to send repsonse object wrapper to controller
-						this.clientController.getCmsController().updateSearchResults(answer.getPassedObj(0).toString());
+						this.clientController.getCmsController().updateSearchResults(answer.getPassedObj());
 						break;
 					}
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
