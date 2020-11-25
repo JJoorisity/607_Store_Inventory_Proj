@@ -9,11 +9,12 @@ import java.net.UnknownHostException;
 import server.serverModel.Commands;
 import sharedModel.ObjectWrapper;
 
-public class ShopClient implements Commands{
+public class ShopClient implements Commands {
 
 	private Socket aSocket;
 	private ObjectInputStream clientIn;
 	private ObjectOutputStream clientOut;
+	private ClientController clientController;
 
 	public ShopClient(String serverName, int portNumber) {
 		try {
@@ -21,7 +22,6 @@ public class ShopClient implements Commands{
 			// initialize client socket
 			clientOut = new ObjectOutputStream(aSocket.getOutputStream()); // Server sending stream
 			clientIn = new ObjectInputStream(aSocket.getInputStream()); // Server receiving stream
-			
 
 		} catch (UnknownHostException uhExc) {
 			System.err.println("Server host was not found.");
@@ -52,7 +52,7 @@ public class ShopClient implements Commands{
 					System.out.println("command : " + command);
 
 					switch (command) {
-					case COMPLETE:{
+					case COMPLETE: {
 						System.out.println("Action Completed");
 						break;
 					}
@@ -61,8 +61,10 @@ public class ShopClient implements Commands{
 						break;
 					}
 					case DISPLAY: // trigger gui response
-						
-						System.out.println(answer.getPassedObj(0).toString());
+						// need to send repsonse object wrapper to controller
+						this.clientController.updateSearchResults(answer.getPassedObj(0).toString());
+
+						// System.out.println(answer.getPassedObj(0).toString());
 						break;
 					}
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
@@ -104,6 +106,10 @@ public class ShopClient implements Commands{
 		} catch (IOException e) {
 			System.out.println("Closing error: " + e.getMessage());
 		}
+	}
+
+	public void setController(ClientController clientController) {
+		this.clientController = clientController;
 	}
 
 }

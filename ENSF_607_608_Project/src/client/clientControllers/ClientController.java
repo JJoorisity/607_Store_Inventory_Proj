@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import client.clientViews.ShopApplication;
 import sharedModel.Customer;
@@ -41,10 +40,9 @@ public class ClientController {
 		this.addRadioButtonActionListeners();
 
 		this.shopClient = new ShopClient("localhost", 8088);
-
+		shopClient.setController(this);
 	
 		shopApplication.startGui(shopApplication);
-		
 
 		shopClient.communicate();
 
@@ -55,11 +53,11 @@ public class ClientController {
 		customerController.getApp().addSearchAction(new searchAction());
 	}
 	
-	public void updateSearchResults() {
+	public void updateSearchResults(String result) {
 		
 		Runnable runner = new Runnable() {
 			public void run() {
-				customerController.getApp().setSearchResultText();
+				customerController.getApp().setSearchResultText(result);
 			}
 		};
 		EventQueue.invokeLater(runner);
@@ -105,7 +103,7 @@ public class ClientController {
 				}
 			};
 			EventQueue.invokeLater(runner);
-
+			
 		}
 	}
 

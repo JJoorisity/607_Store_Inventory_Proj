@@ -367,8 +367,8 @@ public class CmsApplication {
 		return this.radioGroup.getSelection().getActionCommand();
 	}
 
-	public void setSearchResultText() {
-		this.scrollPane.set // need a textarea here
+	public void setSearchResultText(String output) {
+		this.clientDisplay.append(output); // need a textarea here
 		
 	}
 
