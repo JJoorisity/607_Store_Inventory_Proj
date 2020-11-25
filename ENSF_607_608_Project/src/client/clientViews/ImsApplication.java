@@ -33,6 +33,9 @@ public class ImsApplication {
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private final JTextArea itemDisplay = new JTextArea();
 
+	
+	// Add customer Id to purchase section.
+	
 	/**
 	 * Create the application.
 	 */
