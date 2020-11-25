@@ -29,8 +29,9 @@ public class CmsController {
 		this.app = cms;
 	}
 
-	public void addSearcActionListeners() {
+	public void addActionListeners() {
 		this.app.addSearchAction(new searchAction());
+		this.app.addClearSearchAction(new clearAction());
 	}
 
 	public void updateSearchResults(ArrayList<Object> objectList) {
@@ -51,13 +52,16 @@ public class CmsController {
 			String command = "";
 			String searchText = app.getSearchFieldText();
 			String type = app.getSelectedRadioButton();
-			System.out.println(searchText + " " + type);
 
 			// create temp customer object with searchable attribute set.
 			Customer c = new Customer();
 			switch (type) {
 			case "customerId": {
-				c.setCustomerId(Integer.parseInt(searchText));
+				try {
+					c.setCustomerId(Integer.parseInt(searchText));
+		        } catch (NumberFormatException nfe) {
+		        	c.setCustomerId(-1); // if user passes string instead of int set to sentinal value
+		        }
 				command = "SEARCHID";
 				break;
 			}
@@ -75,11 +79,26 @@ public class CmsController {
 			ObjectWrapper request = new ObjectWrapper();
 			request.addPassedObj(c);
 			request.setMessage(command, "CUSTOMER");
-			System.out.println(SwingUtilities.isEventDispatchThread());
 
 			Runnable runner = new Runnable() {
 				public void run() {
 					cc.getShopClient().triggerOutput(request);
+				}
+			};
+			EventQueue.invokeLater(runner);
+
+		}
+	}
+	
+	private class clearAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			Runnable runner = new Runnable() {
+				public void run() {
+					app.setSearchFieldText("");
+					app.resetSearchResultText("");
 				}
 			};
 			EventQueue.invokeLater(runner);

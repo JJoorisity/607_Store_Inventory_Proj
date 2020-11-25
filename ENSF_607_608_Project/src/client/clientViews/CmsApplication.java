@@ -53,7 +53,7 @@ public class CmsApplication {
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private DefaultListModel listModel1 = new DefaultListModel();
 	private final JList resultsList = new JList(listModel1);
-	
+
 	/**
 	 * Create the application.
 	 */
@@ -91,13 +91,13 @@ public class CmsApplication {
 		searchResultsLbl.setBorder(null);
 		panel_SearchResults.add(searchResultsLbl, BorderLayout.NORTH);
 		searchResultsLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		
+
 		resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		resultsList.setVisibleRowCount(20);
 		resultsList.setLayoutOrientation(JList.VERTICAL);
 		scrollPane = new JScrollPane(resultsList);
 		scrollPane.setBackground(Color.WHITE);
-		
+
 		panel_SearchResults.add(scrollPane, BorderLayout.CENTER);
 		panel_SearchCust.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
@@ -317,7 +317,7 @@ public class CmsApplication {
 		gbc_cTypeCBox.gridx = 2;
 		gbc_cTypeCBox.gridy = 6;
 		cTypeCBox.setBackground(new Color(255, 255, 255));
-		cTypeCBox.setModel(new DefaultComboBoxModel(new String[] {"C", "R"}));
+		cTypeCBox.setModel(new DefaultComboBoxModel(new String[] { "C", "R" }));
 		panel_custInfo.add(cTypeCBox, gbc_cTypeCBox);
 		panel_custInfoBtn.setBorder(null);
 
@@ -353,7 +353,7 @@ public class CmsApplication {
 		custTypeBttn.setActionCommand("customerType");
 		this.radioGroup.add(lastNameBttn);
 		lastNameBttn.setActionCommand("lName");
-		
+
 	}
 
 	public JPanel getCmsFrame() {
@@ -364,8 +364,16 @@ public class CmsApplication {
 		this.searchCust.addActionListener(action);
 	}
 
+	public void addClearSearchAction(ActionListener clearAction) {
+		this.clearSearchCust.addActionListener(clearAction);
+	}
+
 	public String getSearchFieldText() {
 		return textField.getText();
+	}
+
+	public void setSearchFieldText(String set) {
+		textField.setText(set);
 	}
 
 	public String getSelectedRadioButton() {
@@ -376,8 +384,12 @@ public class CmsApplication {
 		int i = this.listModel1.getSize();
 		this.resultsList.ensureIndexIsVisible(i - 1);
 		this.listModel1.add(i, output);
-		
-		
+
+	}
+
+	public void resetSearchResultText(String output) {
+		this.listModel1.removeAllElements();
+
 	}
 
 }
