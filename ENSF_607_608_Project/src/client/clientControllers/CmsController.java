@@ -69,8 +69,8 @@ public class CmsController {
 			String command = "";
 			String searchText = app.getSearchFieldText();
 			String type = app.getSelectedRadioButton();
-
-			if (!searchText.isBlank()) {
+			
+			if (!searchText.trim().isEmpty()) {
 				Customer c = new Customer();
 				switch (type) {
 				case "customerId": {

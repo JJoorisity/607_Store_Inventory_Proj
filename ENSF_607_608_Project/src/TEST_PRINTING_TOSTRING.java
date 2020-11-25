@@ -6,25 +6,35 @@ import sharedModel.*;
 public class TEST_PRINTING_TOSTRING {
 
 	public static void main(String[] args) {
-		DbController testDB = new DbController();
-		testDB.initializeConnection();
-////		testDB.resetDatabase();
-////		testDB.createTable();
-////		testDB.initializeSupplierTable();
-////		testDB.initializeItemTable();
-////		testDB.initializeCustomerTable();
+//		DbController testDB = new DbController();
+//		testDB.initializeConnection();
+//////		testDB.resetDatabase();
+//////		testDB.createTable();
+//////		testDB.initializeSupplierTable();
+//////		testDB.initializeItemTable();
+//////		testDB.initializeCustomerTable();
+////
+//		ModelController test = new ModelController(testDB, new ShopApp());
+//		test.getShop().setModelController(test);
 //
-		ModelController test = new ModelController(testDB, new ShopApp());
-		test.getShop().setModelController(test);
-
-		test.initShop();
-
-		test.getShop().executePurchase(1035, 1200, 5);
-		test.getShop().executePurchase(1002, 10, 5);
+//		
+//		
+//		test.initShop();
+//
+//		test.getShop().executePurchase(1035, 1200, 5);
+//		test.getShop().executePurchase(1002, 10, 5);
 //
 //		System.out.println(test.getShop().printOrder());
 //		System.out.println(test.getShop().printItems());
-
+		String type = "   ";
+		if (type.isBlank()) {
+			System.out.println("blank");
+		}
+		if (type.isEmpty()) {
+			System.out.println("empty");
+		}
+		if(type.trim().isEmpty()) 
+		{System.out.println("trimempty");}
 	}
 
 }
