@@ -1,6 +1,5 @@
 package client.clientViews;
 
-import java.awt.EventQueue;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
@@ -9,6 +8,7 @@ public class ShopApplication {
 
 	private JFrame frame;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	
 
 	/**
 	 * Launch the application.
@@ -49,6 +49,7 @@ public class ShopApplication {
 
 		tabbedPane.addTab("Inventory", null, ims.getImsFrame(), null);
 		tabbedPane.addTab("Customers", null, cms.getCmsFrame(), null);
+		
 	}
 
 }

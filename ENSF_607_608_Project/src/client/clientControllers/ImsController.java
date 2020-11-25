@@ -7,18 +7,23 @@ import server.serverModel.Inventory;
 public class ImsController {
 
 	private ImsApplication app;
-	private Inventory inventory = new Inventory();
+	private ClientController cc;
 	
-	public ImsController() {
+	public ImsController(ClientController cc) {
 		this.app = new ImsApplication();
+		this.cc = cc;
 	}
 
 	public ImsApplication getApp() {
 		return this.app;
 	}
+	
 	public void setApp(ImsApplication ims) {
 		this.app = ims;
 	}
 	
+	public ClientController getCController() {
+		return this.cc;
+	}
 	
 }

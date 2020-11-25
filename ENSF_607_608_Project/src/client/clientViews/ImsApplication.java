@@ -16,7 +16,7 @@ public class ImsApplication {
 	private final JPanel purchaseInfoPanel = new JPanel();
 	private final JLabel itemIdLbl = new JLabel("Item ID:");
 	private final JTextField itemIdTxt = new JTextField();
-	private final JLabel purchaseQtyLbl = new JLabel("Purchase Qty");
+	private final JLabel purchaseQtyLbl = new JLabel("Purchase Qty:");
 	private final JTextField purchaseQtyTxt = new JTextField();
 	private final JTextField pMssgeTxt = new JTextField();
 	private final JLabel pMssgLbl = new JLabel("Purchase Executed:");
@@ -32,6 +32,9 @@ public class ImsApplication {
 	private final JButton clearItemBtn = new JButton("Clear");
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private final JList itemList = new JList();
+	private final JLabel custIdLbl = new JLabel("Customer ID:");
+	private final JTextField custIdTxt = new JTextField();
+	private final JButton purchaseBtn = new JButton("Purchase");
 
 	
 	// Add customer Id to purchase section.
@@ -71,60 +74,82 @@ public class ImsApplication {
 		purchasePanel.add(purchaseLbl, BorderLayout.NORTH);
 		purchaseInfoPanel.setBorder(null);
 
+		custIdTxt.setColumns(10);
 		purchasePanel.add(purchaseInfoPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_purchaseInfoPanel = new GridBagLayout();
-		gbl_purchaseInfoPanel.columnWidths = new int[] { 30, 0, 0, 30 };
-		gbl_purchaseInfoPanel.columnWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
-		gbl_purchaseInfoPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0 };
+		gbl_purchaseInfoPanel.columnWidths = new int[] { 30, 0, 0, 0, 30 };
+		gbl_purchaseInfoPanel.columnWeights = new double[] { 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_purchaseInfoPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		purchaseInfoPanel.setLayout(gbl_purchaseInfoPanel);
-
-		GridBagConstraints gbc_itemIdLbl = new GridBagConstraints();
-		gbc_itemIdLbl.insets = new Insets(0, 0, 5, 5);
-		gbc_itemIdLbl.anchor = GridBagConstraints.EAST;
-		gbc_itemIdLbl.gridx = 1;
-		gbc_itemIdLbl.gridy = 0;
-		itemIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-		purchaseInfoPanel.add(itemIdLbl, gbc_itemIdLbl);
-		itemIdTxt.setColumns(10);
-
-		GridBagConstraints gbc_itemIdTxt = new GridBagConstraints();
-		gbc_itemIdTxt.insets = new Insets(0, 0, 5, 0);
-		gbc_itemIdTxt.fill = GridBagConstraints.HORIZONTAL;
-		gbc_itemIdTxt.gridx = 2;
-		gbc_itemIdTxt.gridy = 0;
-		purchaseInfoPanel.add(itemIdTxt, gbc_itemIdTxt);
-
-		GridBagConstraints gbc_purchaseQtyLbl = new GridBagConstraints();
-		gbc_purchaseQtyLbl.anchor = GridBagConstraints.EAST;
-		gbc_purchaseQtyLbl.insets = new Insets(0, 0, 5, 5);
-		gbc_purchaseQtyLbl.gridx = 1;
-		gbc_purchaseQtyLbl.gridy = 1;
-		purchaseQtyLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-		purchaseInfoPanel.add(purchaseQtyLbl, gbc_purchaseQtyLbl);
+						
+						GridBagConstraints gbc_custIdLbl = new GridBagConstraints();
+						gbc_custIdLbl.anchor = GridBagConstraints.EAST;
+						gbc_custIdLbl.insets = new Insets(0, 0, 5, 5);
+						gbc_custIdLbl.gridx = 1;
+						gbc_custIdLbl.gridy = 0;
+						custIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+						purchaseInfoPanel.add(custIdLbl, gbc_custIdLbl);
+								
+								GridBagConstraints gbc_custIdTxt = new GridBagConstraints();
+								gbc_custIdTxt.insets = new Insets(0, 0, 5, 5);
+								gbc_custIdTxt.fill = GridBagConstraints.HORIZONTAL;
+								gbc_custIdTxt.gridx = 2;
+								gbc_custIdTxt.gridy = 0;
+								purchaseInfoPanel.add(custIdTxt, gbc_custIdTxt);
+						
+								GridBagConstraints gbc_itemIdLbl = new GridBagConstraints();
+								gbc_itemIdLbl.insets = new Insets(0, 0, 5, 5);
+								gbc_itemIdLbl.anchor = GridBagConstraints.EAST;
+								gbc_itemIdLbl.gridx = 1;
+								gbc_itemIdLbl.gridy = 1;
+								itemIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+								purchaseInfoPanel.add(itemIdLbl, gbc_itemIdLbl);
+						itemIdTxt.setColumns(10);
+						
+								GridBagConstraints gbc_itemIdTxt = new GridBagConstraints();
+								gbc_itemIdTxt.insets = new Insets(0, 0, 5, 5);
+								gbc_itemIdTxt.fill = GridBagConstraints.HORIZONTAL;
+								gbc_itemIdTxt.gridx = 2;
+								gbc_itemIdTxt.gridy = 1;
+								purchaseInfoPanel.add(itemIdTxt, gbc_itemIdTxt);
+		
+				GridBagConstraints gbc_purchaseQtyLbl = new GridBagConstraints();
+				gbc_purchaseQtyLbl.anchor = GridBagConstraints.EAST;
+				gbc_purchaseQtyLbl.insets = new Insets(0, 0, 5, 5);
+				gbc_purchaseQtyLbl.gridx = 1;
+				gbc_purchaseQtyLbl.gridy = 2;
+				purchaseQtyLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+				purchaseInfoPanel.add(purchaseQtyLbl, gbc_purchaseQtyLbl);
 		purchaseQtyTxt.setColumns(10);
-
-		GridBagConstraints gbc_purchaseQtyTxt = new GridBagConstraints();
-		gbc_purchaseQtyTxt.insets = new Insets(0, 0, 5, 0);
-		gbc_purchaseQtyTxt.fill = GridBagConstraints.HORIZONTAL;
-		gbc_purchaseQtyTxt.gridx = 2;
-		gbc_purchaseQtyTxt.gridy = 1;
-		purchaseInfoPanel.add(purchaseQtyTxt, gbc_purchaseQtyTxt);
-
-		GridBagConstraints gbc_pMssgLbl = new GridBagConstraints();
-		gbc_pMssgLbl.insets = new Insets(0, 0, 5, 5);
-		gbc_pMssgLbl.gridx = 1;
-		gbc_pMssgLbl.gridy = 3;
-		pMssgLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-		purchaseInfoPanel.add(pMssgLbl, gbc_pMssgLbl);
-		pMssgeTxt.setColumns(10);
-
-		GridBagConstraints gbc_pMssgeTxt = new GridBagConstraints();
-		gbc_pMssgeTxt.insets = new Insets(0, 0, 5, 0);
-		gbc_pMssgeTxt.gridwidth = 2;
-		gbc_pMssgeTxt.fill = GridBagConstraints.HORIZONTAL;
-		gbc_pMssgeTxt.gridx = 1;
-		gbc_pMssgeTxt.gridy = 4;
-		purchaseInfoPanel.add(pMssgeTxt, gbc_pMssgeTxt);
+		
+				GridBagConstraints gbc_purchaseQtyTxt = new GridBagConstraints();
+				gbc_purchaseQtyTxt.insets = new Insets(0, 0, 5, 5);
+				gbc_purchaseQtyTxt.fill = GridBagConstraints.HORIZONTAL;
+				gbc_purchaseQtyTxt.gridx = 2;
+				gbc_purchaseQtyTxt.gridy = 2;
+				purchaseInfoPanel.add(purchaseQtyTxt, gbc_purchaseQtyTxt);
+		
+				GridBagConstraints gbc_pMssgLbl = new GridBagConstraints();
+				gbc_pMssgLbl.insets = new Insets(0, 0, 5, 5);
+				gbc_pMssgLbl.gridx = 1;
+				gbc_pMssgLbl.gridy = 4;
+				pMssgLbl.setFont(new Font("Tahoma", Font.BOLD, 12));
+				purchaseInfoPanel.add(pMssgLbl, gbc_pMssgLbl);
+						pMssgeTxt.setColumns(10);
+						
+								GridBagConstraints gbc_pMssgeTxt = new GridBagConstraints();
+								gbc_pMssgeTxt.insets = new Insets(0, 0, 0, 5);
+								gbc_pMssgeTxt.fill = GridBagConstraints.HORIZONTAL;
+								gbc_pMssgeTxt.gridx = 1;
+								gbc_pMssgeTxt.gridy = 5;
+								purchaseInfoPanel.add(pMssgeTxt, gbc_pMssgeTxt);
+								
+								GridBagConstraints gbc_purchaseBtn = new GridBagConstraints();
+								gbc_purchaseBtn.insets = new Insets(0, 0, 0, 5);
+								gbc_purchaseBtn.gridx = 2;
+								gbc_purchaseBtn.gridy = 5;
+								purchaseBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
+								purchaseInfoPanel.add(purchaseBtn, gbc_purchaseBtn);
 		searchItemPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_ls.setLeftComponent(searchItemPane);
@@ -222,7 +247,8 @@ public class ImsApplication {
 		itemIdRBtn.setSelected(true); // first radio button should always be selected. No null searches allowed
 		this.radioGroup.add(itemDRBtn);
 		itemDRBtn.setActionCommand("itemDesc");
-
+		
+		
 	}
 
 	public JPanel getImsFrame() {
