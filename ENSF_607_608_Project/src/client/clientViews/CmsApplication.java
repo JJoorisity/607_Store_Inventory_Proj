@@ -365,7 +365,7 @@ public class CmsApplication {
 	}
 
 	public void setSearchResultText() {
-		this.panel_SearchCust.set // need a textarea here
+		this.scrollPane.set // need a textarea here
 		
 	}
 

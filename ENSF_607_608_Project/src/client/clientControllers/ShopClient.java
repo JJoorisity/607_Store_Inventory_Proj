@@ -61,6 +61,7 @@ public class ShopClient implements Commands{
 						break;
 					}
 					case DISPLAY: // trigger gui response
+						
 						System.out.println(answer.getPassedObj(0).toString());
 						break;
 					}

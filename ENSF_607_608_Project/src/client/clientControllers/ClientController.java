@@ -54,6 +54,16 @@ public class ClientController {
 	public void addRadioButtonActionListeners() {
 		customerController.getApp().addSearchAction(new searchAction());
 	}
+	
+	public void updateSearchResults() {
+		
+		Runnable runner = new Runnable() {
+			public void run() {
+				customerController.getApp().setSearchResultText();
+			}
+		};
+		EventQueue.invokeLater(runner);
+	}
 
 	private class searchAction implements ActionListener {
 

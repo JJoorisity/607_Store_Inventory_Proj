@@ -267,9 +267,9 @@ public class ShopApp implements Commands {
 			Customer c = (Customer) request.getPassedObj(0);
 			if (command.equals(ID) || command.contains(ID))
 				searchObject.add(this.queryCustomer(c.getCustomerId()));
-			else if (command.equals(NAME))
+			else if (command.equals(NAME)|| command.contains(NAME))
 				searchObject.addAll(this.queryCustomer(c.getLastName()));
-			else if (command.equals(TYPE))
+			else if (command.equals(TYPE)|| command.contains(TYPE))
 				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
 			ow.setMessage(DISPLAY, CUSTOMER);
 			break;
