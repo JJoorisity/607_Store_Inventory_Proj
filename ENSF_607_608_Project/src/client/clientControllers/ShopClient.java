@@ -62,7 +62,7 @@ public class ShopClient implements Commands {
 					}
 					case DISPLAY: // trigger gui response
 						// need to send repsonse object wrapper to controller
-						this.clientController.updateSearchResults(answer.getPassedObj(0).toString());
+						this.clientController.getCmsController().updateSearchResults(answer.getPassedObj(0).toString());
 						break;
 					}
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
@@ -80,22 +80,16 @@ public class ShopClient implements Commands {
 		this.close();
 	}
 
-	public void triggerSearch(ObjectWrapper request) {
+	public void triggerOutput(ObjectWrapper request) {
 
 		// send object wrapper with command
 		try {
 			clientOut.writeObject(request);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void triggerPurchase() {
-	}
-
-	public void triggerCustomerUpdate() {
-	}
 
 	public void close() {
 		try {

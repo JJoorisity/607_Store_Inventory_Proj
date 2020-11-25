@@ -19,11 +19,13 @@ public class ClientController {
 
 	public ClientController(ShopClient shopClient) {
 		this.shopClient = shopClient;
-		customerController = new CmsController();
-		inventoryController = new ImsController();
+		customerController = new CmsController(this);
+		//inventoryController = new ImsController(this);
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
-		this.addRadioButtonActionListeners();
+		// replace with generic add all listenrs options
+		customerController.addSearcActionListeners();
+		
 		shopApplication.startGui(shopApplication);
 
 		this.shopClient.communicate();
@@ -33,11 +35,12 @@ public class ClientController {
 
 	// testing constructor to be deleted
 	public ClientController() {
-		customerController = new CmsController();
+		customerController = new CmsController(this);
 		inventoryController = new ImsController();
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
-		this.addRadioButtonActionListeners();
+		// replace with generic add all listenrs options
+		customerController.addSearcActionListeners();
 
 		this.shopClient = new ShopClient("localhost", 8088);
 		shopClient.setController(this);
@@ -48,63 +51,17 @@ public class ClientController {
 
 		// construct gui. pass actionlisters as required.
 	}
-
-	public void addRadioButtonActionListeners() {
-		customerController.getApp().addSearchAction(new searchAction());
+	
+	public CmsController getCmsController() {
+		return this.customerController;
 	}
 	
-	public void updateSearchResults(String result) {
-		
-		Runnable runner = new Runnable() {
-			public void run() {
-				customerController.getApp().setSearchResultText(result);
-			}
-		};
-		EventQueue.invokeLater(runner);
+	public ImsController getImsController() {
+		return this.inventoryController;
 	}
-
-	private class searchAction implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String command = "";
-
-			String searchText = customerController.getApp().getSearchFieldText();
-			String type = customerController.getApp().getSelectedRadioButton();
-			System.out.println(searchText + " " + type);
-
-			// create temp customer object with searchable attribute set.
-			Customer c = new Customer();
-			switch (type) {
-			case "customerId": {
-				c.setCustomerId(Integer.parseInt(searchText));
-				command = "SEARCHID";
-				break;
-			}
-			case "customerType": {
-				c.setCustomerType(searchText.charAt(0));
-				command = "SEARCHTYPE";
-				break;
-			}
-			case "lName": {
-				c.setLastName(searchText);
-				command = "SEARCHNAME";
-				break;
-			}
-			}
-			ObjectWrapper request = new ObjectWrapper();
-			request.addPassedObj(c);
-			request.setMessage(command, "CUSTOMER");
-			System.out.println(SwingUtilities.isEventDispatchThread());
-
-			Runnable runner = new Runnable() {
-				public void run() {
-					shopClient.triggerSearch(request);
-				}
-			};
-			EventQueue.invokeLater(runner);
-			
-		}
+	
+	public ShopClient getShopClient() {
+		return this.shopClient;
 	}
 
 	public static void main(String[] args) {
@@ -112,5 +69,7 @@ public class ClientController {
 		ClientController cc = new ClientController();
 
 	}
+
+	
 
 }
