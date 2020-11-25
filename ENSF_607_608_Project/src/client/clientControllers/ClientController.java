@@ -33,7 +33,7 @@ public class ClientController {
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 		
 		this.addRadioButtonActionListeners();
-		this.shopApplication.getFrame().setVisible(true);
+		this.shopApplication.startGui(this.shopApplication);
 		
 		this.shopClient = new ShopClient("localhost",8088);
 		this.shopClient.communicate();
