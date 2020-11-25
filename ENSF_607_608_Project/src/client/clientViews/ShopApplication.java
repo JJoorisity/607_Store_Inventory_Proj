@@ -5,9 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.*;
 
-import client.clientControllers.CmsController;
-import client.clientControllers.ImsController;
-
 public class ShopApplication {
 
 	private JFrame frame;
@@ -17,6 +14,7 @@ public class ShopApplication {
 	 * Launch the application.
 	 */
 	public void startGui(ShopApplication shop) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

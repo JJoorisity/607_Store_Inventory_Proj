@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
 import client.clientViews.ShopApplication;
 import sharedModel.Customer;
 import sharedModel.ObjectWrapper;
@@ -31,11 +34,11 @@ public class ClientController {
 		customerController = new CmsController();
 		inventoryController = new ImsController();
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
-		
+
 		this.addRadioButtonActionListeners();
 		this.shopApplication.startGui(this.shopApplication);
-		
-		this.shopClient = new ShopClient("localhost",8088);
+
+		this.shopClient = new ShopClient("localhost", 8088);
 		this.shopClient.communicate();
 
 		// construct gui. pass actionlisters as required.
@@ -50,11 +53,11 @@ public class ClientController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = "";
-			
+
 			String searchText = customerController.getApp().getSearchFieldText();
 			String type = customerController.getApp().getSelectedRadioButton();
 			System.out.println(searchText + " " + type);
-			
+
 			// create temp customer object with searchable attribute set.
 			Customer c = new Customer();
 			switch (type) {
@@ -77,18 +80,24 @@ public class ClientController {
 			ObjectWrapper request = new ObjectWrapper();
 			request.addPassedObj(c);
 			request.setMessage(command, "CUSTOMER");
+			System.out.println(SwingUtilities.isEventDispatchThread());
 
-			shopClient.triggerSearch(request);
+			Runnable runner = new Runnable() {
+				public void run() {
+					shopClient.triggerSearch(request);
+				}
+			};
+			EventQueue.invokeLater(runner);
+
 			// execute query
 			// print to results text field
 		}
-
 	}
 
 	public static void main(String[] args) {
 
 		ClientController cc = new ClientController();
-		
+
 	}
 
 }

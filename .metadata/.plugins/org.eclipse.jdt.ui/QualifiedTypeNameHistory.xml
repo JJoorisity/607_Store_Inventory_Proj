@@ -2,6 +2,11 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.time.ZoneId"/>
     <fullyQualifiedTypeName name="server.serverModel.Inventory"/>
-    <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+    <fullyQualifiedTypeName name="sharedModel.Item"/>
     <fullyQualifiedTypeName name="server.serverControllers.ModelController"/>
+    <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+    <fullyQualifiedTypeName name="client.clientViews.CmsApplication"/>
+    <fullyQualifiedTypeName name="client.clientViews.ShopApplication"/>
+    <fullyQualifiedTypeName name="client.clientViews.ImsApplication"/>
+    <fullyQualifiedTypeName name="sharedModel.Customer"/>
 </qualifiedTypeNameHistroy>
