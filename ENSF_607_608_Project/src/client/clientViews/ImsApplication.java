@@ -14,7 +14,7 @@ public class ImsApplication {
 	private final JPanel rightPanel = new JPanel();
 	private final JLabel itemResultLbl = new JLabel("Search Results");
 	private JScrollPane itemSearchPane;
-	
+
 	private final JPanel purchasePanel = new JPanel();
 	private final JLabel purchaseLbl = new JLabel("Purchase Item");
 	private final JPanel purchaseInfoPanel = new JPanel();
@@ -27,7 +27,7 @@ public class ImsApplication {
 	private final JLabel pMssgLbl = new JLabel("Purchase Executed:");
 	private final JTextField pMssgeTxt = new JTextField();
 	private final JButton purchaseBtn = new JButton("Purchase");
-	
+
 	private final JPanel searchItemPane = new JPanel();
 	private final JLabel searchItemLbl = new JLabel("Search Item");
 	private final JPanel itemSearchPanel = new JPanel();
@@ -42,52 +42,48 @@ public class ImsApplication {
 	private final JButton searchAllBtn = new JButton("Search All");
 	private DefaultListModel listModel1 = new DefaultListModel();
 	private final JList itemList = new JList();
-	
-	
-	
 
-	
 	// Add customer Id to purchase section.
-	
+
 	/**
 	 * Create the application.
 	 */
 	public ImsApplication() {
 		initialize();
-		//fix
+		// fix
 	}
-	
+
 	public void addActionListeners(ActionListener listener) {
 		searchItemBtn.addActionListener(listener);
 		searchAllBtn.addActionListener(listener);
 		clearItemBtn.addActionListener(listener);
 		purchaseBtn.addActionListener(listener);
 	}
-	
+
 	public void addSelectionListeners(ListSelectionListener listener) {
 		itemList.addListSelectionListener(listener);
 	}
-	
+
 	public JButton getClearItemBtn() {
 		return this.clearItemBtn;
 	}
-	
+
 	public JButton getSearchItemBtn() {
 		return this.searchItemBtn;
 	}
-	
+
 	public JButton getSearchAllBtn() {
 		return this.searchAllBtn;
 	}
-	
+
 	public JButton getPurchaseBtn() {
 		return this.purchaseBtn;
 	}
-	
+
 	public JList getItemList() {
 		return this.itemList;
 	}
-	
+
 	public String getSearchItemTxt() {
 		return searchItemTxt.getText();
 	}
@@ -95,7 +91,7 @@ public class ImsApplication {
 	public void setSearchItemTxt(String set) {
 		searchItemTxt.setText(set);
 	}
-	
+
 	public String getItemIdTxt() {
 		return itemIdTxt.getText();
 	}
@@ -103,7 +99,7 @@ public class ImsApplication {
 	public void setItemIdTxt(String set) {
 		itemIdTxt.setText(set);
 	}
-	
+
 	public String getPurchaseQtyTxt() {
 		return purchaseQtyTxt.getText();
 	}
@@ -111,7 +107,7 @@ public class ImsApplication {
 	public void setPurchaseQtyTxt(String set) {
 		purchaseQtyTxt.setText(set);
 	}
-	
+
 	public String getcustIdTxt() {
 		return custIdTxt.getText();
 	}
@@ -119,7 +115,7 @@ public class ImsApplication {
 	public void setcustIdTxt(String set) {
 		custIdTxt.setText(set);
 	}
-	
+
 	public String getPMssgeTxt() {
 		return pMssgeTxt.getText();
 	}
@@ -177,75 +173,75 @@ public class ImsApplication {
 		gbl_purchaseInfoPanel.columnWeights = new double[] { 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_purchaseInfoPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 		purchaseInfoPanel.setLayout(gbl_purchaseInfoPanel);
-						
-						GridBagConstraints gbc_custIdLbl = new GridBagConstraints();
-						gbc_custIdLbl.anchor = GridBagConstraints.EAST;
-						gbc_custIdLbl.insets = new Insets(0, 0, 5, 5);
-						gbc_custIdLbl.gridx = 1;
-						gbc_custIdLbl.gridy = 0;
-						custIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-						purchaseInfoPanel.add(custIdLbl, gbc_custIdLbl);
-								
-								GridBagConstraints gbc_custIdTxt = new GridBagConstraints();
-								gbc_custIdTxt.insets = new Insets(0, 0, 5, 5);
-								gbc_custIdTxt.fill = GridBagConstraints.HORIZONTAL;
-								gbc_custIdTxt.gridx = 2;
-								gbc_custIdTxt.gridy = 0;
-								purchaseInfoPanel.add(custIdTxt, gbc_custIdTxt);
-						
-								GridBagConstraints gbc_itemIdLbl = new GridBagConstraints();
-								gbc_itemIdLbl.insets = new Insets(0, 0, 5, 5);
-								gbc_itemIdLbl.anchor = GridBagConstraints.EAST;
-								gbc_itemIdLbl.gridx = 1;
-								gbc_itemIdLbl.gridy = 1;
-								itemIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-								purchaseInfoPanel.add(itemIdLbl, gbc_itemIdLbl);
-						itemIdTxt.setColumns(10);
-						
-								GridBagConstraints gbc_itemIdTxt = new GridBagConstraints();
-								gbc_itemIdTxt.insets = new Insets(0, 0, 5, 5);
-								gbc_itemIdTxt.fill = GridBagConstraints.HORIZONTAL;
-								gbc_itemIdTxt.gridx = 2;
-								gbc_itemIdTxt.gridy = 1;
-								purchaseInfoPanel.add(itemIdTxt, gbc_itemIdTxt);
-		
-				GridBagConstraints gbc_purchaseQtyLbl = new GridBagConstraints();
-				gbc_purchaseQtyLbl.anchor = GridBagConstraints.EAST;
-				gbc_purchaseQtyLbl.insets = new Insets(0, 0, 5, 5);
-				gbc_purchaseQtyLbl.gridx = 1;
-				gbc_purchaseQtyLbl.gridy = 2;
-				purchaseQtyLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
-				purchaseInfoPanel.add(purchaseQtyLbl, gbc_purchaseQtyLbl);
+
+		GridBagConstraints gbc_custIdLbl = new GridBagConstraints();
+		gbc_custIdLbl.anchor = GridBagConstraints.EAST;
+		gbc_custIdLbl.insets = new Insets(0, 0, 5, 5);
+		gbc_custIdLbl.gridx = 1;
+		gbc_custIdLbl.gridy = 0;
+		custIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+		purchaseInfoPanel.add(custIdLbl, gbc_custIdLbl);
+
+		GridBagConstraints gbc_custIdTxt = new GridBagConstraints();
+		gbc_custIdTxt.insets = new Insets(0, 0, 5, 5);
+		gbc_custIdTxt.fill = GridBagConstraints.HORIZONTAL;
+		gbc_custIdTxt.gridx = 2;
+		gbc_custIdTxt.gridy = 0;
+		purchaseInfoPanel.add(custIdTxt, gbc_custIdTxt);
+
+		GridBagConstraints gbc_itemIdLbl = new GridBagConstraints();
+		gbc_itemIdLbl.insets = new Insets(0, 0, 5, 5);
+		gbc_itemIdLbl.anchor = GridBagConstraints.EAST;
+		gbc_itemIdLbl.gridx = 1;
+		gbc_itemIdLbl.gridy = 1;
+		itemIdLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+		purchaseInfoPanel.add(itemIdLbl, gbc_itemIdLbl);
+		itemIdTxt.setColumns(10);
+
+		GridBagConstraints gbc_itemIdTxt = new GridBagConstraints();
+		gbc_itemIdTxt.insets = new Insets(0, 0, 5, 5);
+		gbc_itemIdTxt.fill = GridBagConstraints.HORIZONTAL;
+		gbc_itemIdTxt.gridx = 2;
+		gbc_itemIdTxt.gridy = 1;
+		purchaseInfoPanel.add(itemIdTxt, gbc_itemIdTxt);
+
+		GridBagConstraints gbc_purchaseQtyLbl = new GridBagConstraints();
+		gbc_purchaseQtyLbl.anchor = GridBagConstraints.EAST;
+		gbc_purchaseQtyLbl.insets = new Insets(0, 0, 5, 5);
+		gbc_purchaseQtyLbl.gridx = 1;
+		gbc_purchaseQtyLbl.gridy = 2;
+		purchaseQtyLbl.setFont(new Font("Tahoma", Font.BOLD, 13));
+		purchaseInfoPanel.add(purchaseQtyLbl, gbc_purchaseQtyLbl);
 		purchaseQtyTxt.setColumns(10);
-		
-				GridBagConstraints gbc_purchaseQtyTxt = new GridBagConstraints();
-				gbc_purchaseQtyTxt.insets = new Insets(0, 0, 5, 5);
-				gbc_purchaseQtyTxt.fill = GridBagConstraints.HORIZONTAL;
-				gbc_purchaseQtyTxt.gridx = 2;
-				gbc_purchaseQtyTxt.gridy = 2;
-				purchaseInfoPanel.add(purchaseQtyTxt, gbc_purchaseQtyTxt);
-		
-				GridBagConstraints gbc_pMssgLbl = new GridBagConstraints();
-				gbc_pMssgLbl.insets = new Insets(0, 0, 5, 5);
-				gbc_pMssgLbl.gridx = 1;
-				gbc_pMssgLbl.gridy = 4;
-				pMssgLbl.setFont(new Font("Tahoma", Font.BOLD, 12));
-				purchaseInfoPanel.add(pMssgLbl, gbc_pMssgLbl);
-						pMssgeTxt.setColumns(10);
-						
-								GridBagConstraints gbc_pMssgeTxt = new GridBagConstraints();
-								gbc_pMssgeTxt.insets = new Insets(0, 0, 0, 5);
-								gbc_pMssgeTxt.fill = GridBagConstraints.HORIZONTAL;
-								gbc_pMssgeTxt.gridx = 1;
-								gbc_pMssgeTxt.gridy = 5;
-								purchaseInfoPanel.add(pMssgeTxt, gbc_pMssgeTxt);
-								
-								GridBagConstraints gbc_purchaseBtn = new GridBagConstraints();
-								gbc_purchaseBtn.insets = new Insets(0, 0, 0, 5);
-								gbc_purchaseBtn.gridx = 2;
-								gbc_purchaseBtn.gridy = 5;
-								purchaseBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
-								purchaseInfoPanel.add(purchaseBtn, gbc_purchaseBtn);
+
+		GridBagConstraints gbc_purchaseQtyTxt = new GridBagConstraints();
+		gbc_purchaseQtyTxt.insets = new Insets(0, 0, 5, 5);
+		gbc_purchaseQtyTxt.fill = GridBagConstraints.HORIZONTAL;
+		gbc_purchaseQtyTxt.gridx = 2;
+		gbc_purchaseQtyTxt.gridy = 2;
+		purchaseInfoPanel.add(purchaseQtyTxt, gbc_purchaseQtyTxt);
+
+		GridBagConstraints gbc_pMssgLbl = new GridBagConstraints();
+		gbc_pMssgLbl.insets = new Insets(0, 0, 5, 5);
+		gbc_pMssgLbl.gridx = 1;
+		gbc_pMssgLbl.gridy = 4;
+		pMssgLbl.setFont(new Font("Tahoma", Font.BOLD, 12));
+		purchaseInfoPanel.add(pMssgLbl, gbc_pMssgLbl);
+		pMssgeTxt.setColumns(10);
+
+		GridBagConstraints gbc_pMssgeTxt = new GridBagConstraints();
+		gbc_pMssgeTxt.insets = new Insets(0, 0, 0, 5);
+		gbc_pMssgeTxt.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pMssgeTxt.gridx = 1;
+		gbc_pMssgeTxt.gridy = 5;
+		purchaseInfoPanel.add(pMssgeTxt, gbc_pMssgeTxt);
+
+		GridBagConstraints gbc_purchaseBtn = new GridBagConstraints();
+		gbc_purchaseBtn.insets = new Insets(0, 0, 0, 5);
+		gbc_purchaseBtn.gridx = 2;
+		gbc_purchaseBtn.gridy = 5;
+		purchaseBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
+		purchaseInfoPanel.add(purchaseBtn, gbc_purchaseBtn);
 		searchItemPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_ls.setLeftComponent(searchItemPane);
@@ -289,7 +285,7 @@ public class ImsApplication {
 		gbc_itemDRBtn.gridy = 3;
 		itemDRBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
 		itemSearchPanel.add(itemDRBtn, gbc_itemDRBtn);
-		
+
 		GridBagConstraints gbc_searchAllBtn = new GridBagConstraints();
 		gbc_searchAllBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_searchAllBtn.gridx = 3;
@@ -336,22 +332,20 @@ public class ImsApplication {
 		itemResultLbl.setOpaque(true);
 		itemResultLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
 		rightPanel.add(itemResultLbl, BorderLayout.NORTH);
-		
+
 		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		itemList.setVisibleRowCount(20);
 		itemList.setLayoutOrientation(JList.VERTICAL);
 		itemSearchPane = new JScrollPane(itemList);
 		itemSearchPane.setBackground(Color.WHITE);
 		rightPanel.add(itemSearchPane, BorderLayout.CENTER);
-		
-	
+
 		this.radioGroup.add(itemIdRBtn);
 		itemIdRBtn.setActionCommand("itemId");
 		itemIdRBtn.setSelected(true); // first radio button should always be selected. No null searches allowed
 		this.radioGroup.add(itemDRBtn);
 		itemDRBtn.setActionCommand("itemDesc");
-		
-		
+
 	}
 
 	public JPanel getImsFrame() {
