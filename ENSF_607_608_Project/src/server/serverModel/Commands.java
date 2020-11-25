@@ -7,7 +7,7 @@ public interface Commands {
 	static final String FAILED = "FAILED";
 	static final String ID = "ID"; // attempting check with contains isntead of equals
 	static final String NAME = "NAME";
-	static final String ALL = "*ALL";
+	static final String ALL = "ALL";
 	static final String TYPE = "TYPE";
 	static final String DISPLAY = "DISPLAY";
 	static final String ITEM_ELEC = "ITEM_ELEC";

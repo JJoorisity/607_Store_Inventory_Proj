@@ -51,6 +51,7 @@ public class CmsApplication {
 	private final JComboBox<String> cTypeCBox = new JComboBox<String>();
 	private final JPanel ImsApplication = new JPanel();
 	private ButtonGroup radioGroup = new ButtonGroup();
+	private final JTextArea clientDisplay = new JTextArea();
 
 	/**
 	 * Create the application.
@@ -92,6 +93,8 @@ public class CmsApplication {
 		scrollPane.setBackground(Color.WHITE);
 
 		panel_SearchResults.add(scrollPane, BorderLayout.CENTER);
+		
+		scrollPane.setViewportView(clientDisplay);
 		panel_SearchCust.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_left.setLeftComponent(panel_SearchCust);

@@ -31,6 +31,7 @@ public class ImsApplication {
 	private final JButton searchItemBtn = new JButton("Search");
 	private final JButton clearItemBtn = new JButton("Clear");
 	private ButtonGroup radioGroup = new ButtonGroup();
+	private final JTextArea itemDisplay = new JTextArea();
 
 	/**
 	 * Create the application.
@@ -207,6 +208,8 @@ public class ImsApplication {
 		rightPanel.add(itemResultLbl, BorderLayout.NORTH);
 		itemSearchPane.setBackground(Color.WHITE);
 		rightPanel.add(itemSearchPane, BorderLayout.CENTER);
+		
+		itemSearchPane.setViewportView(itemDisplay);
 		
 	
 		this.radioGroup.add(itemIdRBtn);
