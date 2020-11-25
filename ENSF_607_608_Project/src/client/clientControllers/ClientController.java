@@ -33,7 +33,7 @@ public class ClientController {
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 		
 		this.addRadioButtonActionListeners();
-		this.shopApplication.startGui(this.shopApplication);
+		this.shopApplication.getFrame().setVisible(true);
 		
 		this.shopClient = new ShopClient("localhost",8088);
 		this.shopClient.communicate();
@@ -61,14 +61,17 @@ public class ClientController {
 			case "customerId": {
 				c.setCustomerId(Integer.parseInt(searchText));
 				command = "SEARCHID";
+				break;
 			}
 			case "customerType": {
 				c.setCustomerType(searchText.charAt(0));
 				command = "SEARCHTYPE";
+				break;
 			}
 			case "lName": {
 				c.setLastName(searchText);
 				command = "SEARCHNAME";
+				break;
 			}
 			}
 			ObjectWrapper request = new ObjectWrapper();

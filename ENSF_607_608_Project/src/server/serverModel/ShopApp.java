@@ -218,7 +218,7 @@ public class ShopApp {
 		switch (type) {
 		case "CUSTOMER":
 			success = this.removeCustomer((Customer) request.getPassedObj(0));
-
+			break;
 			// case "ITEM_ELEC": this.removeItem((Item_Elec)request.getPassedObj(0));
 		}
 		if (success)
@@ -242,7 +242,7 @@ public class ShopApp {
 		switch (type) {
 		case "CUSTOMER":
 			success = this.saveCustomer((Customer) request.getPassedObj(0));
-
+			break;
 			// case "ITEM_ELEC": this.saveItem((Item_Elec)request.getPassedObj(0));
 		}
 		if (success)
@@ -272,6 +272,7 @@ public class ShopApp {
 			else if (command.equals("*TYPE"))
 				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
 			ow.setMessage("DISPLAY", "CUSTOMER");
+			break;
 		}
 
 		case "ITEM_ELEC": {
@@ -283,6 +284,7 @@ public class ShopApp {
 			else if (command.equals("*ALL"))
 				searchObject.addAll(this.queryItem());
 			ow.setMessage("DISPLAY", "ITEM_ELEC");
+			break;
 		}
 		case "ORDER": {
 			// will only generate today's order for printing
@@ -296,6 +298,7 @@ public class ShopApp {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			break;
 		}
 	}
 	
@@ -319,18 +322,23 @@ public class ShopApp {
 					System.out.println("command : " + command);
 
 					switch (command) {
-					case "SAVE":
+					case "SAVE":{
 						this.saveObject(request);
-
-					case "SEARCH*":
+						break;
+					}
+					case "SEARCH*":{
 						this.searchObject(request);
-
-					case "DELETE":
+						break;
+					}
+					case "DELETE":{
 						this.deleteObject(request);
-
-					case "PURCHASE":
+						break;
+					}
+					case "PURCHASE":{
 						this.executePurchase((Integer) request.getPassedObj(0), (Integer) request.getPassedObj(1),
 								(Integer) request.getPassedObj(2));
+						break;
+					}
 					}
 				} else if (command.contentEquals("QUIT")) {
 					break;
