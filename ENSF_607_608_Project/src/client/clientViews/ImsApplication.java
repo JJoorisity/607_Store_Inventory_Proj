@@ -27,7 +27,8 @@ public class ImsApplication {
 	private final JLabel pMssgLbl = new JLabel("Purchase Executed:");
 	private final JTextField pMssgeTxt = new JTextField();
 	private final JButton purchaseBtn = new JButton("Purchase");
-
+	private final JButton clearPurchBtn = new JButton("Clear");
+	
 	private final JPanel searchItemPane = new JPanel();
 	private final JLabel searchItemLbl = new JLabel("Search Item");
 	private final JPanel itemSearchPanel = new JPanel();
@@ -43,8 +44,6 @@ public class ImsApplication {
 	private DefaultListModel listModel1 = new DefaultListModel();
 	private final JList itemList = new JList();
 
-	// Add customer Id to purchase section.
-
 	/**
 	 * Create the application.
 	 */
@@ -58,6 +57,7 @@ public class ImsApplication {
 		searchAllBtn.addActionListener(listener);
 		clearItemBtn.addActionListener(listener);
 		purchaseBtn.addActionListener(listener);
+		clearPurchBtn.addActionListener(listener);
 	}
 
 	public void addSelectionListeners(ListSelectionListener listener) {
@@ -80,6 +80,10 @@ public class ImsApplication {
 		return this.purchaseBtn;
 	}
 
+	public JButton getClearPurchBtn() {
+		return this.clearPurchBtn;
+	}
+	
 	public JList getItemList() {
 		return this.itemList;
 	}
@@ -221,6 +225,13 @@ public class ImsApplication {
 		gbc_purchaseQtyTxt.gridy = 2;
 		purchaseInfoPanel.add(purchaseQtyTxt, gbc_purchaseQtyTxt);
 
+		GridBagConstraints gbc_clearPurchBtn = new GridBagConstraints();
+		gbc_clearPurchBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_clearPurchBtn.gridx = 2;
+		gbc_clearPurchBtn.gridy = 5;
+		clearPurchBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
+		purchaseInfoPanel.add(clearPurchBtn, gbc_clearPurchBtn);
+
 		GridBagConstraints gbc_pMssgLbl = new GridBagConstraints();
 		gbc_pMssgLbl.insets = new Insets(0, 0, 5, 5);
 		gbc_pMssgLbl.gridx = 1;
@@ -239,7 +250,7 @@ public class ImsApplication {
 		GridBagConstraints gbc_purchaseBtn = new GridBagConstraints();
 		gbc_purchaseBtn.insets = new Insets(0, 0, 0, 5);
 		gbc_purchaseBtn.gridx = 2;
-		gbc_purchaseBtn.gridy = 5;
+		gbc_purchaseBtn.gridy = 3;
 		purchaseBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
 		purchaseInfoPanel.add(purchaseBtn, gbc_purchaseBtn);
 		searchItemPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -256,7 +267,7 @@ public class ImsApplication {
 
 		searchItemPane.add(itemSearchPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_itemSearchPanel = new GridBagLayout();
-		gbl_itemSearchPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 30 };
+		gbl_itemSearchPanel.rowHeights = new int[] {0, 0, 0, 0, 0, 0, 0};
 		gbl_itemSearchPanel.columnWidths = new int[] { 30, 30, 30, 30, 30 };
 		gbl_itemSearchPanel.columnWeights = new double[] { 1.0 };
 		gbl_itemSearchPanel.rowWeights = new double[] { Double.MIN_VALUE, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };

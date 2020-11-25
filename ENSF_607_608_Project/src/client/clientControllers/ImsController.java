@@ -65,8 +65,15 @@ public class ImsController implements Commands {
 		wrapMessage(command, ITEM_ELEC, item);
 	}
 	
-	public void executeClear() {
+	public void executeClearSearch() {
 		this.app.setSearchItemTxt("");		
+	}
+	
+	public void executeClearPurchase() {
+		this.app.setcustIdTxt("");
+		this.app.setItemIdTxt("");
+		this.app.setPurchaseQtyTxt("");
+		this.app.setPMssgeTxt("");
 	}
 	
 	public void executePurchase() {
@@ -118,11 +125,13 @@ public class ImsController implements Commands {
 			if (e.getSource() == getApp().getSearchItemBtn())
 				executeSearch();
 			else if (e.getSource() == getApp().getClearItemBtn())
-				executeClear();
+				executeClearSearch();
 			else if (e.getSource() == getApp().getPurchaseBtn())
 				executePurchase();
 			else if (e.getSource() == getApp().getSearchAllBtn())
 				executeSearchAll();
+			else if (e.getSource() == getApp().getClearPurchBtn())
+				executeClearPurchase();
 		}
 		
 		@Override
