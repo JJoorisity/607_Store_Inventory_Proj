@@ -28,7 +28,7 @@ public class CmsApplication {
 	private final JTextField textField = new JTextField();
 	private final JButton searchCust = new JButton("Search");
 	private final JButton clearSearchCust = new JButton("Clear Search");
-	private final JScrollPane scrollPane = new JScrollPane();
+	private JScrollPane scrollPane = new JScrollPane();
 	private final JLabel lblNewLabel = new JLabel("Customer Information");
 	private final JPanel panel_custInfo = new JPanel();
 	private final JButton saveCustBtn = new JButton("Save");
@@ -91,14 +91,14 @@ public class CmsApplication {
 		searchResultsLbl.setBorder(null);
 		panel_SearchResults.add(searchResultsLbl, BorderLayout.NORTH);
 		searchResultsLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-		scrollPane.setBackground(Color.WHITE);
-
-		panel_SearchResults.add(scrollPane, BorderLayout.CENTER);
-		resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		resultsList.setVisibleRowCount(100);
-		resultsList.setLayoutOrientation(JList.VERTICAL);
 		
-		scrollPane.setColumnHeaderView(resultsList);
+		resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		resultsList.setVisibleRowCount(20);
+		resultsList.setLayoutOrientation(JList.VERTICAL);
+		scrollPane = new JScrollPane(resultsList);
+		scrollPane.setBackground(Color.WHITE);
+		
+		panel_SearchResults.add(scrollPane, BorderLayout.CENTER);
 		panel_SearchCust.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_left.setLeftComponent(panel_SearchCust);

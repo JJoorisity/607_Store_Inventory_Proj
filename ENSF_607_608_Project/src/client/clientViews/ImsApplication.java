@@ -10,7 +10,7 @@ public class ImsApplication {
 	private final JSplitPane splitPane_ls = new JSplitPane();
 	private final JPanel rightPanel = new JPanel();
 	private final JLabel itemResultLbl = new JLabel("Search Results");
-	private final JScrollPane itemSearchPane = new JScrollPane();
+	private JScrollPane itemSearchPane;
 	private final JPanel purchasePanel = new JPanel();
 	private final JLabel purchaseLbl = new JLabel("Purchase Item");
 	private final JPanel purchaseInfoPanel = new JPanel();
@@ -31,7 +31,7 @@ public class ImsApplication {
 	private final JButton searchItemBtn = new JButton("Search");
 	private final JButton clearItemBtn = new JButton("Clear");
 	private ButtonGroup radioGroup = new ButtonGroup();
-	private final JTextArea itemDisplay = new JTextArea();
+	private final JList itemList = new JList();
 
 	
 	// Add customer Id to purchase section.
@@ -207,12 +207,14 @@ public class ImsApplication {
 		itemResultLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		itemResultLbl.setOpaque(true);
 		itemResultLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
-
 		rightPanel.add(itemResultLbl, BorderLayout.NORTH);
+		
+		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		itemList.setVisibleRowCount(20);
+		itemList.setLayoutOrientation(JList.VERTICAL);
+		itemSearchPane = new JScrollPane(itemList);
 		itemSearchPane.setBackground(Color.WHITE);
 		rightPanel.add(itemSearchPane, BorderLayout.CENTER);
-		
-		itemSearchPane.setViewportView(itemDisplay);
 		
 	
 		this.radioGroup.add(itemIdRBtn);
