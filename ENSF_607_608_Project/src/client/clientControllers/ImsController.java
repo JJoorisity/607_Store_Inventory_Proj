@@ -71,6 +71,10 @@ public class ImsController implements Commands {
 		
 	}
 	
+	public void executeSearchAll() {
+		
+	}
+	
 	public void wrapMessage(String command, String type, Object newObj) {
 		ObjectWrapper request = new ObjectWrapper();
 		request.addPassedObj(newObj);
@@ -105,7 +109,8 @@ public class ImsController implements Commands {
 				executeClear();
 			else if (e.getSource() == getApp().getPurchaseBtn())
 				executePurchase();
-			
+			else if (e.getSource() == getApp().getSearchAllBtn())
+				executeSearchAll();
 			
 //			String command = "";
 //			String searchText = app.getSearchFieldText();
