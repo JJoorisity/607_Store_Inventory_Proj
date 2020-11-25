@@ -20,7 +20,7 @@ public class ClientController {
 	public ClientController(ShopClient shopClient) {
 		this.shopClient = shopClient;
 		customerController = new CmsController(this);
-		inventoryController = new ImsController();
+		inventoryController = new ImsController(this);
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
 		// replace with generic add all listenrs options
@@ -36,7 +36,7 @@ public class ClientController {
 	// testing constructor to be deleted
 	public ClientController() {
 		customerController = new CmsController(this);
-		inventoryController = new ImsController();
+		inventoryController = new ImsController(this);
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
 		// replace with generic add all listenrs options
