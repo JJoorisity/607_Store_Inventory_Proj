@@ -43,6 +43,10 @@ public class Item {
 		this.setSupplierID(supplierID);
 
 	}
+	
+	public Item() {
+		
+	}
 
 	public int getItemID() {
 		return itemID;

@@ -90,7 +90,7 @@ public class DbControllerHelper implements DatabaseTables {
 	}
 	
 	public String queryItemDesc() {
-		return ("SELECT * FROM " + ITEMS + " WHERE itemDesc = (?)");
+		return ("SELECT * FROM " + ITEMS + " WHERE itemDesc LIKE (?)");
 	}
 	
 	public String queryItemAll() {
