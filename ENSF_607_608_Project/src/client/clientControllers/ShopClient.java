@@ -51,12 +51,16 @@ public class ShopClient {
 					System.out.println("command : " + command);
 
 					switch (command) {
-					case "COMPLETE":
+					case "COMPLETE":{
 						System.out.println("Action Completed");
-					case "FAILED":
+						break;
+					}
+					case "FAILED": {
 						System.out.println("Action Completed");
+						break;
+					}
 					case "DISPLAY": // trigger gui response
-
+						break;
 					}
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
 					break;

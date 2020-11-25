@@ -17,7 +17,7 @@ import server.serverControllers.ModelController;
  * @version 1.0
  * @since 2020-11-26
  */
-public class ShopApp {
+public class ShopApp implements Commands {
 
 	private ModelController modelController;
 	private Inventory inventory;
@@ -216,15 +216,15 @@ public class ShopApp {
 		ObjectWrapper ow = new ObjectWrapper();
 		boolean success = false;
 		switch (type) {
-		case "CUSTOMER":
+		case CUSTOMER:
 			success = this.removeCustomer((Customer) request.getPassedObj(0));
 			break;
 			// case "ITEM_ELEC": this.removeItem((Item_Elec)request.getPassedObj(0));
 		}
 		if (success)
-			ow.setMessage("COMPLETE", null);
+			ow.setMessage(COMPLETE, null);
 		else
-			ow.setMessage("FAILED", null);
+			ow.setMessage(FAILED, null);
 		try {
 			this.modelController.getOutputStream().writeObject(ow);
 		} catch (IOException e) {
@@ -240,15 +240,15 @@ public class ShopApp {
 		ObjectWrapper ow = new ObjectWrapper();
 		boolean success = false;
 		switch (type) {
-		case "CUSTOMER":
+		case CUSTOMER:
 			success = this.saveCustomer((Customer) request.getPassedObj(0));
 			break;
 			// case "ITEM_ELEC": this.saveItem((Item_Elec)request.getPassedObj(0));
 		}
 		if (success)
-			ow.setMessage("COMPLETE", null);
+			ow.setMessage(COMPLETE, null);
 		else
-			ow.setMessage("FAILED", null);
+			ow.setMessage(FAILED, null);
 		try {
 			this.modelController.getOutputStream().writeObject(ow);
 		} catch (IOException e) {
@@ -263,34 +263,34 @@ public class ShopApp {
 		ArrayList<Object> searchObject = new ArrayList<Object>();
 		ObjectWrapper ow = new ObjectWrapper();
 		switch (type) {
-		case "CUSTOMER": {
+		case CUSTOMER: {
 			Customer c = (Customer) request.getPassedObj(0);
-			if (command.equals("*ID"))
+			if (command.equals(ID))
 				searchObject.add(this.queryCustomer(c.getCustomerId()));
-			else if (command.equals("*NAME"))
+			else if (command.equals(NAME))
 				searchObject.addAll(this.queryCustomer(c.getLastName()));
-			else if (command.equals("*TYPE"))
+			else if (command.equals(TYPE))
 				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
-			ow.setMessage("DISPLAY", "CUSTOMER");
+			ow.setMessage(DISPLAY, CUSTOMER);
 			break;
 		}
 
-		case "ITEM_ELEC": {
+		case ITEM_ELEC: {
 			Item_Elec item = (Item_Elec) request.getPassedObj(0);
-			if (command.equals("*ID"))
+			if (command.equals(ID))
 				searchObject.add(this.queryItem(item.getItemID()));
-			else if (command.equals("*NAME"))
+			else if (command.equals(NAME))
 				searchObject.addAll(this.queryItem(item.getItemDesc()));
-			else if (command.equals("*ALL"))
+			else if (command.equals(ALL))
 				searchObject.addAll(this.queryItem());
-			ow.setMessage("DISPLAY", "ITEM_ELEC");
+			ow.setMessage(DISPLAY, ITEM_ELEC);
 			break;
 		}
-		case "ORDER": {
+		case ORDER: {
 			// will only generate today's order for printing
 			int id = this.getInventory().generateOrderID();
 			searchObject.add(modelController.getDbController().queryOrder(id));
-			ow.setMessage("DISPLAY", "ORDER");
+			ow.setMessage(DISPLAY, ORDER);
 		}
 			ow.addPassedObj(searchObject);
 			try {
@@ -318,31 +318,29 @@ public class ShopApp {
 			while (true) {
 				ObjectWrapper request = (ObjectWrapper) this.modelController.getInputStream().readObject();
 				String command = request.getMessage()[0];
-				if (request != null && !command.equals("")) {
+				if (command.contains(SEARCH)) {
+					this.saveObject(request);
+				} else if (command.contentEquals(QUIT)) {
+					break;
+				}else if (request != null && !command.equals("")) {
 					System.out.println("command : " + command);
 
-					switch (command) {
-					case "SAVE":{
+					switch  (command) {
+					case SAVE:{
 						this.saveObject(request);
 						break;
 					}
-					case "SEARCH*":{
-						this.searchObject(request);
-						break;
-					}
-					case "DELETE":{
+					case DELETE:{
 						this.deleteObject(request);
 						break;
 					}
-					case "PURCHASE":{
+					case PURCHASE:{
 						this.executePurchase((Integer) request.getPassedObj(0), (Integer) request.getPassedObj(1),
 								(Integer) request.getPassedObj(2));
 						break;
 					}
 					}
-				} else if (command.contentEquals("QUIT")) {
-					break;
-				}
+				} 
 				request.resetWrapper();
 			}
 		} catch (ClassNotFoundException | IOException ex) {

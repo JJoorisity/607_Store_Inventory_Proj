@@ -45,9 +45,11 @@ public class ImsApplication {
 	 */
 	private void initialize() {
 		ImsFrame.setLayout(new BorderLayout(0, 0));
+		splitPane_rs.setDividerSize(3);
 		splitPane_rs.setBorder(null);
 
 		ImsFrame.add(splitPane_rs);
+		splitPane_ls.setDividerSize(3);
 		splitPane_ls.setBorder(null);
 		splitPane_ls.setOrientation(JSplitPane.VERTICAL_SPLIT);
 
@@ -56,6 +58,10 @@ public class ImsApplication {
 
 		splitPane_ls.setRightComponent(purchasePanel);
 		purchasePanel.setLayout(new BorderLayout(0, 0));
+		purchaseLbl.setOpaque(true);
+		purchaseLbl.setBackground(new Color(0, 51, 102));
+		purchaseLbl.setForeground(new Color(255, 255, 255));
+		purchaseLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		purchaseLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
 
 		purchasePanel.add(purchaseLbl, BorderLayout.NORTH);
@@ -115,9 +121,14 @@ public class ImsApplication {
 		gbc_pMssgeTxt.gridx = 1;
 		gbc_pMssgeTxt.gridy = 4;
 		purchaseInfoPanel.add(pMssgeTxt, gbc_pMssgeTxt);
+		searchItemPane.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_ls.setLeftComponent(searchItemPane);
 		searchItemPane.setLayout(new BorderLayout(0, 0));
+		searchItemLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		searchItemLbl.setOpaque(true);
+		searchItemLbl.setForeground(new Color(255, 255, 255));
+		searchItemLbl.setBackground(new Color(0, 51, 102));
 		searchItemLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
 
 		searchItemPane.add(searchItemLbl, BorderLayout.NORTH);
@@ -187,9 +198,14 @@ public class ImsApplication {
 
 		splitPane_rs.setRightComponent(rightPanel);
 		rightPanel.setLayout(new BorderLayout(0, 0));
+		itemResultLbl.setBackground(new Color(0, 51, 102));
+		itemResultLbl.setForeground(new Color(255, 255, 255));
+		itemResultLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		itemResultLbl.setOpaque(true);
 		itemResultLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
 
 		rightPanel.add(itemResultLbl, BorderLayout.NORTH);
+		itemSearchPane.setBackground(Color.WHITE);
 		rightPanel.add(itemSearchPane, BorderLayout.CENTER);
 		
 	

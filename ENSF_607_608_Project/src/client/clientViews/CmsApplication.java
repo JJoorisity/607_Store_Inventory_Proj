@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.border.*;
 
+// Need to restrict string lengths.
+
 public class CmsApplication {
 
 	private final JPanel CmsFrame = new JPanel();
@@ -66,29 +68,37 @@ public class CmsApplication {
 		CmsFrame.setLayout(new BorderLayout(0, 0));
 		CmsFrame.add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
-		splitPane_right.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		splitPane_right.setBorder(null);
 		splitPane_right.setBackground(Color.WHITE);
 		splitPane_right.setDividerSize(3);
 
 		panel.add(splitPane_right, BorderLayout.CENTER);
 		splitPane_left.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		splitPane_left.setDividerSize(3);
-		splitPane_left.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		splitPane_left.setBorder(null);
 
 		splitPane_right.setLeftComponent(splitPane_left);
-		panel_SearchResults.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_SearchResults.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_left.setRightComponent(panel_SearchResults);
 		panel_SearchResults.setLayout(new BorderLayout(0, 0));
+		searchResultsLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		searchResultsLbl.setOpaque(true);
+		searchResultsLbl.setForeground(new Color(255, 255, 255));
+		searchResultsLbl.setBackground(new Color(0, 51, 102));
 		searchResultsLbl.setBorder(null);
 		panel_SearchResults.add(searchResultsLbl, BorderLayout.NORTH);
-		searchResultsLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
+		searchResultsLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
+		scrollPane.setBackground(Color.WHITE);
 
 		panel_SearchResults.add(scrollPane, BorderLayout.CENTER);
-		panel_SearchCust.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_SearchCust.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_left.setLeftComponent(panel_SearchCust);
 		panel_SearchCust.setLayout(new BorderLayout(0, 0));
+		searchCustLbl.setOpaque(true);
+		searchCustLbl.setForeground(new Color(255, 255, 255));
+		searchCustLbl.setBackground(new Color(0, 51, 102));
 		searchCustLbl.setBorder(null);
 		searchCustLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		searchCustLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -162,10 +172,13 @@ public class CmsApplication {
 		gbc_lastNameBttn.gridy = 3;
 		panel_2.add(lastNameBttn, gbc_lastNameBttn);
 		lastNameBttn.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panel_CustInfo.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_CustInfo.setBorder(new LineBorder(Color.LIGHT_GRAY));
 
 		splitPane_right.setRightComponent(panel_CustInfo);
 		panel_CustInfo.setLayout(new BorderLayout(0, 0));
+		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setOpaque(true);
+		lblNewLabel.setBackground(new Color(0, 51, 102));
 		lblNewLabel.setBorder(null);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -296,7 +309,8 @@ public class CmsApplication {
 		gbc_cTypeCBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_cTypeCBox.gridx = 2;
 		gbc_cTypeCBox.gridy = 6;
-		cTypeCBox.setModel(new DefaultComboBoxModel(new String[] { "C, R" }));
+		cTypeCBox.setBackground(new Color(255, 255, 255));
+		cTypeCBox.setModel(new DefaultComboBoxModel(new String[] {"C", "R"}));
 		panel_custInfo.add(cTypeCBox, gbc_cTypeCBox);
 		panel_custInfoBtn.setBorder(null);
 
