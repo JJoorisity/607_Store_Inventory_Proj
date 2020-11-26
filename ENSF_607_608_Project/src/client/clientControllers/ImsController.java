@@ -157,9 +157,13 @@ public class ImsController implements Commands, PrintTableConstants {
 		public void valueChanged(ListSelectionEvent e) {
 			Runnable runner = new Runnable() {
 				public void run() {
-					String itemId = String.valueOf(app.getItemTable().getValueAt(app.getItemTable().getSelectedRow(), 0));
-					app.setItemIdTxt(itemId);
-					itemId = "";
+					// get current selected row
+					int i = app.getItemTable().getSelectedRow();
+					
+					if (i >= 0) {
+						String itemId = String.valueOf(app.getItemTable().getValueAt(i, 0));
+						app.setItemIdTxt(itemId);
+					}
 				}
 			};
 			EventQueue.invokeLater(runner);
