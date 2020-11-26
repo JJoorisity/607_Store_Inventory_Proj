@@ -74,6 +74,7 @@ public class ShopClient implements Commands {
 					}
 					case PURCHASE: {
 						this.clientController.getImsController().updatePurchaseField(answer.getMessage()[1]);
+						this.clientController.getImsController().executeSearchAll();
 						break;
 					}
 					}
