@@ -93,6 +93,7 @@ public class CmsApplication {
 		searchResultsLbl.setBorder(null);
 		panel_SearchResults.add(searchResultsLbl, BorderLayout.NORTH);
 		searchResultsLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
+		resultsList.setFont(new Font("Monospaced", Font.PLAIN, 13));
 
 		resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		resultsList.setVisibleRowCount(20);
