@@ -45,6 +45,7 @@ public class ImsApplication {
 	private final JButton searchAllBtn = new JButton("Search All");
 	private DefaultTableModel tableModel = new DefaultTableModel();
 	private JTable itemTable;
+	private final JButton orderBtn = new JButton("Generate Daily Order");
 
 	/**
 	 * Create the application.
@@ -60,6 +61,7 @@ public class ImsApplication {
 		clearItemBtn.addActionListener(listener);
 		purchaseBtn.addActionListener(listener);
 		clearPurchBtn.addActionListener(listener);
+		orderBtn.addActionListener(listener);
 	}
 
 	public void addSelectionListeners(ListSelectionListener listener) {
@@ -84,6 +86,10 @@ public class ImsApplication {
 
 	public JButton getClearPurchBtn() {
 		return this.clearPurchBtn;
+	}
+	
+	public JButton getOrderBtn() {
+		return this.orderBtn;
 	}
 	
 	public JTable getItemTable() {
@@ -307,7 +313,7 @@ public class ImsApplication {
 		GridBagConstraints gbc_searchAllBtn = new GridBagConstraints();
 		gbc_searchAllBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_searchAllBtn.gridx = 3;
-		gbc_searchAllBtn.gridy = 4;
+		gbc_searchAllBtn.gridy = 3;
 		searchAllBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
 		itemSearchPanel.add(searchAllBtn, gbc_searchAllBtn);
 
@@ -322,7 +328,7 @@ public class ImsApplication {
 		GridBagConstraints gbc_searchItemBtn = new GridBagConstraints();
 		gbc_searchItemBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_searchItemBtn.gridx = 3;
-		gbc_searchItemBtn.gridy = 5;
+		gbc_searchItemBtn.gridy = 2;
 		searchItemBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
 		itemSearchPanel.add(searchItemBtn, gbc_searchItemBtn);
 		searchItemTxt.setColumns(10);
@@ -375,6 +381,9 @@ public class ImsApplication {
 		itemTable.setBackground(Color.WHITE);
 		
 		itemSearchPane.setViewportView(itemTable);
+		orderBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
+		
+		rightPanel.add(orderBtn, BorderLayout.SOUTH);
 
 		this.radioGroup.add(itemIdRBtn);
 		itemIdRBtn.setActionCommand("itemId");

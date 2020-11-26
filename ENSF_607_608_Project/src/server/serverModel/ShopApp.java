@@ -299,9 +299,8 @@ public class ShopApp implements Commands {
 		}
 		case ORDER: {
 			// will only generate today's order for printing
-			int id = this.getInventory().generateOrderID();
-			searchObject.add(modelController.getDbController().queryOrder(id));
-			ow.setMessage(DISPLAY, ORDER);
+			String genOrder = printOrder();
+			ow.setMessage(genOrder, ORDER);
 			break;
 		}
 		}

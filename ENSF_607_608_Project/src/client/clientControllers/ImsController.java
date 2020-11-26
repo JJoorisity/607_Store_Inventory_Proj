@@ -113,6 +113,11 @@ public class ImsController implements Commands, PrintTableConstants {
 		wrapMessage(command, ITEM_ELEC, item);
 	}
 	
+	public void generateOrder() {
+		String command = SEARCH + ORDER;
+		wrapMessage(command, ORDER, null);
+	}
+	
 	public void wrapMessage(String command, String type, Object newObj) {
 		ObjectWrapper request = new ObjectWrapper();
 		request.addPassedObj(newObj);
@@ -151,6 +156,8 @@ public class ImsController implements Commands, PrintTableConstants {
 				executeSearchAll();
 			else if (e.getSource() == getApp().getClearPurchBtn())
 				executeClearPurchase();
+			else if (e.getSource() == getApp().getOrderBtn())
+				generateOrder();
 		}
 		
 		@Override

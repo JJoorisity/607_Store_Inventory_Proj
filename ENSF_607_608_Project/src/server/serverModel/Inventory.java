@@ -1,5 +1,8 @@
 package server.serverModel;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
@@ -15,7 +18,7 @@ import sharedModel.*;
  * @version 1.0
  * @since 2020-11-26
  */
-public class Inventory implements PrintTableConstants {
+public class Inventory implements PrintTableConstants, Commands {
 
 	private LinkedHashSet<Item_Elec> itemList;
 	private Order order;
@@ -126,10 +129,20 @@ public class Inventory implements PrintTableConstants {
 				Item temp = this.getItem(oL.getItemId());
 				res += oL.printOrderLine(temp);
 			}
-			return res;
+			
+			// create new order
+			File newOrder = new File(order.getOrderID() + ".txt");
+			try {
+				FileWriter fw = new FileWriter(newOrder);
+				fw.write(res);
+				fw.close();
+				return COMPLETE;
+			} catch (IOException e) {
+				System.err.println("Error in printOrder for file " + order.getOrderID() + ".txt");
+				e.printStackTrace();
+			}
 		}
-		return "No Orders Made";
-
+		return FAILED;
 	}
 
 }
