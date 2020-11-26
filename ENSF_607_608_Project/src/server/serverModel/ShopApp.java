@@ -302,6 +302,13 @@ public class ShopApp implements Commands {
 			else if (command.contains(ALL))
 				searchObject.addAll(this.queryItem());
 			ow.setMessage(DISPLAYITEM, ITEM_ELEC);
+			
+			// if query returns a null, set the outgoing message to failed
+			if (searchObject.isEmpty() == true) {
+				ow.setMessage(FAILED, ITEM_ELEC);
+			} else if (searchObject.get(0) == null) {
+				ow.setMessage(FAILED, ITEM_ELEC);
+			}
 			break;
 		}
 		case ORDER: {
