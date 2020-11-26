@@ -19,13 +19,6 @@ public class ModelController implements Runnable, DatabaseTables {
 	private ObjectInputStream clientIn;
 	private ObjectOutputStream clientOut;
 
-	// TODO
-	// Query order by ID. print to reasonable format
-	// Print Order to reasonable format
-	// Print all Items/Suppliers in list
-	// print Item
-	// serialize everything
-
 	/**
 	 * Constructor
 	 * 

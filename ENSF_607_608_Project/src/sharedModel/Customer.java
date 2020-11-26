@@ -3,6 +3,16 @@ package sharedModel;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Customer holds all customer information. Implements Serializable so it can be
+ * sent between server and client. Implements PrintTableConstants to maintain
+ * cohesion between class toString() methods. Overrides equals and hashcode to
+ * ensure objects can be stored in a linkedhashset without error or duplication.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class Customer implements Serializable, PrintTableConstants {
 
 	private static final long serialVersionUID = 1L;
@@ -14,6 +24,17 @@ public class Customer implements Serializable, PrintTableConstants {
 	private String phoneNum;
 	private char customerType;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param id      (Integer) unique customer ID
+	 * @param first   (String) customer first name
+	 * @param last    (String) customer last name
+	 * @param address (String) customer address
+	 * @param pc      (String) customer postal code
+	 * @param pn      (String) customer phone number
+	 * @param type    (char) customer Type (residential or commercial (R/C)
+	 */
 	public Customer(int id, String first, String last, String address, String pc, String pn, char type) {
 		this.setCustomerId(id);
 		this.setFirstName(first);
@@ -24,6 +45,11 @@ public class Customer implements Serializable, PrintTableConstants {
 		this.setCustomerType(type);
 	}
 
+	/**
+	 * default constructor for instances where an object wrapper needs to send a
+	 * search query with only one customer attribute. (e.g. search by ID requires a
+	 * customer object with an ID but no other information to perform the query)
+	 */
 	public Customer() {
 	}
 
@@ -89,10 +115,11 @@ public class Customer implements Serializable, PrintTableConstants {
 		String res = "";
 		res += "Name: " + this.getFirstName() + " " + this.getLastName() + " | Customer ID: " + this.getCustomerId()
 				+ " | Customer Type: " + this.getCustomerType() + "\n";
-		//res += TABLEBREAK;
+		// res += TABLEBREAK;
 		return res;
 
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		boolean flag = false;
@@ -109,8 +136,8 @@ public class Customer implements Serializable, PrintTableConstants {
 	}
 
 	/**
-	 * {@inheritDoc} ensures item objects are compared using their item ID's only
-	 * and not as a hash of the obj itselg
+	 * {@inheritDoc} ensures item objects are compared using their customer ID's
+	 * only and not as a hash of the object itself
 	 */
 	@Override
 	public int hashCode() {

@@ -112,7 +112,8 @@ public class ShopApp implements Commands {
 		Item_Elec item = modelController.getDbController().queryItem(itemID);
 		boolean success = false;
 		ObjectWrapper ow = new ObjectWrapper();
-		if (this.getInventory().decrement(item, qty) && modelController.getDbController().queryCustomer(customerID) != null) {
+		if (this.getInventory().decrement(item, qty)
+				&& modelController.getDbController().queryCustomer(customerID) != null) {
 			modelController.getDbController().updateItem(itemID, item.getQty()); // updates Item in db with new qty
 			this.updateOrders(item, qty);
 			modelController.getDbController().insertPurchases(itemID, customerID);
@@ -282,8 +283,8 @@ public class ShopApp implements Commands {
 			else if (command.equals(TYPE) || command.contains(TYPE))
 				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
 			ow.setMessage(DISPLAY, CUSTOMER);
-			
-			 // if query returns a null, set the outgoing message to failed
+
+			// if query returns a null, set the outgoing message to failed
 			if (searchObject.isEmpty() == true) {
 				ow.setMessage(FAILED, CUSTOMER);
 			} else if (searchObject.get(0) == null) {
@@ -301,7 +302,7 @@ public class ShopApp implements Commands {
 			else if (command.contains(ALL))
 				searchObject.addAll(this.queryItem());
 			ow.setMessage(DISPLAYITEM, ITEM_ELEC);
-			
+
 			// if query returns a null, set the outgoing message to failed
 			if (searchObject.isEmpty() == true) {
 				ow.setMessage(FAILED, ITEM_ELEC);
@@ -368,9 +369,8 @@ public class ShopApp implements Commands {
 						break;
 					}
 					case PURCHASE: {
-						ArrayList <Integer> purchase = (ArrayList<Integer>) request.getPassedObj(0);
-						this.executePurchase(purchase.get(0), purchase.get(1),
-								purchase.get(2));
+						ArrayList<Integer> purchase = (ArrayList<Integer>) request.getPassedObj(0);
+						this.executePurchase(purchase.get(0), purchase.get(1), purchase.get(2));
 						break;
 					}
 

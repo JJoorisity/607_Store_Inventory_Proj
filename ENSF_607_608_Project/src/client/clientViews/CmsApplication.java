@@ -7,10 +7,21 @@ import java.awt.event.ActionListener;
 import javax.swing.border.*;
 import javax.swing.event.ListSelectionListener;
 
+import com.mysql.cj.util.StringUtils;
+
 import sharedModel.Customer;
 
 // Need to restrict string lengths.
 
+/**
+ * Customer management system GUI building class. Handles the creation of all
+ * required components to make the GUI functional. Also implements actions for
+ * event listeners.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class CmsApplication {
 
 	private final JPanel CmsFrame = new JPanel();
@@ -64,7 +75,8 @@ public class CmsApplication {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the frame. TODO break out into classes, one for
+	 * each component created.
 	 */
 	private void initialize() {
 		textField.setColumns(10);
@@ -403,6 +415,12 @@ public class CmsApplication {
 		return this.radioGroup.getSelection().getActionCommand();
 	}
 
+	/**
+	 * Updates search results text
+	 * 
+	 * @param output (String) adds items to the results list based on passed
+	 *               object.toString()
+	 */
 	@SuppressWarnings("unchecked")
 	public void setSearchResultText(String output) {
 		int i = this.listModel1.getSize();
@@ -410,10 +428,19 @@ public class CmsApplication {
 		this.listModel1.add(i, output);
 	}
 
+	/**
+	 * Clears all search results
+	 */
 	public void resetSearchResultText() {
 		this.listModel1.removeAllElements();
 	}
 
+	/**
+	 * Updates customer info panel based on selected value from search results
+	 * 
+	 * @param object (Customer) Fresh database object queried from DB using the
+	 *               search results customerID selected.
+	 */
 	public void updateCustInfoPane(Object object) {
 		Customer c = (Customer) object;
 		this.clientIdTxt.setText(Integer.toString(c.getCustomerId()));
@@ -442,16 +469,26 @@ public class CmsApplication {
 		this.pnTxt.setText("");
 	}
 
+	/**
+	 * Creates a new customer based on the information entered in the customer
+	 * information panel. Used to create new and update existing customers in the
+	 * database.
+	 * 
+	 * @return (Customer) newly generated customer with attribute information
+	 *         supplied by user of GUI. If Customer ID is not a number returns null.
+	 */
 	public Customer getEditedCustInfo() {
 		if (!this.clientIdTxt.getText().trim().isEmpty()) {
-			int id = Integer.parseInt(this.clientIdTxt.getText());
-			String fname = this.fNameTxt.getText();
-			String lname = this.lNameTxt.getText();
-			String address = this.addressTxt.getText();
-			String postalcode = this.pcTxt.getText();
-			String phone = this.pnTxt.getText();
-			char type = ((String) this.cTypeCBox.getSelectedItem()).charAt(0);
-			return new Customer(id, fname, lname, address, postalcode, phone, type);
+			if (StringUtils.isStrictlyNumeric(this.clientIdTxt.getText().trim())) {
+				int id = Integer.parseInt(this.clientIdTxt.getText());
+				String fname = this.fNameTxt.getText();
+				String lname = this.lNameTxt.getText();
+				String address = this.addressTxt.getText();
+				String postalcode = this.pcTxt.getText();
+				String phone = this.pnTxt.getText();
+				char type = ((String) this.cTypeCBox.getSelectedItem()).charAt(0);
+				return new Customer(id, fname, lname, address, postalcode, phone, type);
+			}
 		}
 		return null;
 	}

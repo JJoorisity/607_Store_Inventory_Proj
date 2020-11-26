@@ -5,18 +5,15 @@ import java.sql.PreparedStatement;
 import java.util.Objects;
 
 /**
- * Exercise 1 Code
+ * Regular Item/tool. Contains all relevant information as supplied by the
+ * item.txt file.
  * 
- * @author Nathan Jack
+ * @author NJack & JJoorisity
  * @version 1.0
- * @since Oct 9th, 2020
- * 
- *        Sources: Code requirements from assignment
- * 
- *        Description: Item object that holds all information related to the
- *        individual tool.
+ * @since 2020-11-26
  */
-public class Item implements PrintTableConstants, Serializable{
+
+public class Item implements PrintTableConstants, Serializable {
 
 	private static final long serialVersionUID = 2L;
 	protected int itemID;
@@ -45,9 +42,12 @@ public class Item implements PrintTableConstants, Serializable{
 		this.setSupplierID(supplierID);
 
 	}
-	
+
+	/**
+	 * Default constructor for cases where an ObjectWrapper needs to query by a
+	 * single parameter.
+	 */
 	public Item() {
-		
 	}
 
 	public int getItemID() {
@@ -99,20 +99,20 @@ public class Item implements PrintTableConstants, Serializable{
 	}
 
 	/**
-	 * {@inheritDoc} To string returns a line representation of the item buffered by
-	 * "|"
+	 * {@inheritDoc} To string returns a line representation of the item delimited
+	 * by commas
 	 */
 	@Override
 	public String toString() {
-		String res = String.valueOf(getItemID()) + "," + this.getItemDesc() + "," + String.valueOf(this.getQty()) + "," + 
-				String.valueOf(this.getPrice());
+		String res = String.valueOf(getItemID()) + "," + this.getItemDesc() + "," + String.valueOf(this.getQty()) + ","
+				+ String.valueOf(this.getPrice());
 		return res;
 
 	}
 
 	/**
 	 * {@inheritDoc} ensures item objects are compared using their item ID's only
-	 * and not as a hash of all vars
+	 * and not as a hash of all attributes
 	 * 
 	 * @return boolean t/f based on ItemId integer comparison
 	 */
@@ -133,7 +133,7 @@ public class Item implements PrintTableConstants, Serializable{
 
 	/**
 	 * {@inheritDoc} ensures item objects are compared using their item ID's only
-	 * and not as a hash of the obj itselg
+	 * and not as a hash of the object itself
 	 */
 	@Override
 	public int hashCode() {
