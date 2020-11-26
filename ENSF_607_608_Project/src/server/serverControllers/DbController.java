@@ -7,25 +7,42 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-
 import sharedModel.*;
 import java.sql.*;
 
+/**
+ * Controller used to interface between the shop model controller and shop application
+ * to the mySQL database. Contains the following mySQL commands:
+ * - initialize connection,
+ * - create tables,
+ * - drop tables,
+ * - query, update, and delete among tables.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class DbController implements DatabaseConstants, DatabaseTables {
 
-	// Attributes
-	private Connection conn; // Object of type connection from the JDBC class that deals with connecting to
-								// the database
-	private Statement stmt; // object of type statement from JDBC class that enables the creation "Query
-							// statements"
-	private ResultSet rs; // object of type ResultSet from the JDBC class that stores the result of the
-							// query
+	
+	private Connection conn; 	// Object of type connection from the JDBC class that deals with connecting to
+									// the database
+	private Statement stmt; 	// object of type statement from JDBC class that enables the creation "Query
+									// statements"
+	private ResultSet rs; 		// object of type ResultSet from the JDBC class that stores the result of the
+									// query
 	private DbControllerHelper helper;
 
+	/**
+	 * Default constructor to initialize connection with DbControllerHelper class.
+	 */
 	public DbController() {
 		helper = new DbControllerHelper();
 	}
 
+	/**
+	 * Initialize the connection to the shop database.
+	 */
 	public void initializeConnection() {
 		try {
 			// Register JDBC driver
@@ -39,6 +56,9 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Close all connections to the database.
+	 */
 	public void close() {
 		try {
 			stmt.close();
@@ -49,20 +69,24 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Drops all tables in the shop database, for hard reset.
+	 */
 	public void resetDatabase() {
 		String sqlDropTables = "DROP TABLES PURCHASES, ITEMS, SUPPLIERS, ORDER_LINES, ORDERS, CUSTOMERS";
 		try {
 			stmt = conn.createStatement();
 			stmt.executeUpdate(sqlDropTables);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("All tables deleted...");
 	}
 
+	/**
+	 * Creates all necessary table schemas in the database for the shop application.
+	 */
 	public void createTable() {
-
 		String sqlSupp = "CREATE TABLE " + SUPPLIERS + "(supplierId INTEGER not NULL, " + " supplierType VARCHAR(1), "
 				+ " supplierName VARCHAR(255), " + " salesContact VARCHAR(255), " + " address VARCHAR(255), "
 				+ " importTax DECIMAL(5,2), " + " PRIMARY KEY (supplierId))";
@@ -100,12 +124,14 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			stmt.executeUpdate(sqlOrderLine);
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Created table in given database...");
 	}
 
+	/**
+	 * Initialize the item data by reading in from a text file.
+	 */
 	public void initializeItemTable() {
 		ArrayList<Object> newItems = helper.importFromTxt(ITEMFILE);
 		for (Object item : newItems) {
@@ -113,6 +139,9 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Initialize the supplier data by reading in from a text file.
+	 */
 	public void initializeSupplierTable() {
 		ArrayList<Object> newSuppliers = helper.importFromTxt(SUPPLIERFILE);
 		for (Object s : newSuppliers) {
@@ -120,6 +149,9 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Initialize the customer data by reading in from a text file.
+	 */
 	public void initializeCustomerTable() {
 		ArrayList<Object> newCustomers = helper.importFromTxt(CUSTOMERFILE);
 		for (Object c : newCustomers) {
@@ -127,6 +159,12 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Inserts a new item into the database.
+	 * Uses the lowest class of item; a non-electric item will have null values
+	 * for the electric specific attributes.
+	 * @param item (Item_Elec) electric item used to update the database.
+	 */
 	public void insertItem(Item_Elec item) {
 		try {
 			String query = helper.insertItem();
@@ -149,6 +187,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Query an item by its item ID.
+	 * @param itemID (int) the ID being searched in mySQL.
+	 * @return (Item_Elec) the returned searched item attributes are stored in Item_Elec object.
+	 */
 	public Item_Elec queryItem(int itemID) {
 		Item_Elec queryRes = null;
 		try {
@@ -171,6 +214,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
+	/**
+	 * Query by item name/description to find all results that contain the search parameter.
+	 * @param itemDesc (String) name or description of item being searched.
+	 * @return (LinkedHashSet<Item_Elec>) the returned searched items are stored in Item_Elec objects.
+	 */
 	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
 		itemDesc = "%" + itemDesc + "%";
 		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
@@ -193,6 +241,10 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
+	/**
+	 * Query all items stored in the database.
+	 * @return (LinkedHashSet<Item_Elec>) the returned searched items are stored in Item_Elec objects.
+	 */
 	public LinkedHashSet<Item_Elec> queryItem() {
 		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
 		try {
@@ -213,6 +265,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
+	/**
+	 * Update the item quantity after a purchase.
+	 * @param itemID (int) the ID of the item purchased.
+	 * @param qty (int) the quantity of the item to be reduced.
+	 */
 	public void updateItem(int itemID, int qty) {
 		try {
 			String query = helper.updateItem();
@@ -230,18 +287,14 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	}
 
 //	public void removeItem(Item item) {
-//		try {
-//			String query = helper.removeItem();
-//			PreparedStatement pStat = conn.prepareStatement(query);
-//			pStat.setInt(1, item.getItemID());
-//			int rowCount = pStat.executeUpdate();
-//			System.out.println("row Count = " + rowCount);
-//			pStat.close();
-//		} catch (SQLException e) {
-//			System.err.println("removeItem failed with " + item);
-//		}
 //	}
 
+	/**
+	 * Insert a new supplier into the database.
+	 * Uses the lowest class of supplier; a local supplier will have null values
+	 * for the international attributes.
+	 * @param supplier (Int_Supplier) international supplier used to update the database.
+	 */
 	public void insertSupplier(Int_Supplier supplier) {
 		try {
 			String query = helper.insertSupplier();
@@ -260,7 +313,38 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Query supplier by the supplier ID.
+	 * Local suppliers are stored in an international supplier with null information for the
+	 * international attributes.
+	 * @param supplierID (int) the ID being searched.
+	 * @return (Int_supplier) returns an international supplier matching the ID.
+	 */
+	public Int_Supplier querySupplier(int supplierID) {
+		Int_Supplier queryRes = null;
+		try {
+			String query = helper.querySupplier();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, supplierID);
+			ResultSet results = pStat.executeQuery();
 
+			if (results.next()) {
+				queryRes = new Int_Supplier(results.getInt("supplierID"), results.getString("supplierType").charAt(0),
+						results.getString("supplierName"), results.getString("salesContact"),
+						results.getString("address"), results.getDouble("importTax"));
+				pStat.close();
+			}
+		} catch (SQLException e) {
+			System.err.println("querySupplier failed with " + supplierID);
+		}
+		return queryRes;
+	}
+
+	/**
+	 * Insert a new customer into the database.
+	 * @param customer (Customer) used to update the database.
+	 */
 	public void insertCustomer(Customer customer) {
 		try {
 			String query = helper.insertCustomer();
@@ -281,6 +365,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Query a customer by the customer's ID.
+	 * @param customerID (int) the ID to query.
+	 * @return (Customer) the query results stored as a Customer object.
+	 */
 	public Customer queryCustomer(int customerID) {
 		Customer queryRes = null;
 		try {
@@ -301,6 +390,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
+	/**
+	 * Query customers by the customer type: residential (R) or commercial (C).
+	 * @param type (char) the type being queried.
+	 * @return (LinkedHashSet<Customer>) the results are stored as a list of Customer objects.
+	 */
 	public LinkedHashSet<Customer> queryCustomer(char type) {
 		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
@@ -321,6 +415,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
+	/**
+	 * Query customers by the customer last name.
+	 * @param name (String) the last name or text being searched in the database's customer last name.
+	 * @return (LinkedHashSet<Customer>) the results are stored as a list of Customer objects.
+	 */
 	public LinkedHashSet<Customer> queryCustomer(String name) {
 		LinkedHashSet<Customer> queryRes = new LinkedHashSet<Customer>();
 		try {
@@ -341,6 +440,10 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
+	/**
+	 * Update a customer's attributes in the database.
+	 * @param customer (Customer) the new customer information to update.
+	 */
 	public void updateCustomer(Customer customer) {
 		try {
 			String query = helper.updateCustomer();
@@ -361,6 +464,10 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Delete a customer from the database.
+	 * @param customer (Customer) the customer to be removed.
+	 */
 	public void removeCustomer(Customer customer) {
 		try {
 			String query = helper.removeCustomer();
@@ -374,6 +481,36 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Query an order by the order ID.
+	 * @param orderId (int) the order ID of the order being searched.
+	 * @param mc (ModelController) access to the model to store items from order lines.
+	 * @return (Order) the order searched.
+	 */
+	public Order queryOrder(int orderId, ModelController mc) {
+		Order queryRes = null;
+		try {
+			String query = helper.queryOrder();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, orderId);
+			ResultSet results = pStat.executeQuery();
+
+			if (results.next()) {
+				queryRes = new Order(results.getInt("orderId"));
+				pStat.close();
+				queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID(), mc));
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("queryOrder failed with " + orderId);
+		}
+		return queryRes;
+	}
+	
+	/**
+	 * Insert a new order into the database.
+	 * @param order (Order) the new order being added.
+	 */
 	public void insertOrder(Order order) {
 		try {
 			String query = helper.insertOrder();
@@ -389,6 +526,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Insert a new OrderLine into the database
+	 * @param ol (OrderLine) the order line being added.
+	 * @param orderID (int) the order ID linked to this order line.
+	 */
 	public void insertOrderLine(OrderLine ol, int orderID) {
 		try {
 			String query = helper.insertOrderLine();
@@ -406,6 +548,12 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 
 	}
 
+	/**
+	 * Adjust the quantity of an order line if additional items are purchased in the same day.
+	 * @param ol (OrderLine) the order line being updated.
+	 * @param qty (int) the quantity of items to add to the order line.
+	 * @param orderID (int) the order ID of the order line being updated.
+	 */
 	public void updateOrderLine(OrderLine ol, int qty, int orderID) {
 		try {
 			String query = helper.updateOrderLine();
@@ -421,6 +569,12 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 	}
 
+	/**
+	 * Query a specific order line.
+	 * @param itemId (int) the item ID of the specified order line.
+	 * @param orderId (int) the order ID of the specified order line.
+	 * @return (OrderLine) returns the searched order line.
+	 */
 	public OrderLine queryOrderLine(int itemId, int orderId) {
 		OrderLine queryRes = null;
 		try {
@@ -443,6 +597,13 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 	
+	/**
+	 * Query all order lines for a specific order.
+	 * @param orderId (int) the order ID being searched.
+	 * @param mc (ModelController) access to the current model controller to update the local
+	 * inventory with the items from each order line.
+	 * @return (LinkedHashSet<OrderLine>) a list of all order lines matching the order ID.
+	 */
 	private LinkedHashSet<OrderLine> queryAllOrderLines(int orderId, ModelController mc) {
 		LinkedHashSet<OrderLine> queryRes = new LinkedHashSet<OrderLine>();
 		try {
@@ -466,49 +627,11 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		return queryRes;
 	}
 
-	public Order queryOrder(int orderId, ModelController mc) {
-		Order queryRes = null;
-		try {
-			String query = helper.queryOrder();
-			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setInt(1, orderId);
-			ResultSet results = pStat.executeQuery();
-
-			if (results.next()) {
-				queryRes = new Order(results.getInt("orderId"));
-				pStat.close();
-				queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID(), mc));
-			}
-			
-		} catch (SQLException e) {
-			System.err.println("queryOrder failed with " + orderId);
-		}
-		return queryRes;
-	}
-
-	
-
-	public Int_Supplier querySupplier(int supplierID) {
-		Int_Supplier queryRes = null;
-		try {
-			String query = helper.querySupplier();
-			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setInt(1, supplierID);
-			ResultSet results = pStat.executeQuery();
-
-			if (results.next()) {
-				queryRes = new Int_Supplier(results.getInt("supplierID"), results.getString("supplierType").charAt(0),
-						results.getString("supplierName"), results.getString("salesContact"),
-						results.getString("address"), results.getDouble("importTax"));
-				pStat.close();
-			}
-		} catch (SQLException e) {
-			System.err.println("querySupplier failed with " + supplierID);
-		}
-		return queryRes;
-
-	}
-
+	/**
+	 * Insert a new purchase line into database.
+	 * @param itemID (int) item ID assigned to the purchase.
+	 * @param customerID (int) the customer ID assigned to the purchase.
+	 */
 	public void insertPurchases(int itemID, int customerID) {
 		try {
 			String query = helper.insertPurchases();
@@ -523,17 +646,6 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			e.printStackTrace();
 		}
 
-	}
-
-	public static void main(String[] args0) {
-		DbController myApp = new DbController();
-		myApp.initializeConnection();
-		myApp.resetDatabase();
-		myApp.createTable();
-		myApp.initializeSupplierTable();
-		myApp.initializeItemTable();
-		myApp.initializeCustomerTable();
-		myApp.close();
 	}
 
 }

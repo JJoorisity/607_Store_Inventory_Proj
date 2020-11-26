@@ -2,16 +2,31 @@ package client.clientViews;
 
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.border.*;
 
+/**
+ * Generate the shop application by combining both the ImsApplication and 
+ * CmsApplication class frames into separate tabs of the ShopApplication JFrame.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class ShopApplication {
 
 	private JFrame frame;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
+	/**
+	 * Create the shop application.
+	 */
+	public ShopApplication(CmsApplication cms, ImsApplication ims) {
+		initialize(cms, ims);
+	}
 
 	/**
-	 * Launch the application.
+	 * Launch the GUI application.
+	 * @param shop (ShopApplication) passes itself to use the 
+	 * eventQueue runnable method.
 	 */
 	public void startGui(ShopApplication shop) {
 		
@@ -26,19 +41,17 @@ public class ShopApplication {
 		});
 	}
 	
+	/**
+	 * @return (JFrame) returns the shop JFrame.
+	 */
 	public JFrame getFrame() {
 		return this.frame;
 	}
 
 	/**
-	 * Create the application.
-	 */
-	public ShopApplication(CmsApplication cms, ImsApplication ims) {
-		initialize(cms, ims);
-	}
-
-	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the GUI tabbed frames.
+	 * @param cms (CmsApplication) the customer frame.
+	 * @param ims (ImsApplication) the inventory frame.
 	 */
 	private void initialize(CmsApplication cms, ImsApplication ims) {
 		frame = new JFrame();

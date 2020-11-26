@@ -29,6 +29,10 @@ public class ShopApp implements Commands {
 		this.inventory = new Inventory();
 	}
 
+	/**
+	 * Assign the model controller in the system for communication.
+	 * @param m (ModelController) current model controller.
+	 */
 	public void setModelController(ModelController m) {
 		this.modelController = m;
 	}
@@ -43,7 +47,6 @@ public class ShopApp implements Commands {
 	/**
 	 * Save new or modify existing customer. If customer id is not found in
 	 * database: create new else update.
-	 * 
 	 * @param customer (Customer) the customer being adjusted
 	 * @return (boolean) returns true that change was successful.
 	 */
@@ -58,7 +61,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Remove customer from the shop database.
-	 * 
 	 * @param customer (Customer) the customer being removed from the database.
 	 * @return (boolean) true if removal was successful.
 	 */
@@ -72,7 +74,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Query a list of customers by the customer type.
-	 * 
 	 * @param type (char) type of customer being searched.
 	 * @return (LinkedHashSet<Customer>) list of customers returned from mySQL
 	 *         query.
@@ -83,7 +84,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Query a list of customers by customer last name.
-	 * 
 	 * @param name (String) last name of customers being searched.
 	 * @return (LinkedHashSet<Customer>) list of customers returned from mySQL
 	 *         query.
@@ -94,7 +94,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Query a customers by customer id.
-	 * 
 	 * @param id (int) id of customer being searched.
 	 * @return (Customer) customer returned from query.
 	 */
@@ -104,11 +103,10 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Execute a purchase by a customer for a specified quantity of an item.
-	 * 
+	 * Returns a object message indicating successful purchase.
 	 * @param itemID     (int) id of item that was purchased.
 	 * @param qty        (int) quantity purchased of item.
 	 * @param customerID (int) id of customer executing the purchase.
-	 * @return (boolean) true if the purchase was successful.
 	 */
 	public void executePurchase(int itemID, int qty, int customerID) {
 		Item_Elec item = modelController.getDbController().queryItem(itemID);
@@ -133,7 +131,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Update the daily order with any new items that need to be ordered.
-	 * 
 	 * @param item (Item_Elec) item that needs to be ordered.
 	 * @param qty  (int) quantity of item that needs to be ordered.
 	 */
@@ -148,12 +145,10 @@ public class ShopApp implements Commands {
 
 			updateOrderLines(item, temp.getOrderID(), qty);
 		}
-		return; // output to gui that order succeeded or failed
 	}
 
 	/**
 	 * Return a supplier from the database based on the passed ID
-	 * 
 	 * @param supplierID (int) 4 digit supplier ID to return
 	 * @return (Supplier) retunrs single queried supplier or null if ID does not
 	 *         match DB
@@ -165,7 +160,6 @@ public class ShopApp implements Commands {
 	/**
 	 * Update the daily order's orderlines by adding a new line or updating existing
 	 * line's quantity.
-	 * 
 	 * @param item    (Item_Elec) item that needs to be ordered.
 	 * @param orderId (int) order id that the orderline is being added to.
 	 * @param qty     (int) quantity of item needing to be ordered.
@@ -179,16 +173,13 @@ public class ShopApp implements Commands {
 			modelController.getDbController().insertOrderLine(
 					new OrderLine(item.getItemID(), item.ORDERQTYLIMIT - item.getQty(), tempSupp.getCompanyName()),
 					orderId);
-			return;
 		} else {
 			modelController.getDbController().updateOrderLine(templine, qty, orderId);
-			return;
 		}
 	}
 
 	/**
 	 * Query an item by the item name/description.
-	 * 
 	 * @param itemDesc (String) description of item being searched.
 	 * @return (LinkedHashSet<Item_Elec>) list of items matching the item
 	 *         description.
@@ -199,7 +190,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Query all items listed in the database
-	 * 
 	 * @return (LinkedHashSet<Item_Elec>) list of all items.
 	 */
 	public LinkedHashSet<Item_Elec> queryItem() {
@@ -208,7 +198,6 @@ public class ShopApp implements Commands {
 
 	/**
 	 * Query an item from the database by its id.
-	 * 
 	 * @param itemId (int) id of item being searched.
 	 * @return (Item_Elec) item matching the item id.
 	 */
@@ -216,8 +205,11 @@ public class ShopApp implements Commands {
 		return modelController.getDbController().queryItem(itemId);
 	}
 
-	// Included items as an option for extensibility but implementation is not
-	// required.
+	/**
+	 * Delete a specified object from the database.
+	 * Case for Customer.
+	 * @param request (ObjectWrapper) specified object to be removed.
+	 */
 	private void deleteObject(ObjectWrapper request) {
 		String type = request.getMessage()[1];
 		ObjectWrapper ow = new ObjectWrapper();
@@ -240,8 +232,11 @@ public class ShopApp implements Commands {
 		}
 	}
 
-	// Included items as an option for extensibility but implementation is not
-	// required.
+	/**
+	 * Save the specified object in the appropriate table in the database.
+	 * Case for Customer.
+	 * @param request (ObjectWrapper) object to be saved.
+	 */
 	private void saveObject(ObjectWrapper request) {
 		String type = request.getMessage()[1];
 		ObjectWrapper ow = new ObjectWrapper();
@@ -259,11 +254,15 @@ public class ShopApp implements Commands {
 		try {
 			this.modelController.getOutputStream().writeObject(ow);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * Search a specific object in the database.
+	 * Case for Customer, Item_Elec, or Order.
+	 * @param request (ObjectWrapper) Object to be searched.
+	 */
 	private void searchObject(ObjectWrapper request) {
 		String type = request.getMessage()[1];
 		String command = request.getMessage()[0];
@@ -326,18 +325,28 @@ public class ShopApp implements Commands {
 		}
 	}
 
+	/**
+	 * Calls a print of the daily order.
+	 * @return (String) the print success message.
+	 */
 	public String printOrder() {
 		int i = this.getInventory().generateOrderID();
 		Order temp = this.modelController.getDbController().queryOrder(i, this.modelController);
 		return this.getInventory().printOrder(temp);
 	}
 
+	/**
+	 * Print the item list stored in the database.
+	 * @return (String) print out of all items in the database.
+	 */
 	public String printItems() {
 		return this.getInventory().toString();
 	}
 
+	/**
+	 * Run method to generate communication between the client and server.
+	 */
 	public void runShop() {
-		// ObjectWrapper request;
 		try {
 			while (true) {
 				ObjectWrapper request = (ObjectWrapper) this.modelController.getInputStream().readObject();
@@ -376,11 +385,3 @@ public class ShopApp implements Commands {
 	}
 
 }
-
-//public boolean removeItem(Item item) {
-//if (dbController.queryItem(item.getItemID()) != null) {
-//	dbController.removeItem(item);
-//	return true;
-//}
-//return false;
-//}

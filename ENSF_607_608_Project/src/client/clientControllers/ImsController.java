@@ -13,34 +13,64 @@ import com.mysql.cj.util.StringUtils;
 import client.clientViews.ImsApplication;
 import sharedModel.*;
 
+/**
+ * Controller of the interactions between reading information from the client
+ * and displaying in the ImsApplication frame.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class ImsController implements Commands, PrintTableConstants {
 
 	private ImsApplication app;
 	private ClientController cc;
 	
+	/**
+	 * Default constructor.
+	 * @param cc (ClientConroller) relation with the client controller to allow
+	 * communcation to the server.
+	 */
 	public ImsController(ClientController cc) {
 		this.app = new ImsApplication();
 		this.addActionListeners();
 		this.cc = cc;
 	}
 
+	/**
+	 * @return (ImsApplication) instance of the inventory frame.
+	 */
 	public ImsApplication getApp() {
 		return this.app;
 	}
 	
+	/**
+	 * Set a new inventory frame.
+	 * @param ims (ImsApplication)
+	 */
 	public void setApp(ImsApplication ims) {
 		this.app = ims;
 	}
 	
+	/**
+	 * @return (ClientConroller)
+	 */
 	public ClientController getCController() {
 		return this.cc;
 	}
 	
+	/**
+	 * Add action listeners to the ImsApplication.
+	 */
 	public void addActionListeners() {
 		this.app.addActionListeners(new ImsActions());
 		this.app.addSelectionListeners(new ImsActions());
 	}
 	
+	/**
+	 * Execute a search command from the ImsApplication to the server database.
+	 * Cases are by item ID or item Description.
+	 */
 	public void executeSearch() {
 		String command = "";
 		String searchText = this.app.getSearchItemTxt();
@@ -68,6 +98,10 @@ public class ImsController implements Commands, PrintTableConstants {
 		wrapMessage(command, ITEM_ELEC, item);
 	}
 	
+	/**
+	 * Update the search results into the ImsApplication result table.
+	 * @param objectList (ArrayList<Object>) list of objects to display.
+	 */
 	public void updateSearchResults(ArrayList<Object> objectList) {
 		for (Object o : objectList) {
 			Runnable runner = new Runnable() {
@@ -79,6 +113,10 @@ public class ImsController implements Commands, PrintTableConstants {
 		}
 	}
 	
+	/**
+	 * Update the purchase field message depending on if purchase was successful.
+	 * @param message (String) message from server.
+	 */
 	public void updatePurchaseField(String message) {
 		Runnable runner = new Runnable() {
 			public void run() {
@@ -88,11 +126,17 @@ public class ImsController implements Commands, PrintTableConstants {
 		EventQueue.invokeLater(runner);
 	}
 	
+	/**
+	 * Clear all the search fields.
+	 */
 	public void executeClearSearch() {
 		this.app.setSearchItemTxt("");
 		this.app.resetSearchResultText();
 	}
 	
+	/**
+	 * Clear all the purchase fields.
+	 */
 	public void executeClearPurchase() {
 		this.app.setcustIdTxt("");
 		this.app.setItemIdTxt("");
@@ -100,6 +144,10 @@ public class ImsController implements Commands, PrintTableConstants {
 		this.app.setPMssgeTxt("");
 	}
 	
+	/**
+	 * Execute a purchase from the ImsApplication entered information
+	 * to the server database.
+	 */
 	public void executePurchase() {
 		String command = PURCHASE;
 		ArrayList<Object> purchases = new ArrayList<Object>();
@@ -112,6 +160,9 @@ public class ImsController implements Commands, PrintTableConstants {
 		}
 	}
 	
+	/**
+	 * Execute a search of all items in the server database.
+	 */
 	public void executeSearchAll() {
 		this.app.resetSearchResultText();
 		String command = SEARCH + ALL;
@@ -120,11 +171,20 @@ public class ImsController implements Commands, PrintTableConstants {
 		wrapMessage(command, ITEM_ELEC, item);
 	}
 	
+	/**
+	 * Generate a text file for the daily order.
+	 */
 	public void generateOrder() {
 		String command = SEARCH + ORDER;
 		wrapMessage(command, ORDER, null);
 	}
 	
+	/**
+	 * Create a ObjectWrapper to send to the server for processing.
+	 * @param command (String) the command the server needs to execute.
+	 * @param type (String) the type of object being sent.
+	 * @param newObj (Object) the object being sent to the server.
+	 */
 	public void wrapMessage(String command, String type, Object newObj) {
 		ObjectWrapper request = new ObjectWrapper();
 		request.addPassedObj(newObj);
@@ -138,19 +198,18 @@ public class ImsController implements Commands, PrintTableConstants {
 		EventQueue.invokeLater(runner);
 	}
 
-//	public void updateSearchResults(ArrayList<Object> objectList) {
-//		for (Object o : objectList) {
-//			Runnable runner = new Runnable() {
-//				public void run() {
-//					app.setSearchResultText(o.toString());
-//				}
-//			};
-//			EventQueue.invokeLater(runner);
-//		}
-//	}
-
+	/**
+	 * Inner class to create action listeners for the ImsApplication events.
+	 * 
+	 * @author NJack & JJoorisity
+	 * @version 1.0
+	 * @since 2020-11-26
+	 */
 	private class ImsActions implements ActionListener, ListSelectionListener {
 
+		/**
+		 * Method trigger for all action events by the ImsApplication button clicks.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == getApp().getSearchItemBtn())
@@ -167,6 +226,9 @@ public class ImsController implements Commands, PrintTableConstants {
 				generateOrder();
 		}
 		
+		/**
+		 * Method trigger for all selection events by the ImsApplication table selections.
+		 */
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			Runnable runner = new Runnable() {

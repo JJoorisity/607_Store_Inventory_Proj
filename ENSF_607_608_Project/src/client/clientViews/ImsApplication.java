@@ -9,6 +9,14 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Inventory Management System to create the inventory frame run by the
+ * Shop Application.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class ImsApplication {
 	private final JPanel ImsFrame = new JPanel();
 	private final JSplitPane splitPane_rs = new JSplitPane();
@@ -52,9 +60,12 @@ public class ImsApplication {
 	 */
 	public ImsApplication() {
 		initialize();
-		// fix
 	}
 
+	/**
+	 * Add action listeners to the buttons
+	 * @param listener (ActionListener)
+	 */
 	public void addActionListeners(ActionListener listener) {
 		searchItemBtn.addActionListener(listener);
 		searchAllBtn.addActionListener(listener);
@@ -64,82 +75,149 @@ public class ImsApplication {
 		orderBtn.addActionListener(listener);
 	}
 
+	/**
+	 * Add selection listeners to the table for selection
+	 * @param listener (ListSelectionListener)
+	 */
 	public void addSelectionListeners(ListSelectionListener listener) {
 		itemTable.getSelectionModel().addListSelectionListener(listener);
 	}
 
+	/**
+	 * @return (JButton) the clear items button.
+	 */
 	public JButton getClearItemBtn() {
 		return this.clearItemBtn;
 	}
 
+	/**
+	 * @return (JButton) the search items button.
+	 */
 	public JButton getSearchItemBtn() {
 		return this.searchItemBtn;
 	}
 
+	/**
+	 * @return (JButton) the search all items button.
+	 */
 	public JButton getSearchAllBtn() {
 		return this.searchAllBtn;
 	}
 
+	/**
+	 * @return (JButton) the purchase items button.
+	 */
 	public JButton getPurchaseBtn() {
 		return this.purchaseBtn;
 	}
 
+	/**
+	 * @return (JButton) the clear purchases button.
+	 */
 	public JButton getClearPurchBtn() {
 		return this.clearPurchBtn;
 	}
 	
+	/**
+	 * @return (JButton) the generate orders button.
+	 */
 	public JButton getOrderBtn() {
 		return this.orderBtn;
 	}
 	
+	/**
+	 * @return (JTable) the search results table.
+	 */
 	public JTable getItemTable() {
 		return this.itemTable;
 	}
 
+	/**
+	 * @return (String) the search items text.
+	 */
 	public String getSearchItemTxt() {
 		return searchItemTxt.getText();
 	}
 
+	/**
+	 * Set the search item text.
+	 * @param set (String) text to display.
+	 */
 	public void setSearchItemTxt(String set) {
 		searchItemTxt.setText(set);
 	}
 
+	/**
+	 * @return (String) the item ID text.
+	 */
 	public String getItemIdTxt() {
 		return itemIdTxt.getText();
 	}
 
+	/**
+	 * Set the item ID text.
+	 * @param set (String) text to display.
+	 */
 	public void setItemIdTxt(String set) {
 		itemIdTxt.setText(set);
 	}
 
+	/**
+	 * @return (String) the purchase quantity text.
+	 */
 	public String getPurchaseQtyTxt() {
 		return purchaseQtyTxt.getText();
 	}
 
+	/**
+	 * Set the purchase quantity text.
+	 * @param set (String) text to display.
+	 */
 	public void setPurchaseQtyTxt(String set) {
 		purchaseQtyTxt.setText(set);
 	}
 
+	/**
+	 * @return (String) the customer ID text.
+	 */
 	public String getcustIdTxt() {
 		return custIdTxt.getText();
 	}
 
+	/**
+	 * Set the customer ID text.
+	 * @param set (String) text to display.
+	 */
 	public void setcustIdTxt(String set) {
 		custIdTxt.setText(set);
 	}
 
+	/**
+	 * @return (String) the purchase message text.
+	 */
 	public String getPMssgeTxt() {
 		return pMssgeTxt.getText();
 	}
 
+	/**
+	 * Set the purchase message text.
+	 * @param set (String) text to display.
+	 */
 	public void setPMssgeTxt(String set) {
 		pMssgeTxt.setText(set);
 	}
 
+	/**
+	 * @return (String) the selection from the radio buttons.
+	 */
 	public String getSelectedRadioButton() {
 		return this.radioGroup.getSelection().getActionCommand();
 	}
 
+	/**
+	 * Display the search results in the table.
+	 * @param output (String) string to be added to the table.
+	 */
 	public void setSearchResultText(String output) {
 		String[] split = output.trim().split(",");
 		Object[] rowData = {new Integer(Integer.parseInt(split[0])), split[1], new Integer(Integer.parseInt(split[2])), 
@@ -148,14 +226,25 @@ public class ImsApplication {
 		tableModel.fireTableRowsInserted(0, tableModel.getRowCount());
 	}
 
+	/**
+	 * Clear the search results table and set rows to 0.
+	 */
 	public void resetSearchResultText() {
 		itemTable.clearSelection();
 		this.tableModel.setRowCount(0);
 		tableModel.fireTableRowsDeleted(0, 0);;
 	}
+	
+	/**
+	 * Get the inventory frame.
+	 * @return (JPanel)
+	 */
+	public JPanel getImsFrame() {
+		return this.ImsFrame;
+	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the inventory frame.
 	 */
 	private void initialize() {
 		ImsFrame.setLayout(new BorderLayout(0, 0));
@@ -391,10 +480,6 @@ public class ImsApplication {
 		this.radioGroup.add(itemDRBtn);
 		itemDRBtn.setActionCommand("itemDesc");
 
-	}
-
-	public JPanel getImsFrame() {
-		return this.ImsFrame;
 	}
 
 }
