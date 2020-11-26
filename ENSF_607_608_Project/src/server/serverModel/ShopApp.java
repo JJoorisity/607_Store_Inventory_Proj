@@ -140,7 +140,7 @@ public class ShopApp implements Commands {
 	private void updateOrders(Item_Elec item, int qty) {
 		if (item.getQty() < item.ORDERQTYLIMIT) {
 			int i = this.getInventory().generateOrderID();
-			Order temp = this.modelController.getDbController().queryOrder(i);
+			Order temp = this.modelController.getDbController().queryOrder(i, this.modelController);
 			if (temp == null) {
 				temp = new Order(i);
 				modelController.getDbController().insertOrder(temp);
@@ -283,6 +283,13 @@ public class ShopApp implements Commands {
 			else if (command.equals(TYPE) || command.contains(TYPE))
 				searchObject.addAll(this.queryCustomer(c.getCustomerType()));
 			ow.setMessage(DISPLAY, CUSTOMER);
+			
+			 // if query returns a null, set the outgoing message to failed
+			if (searchObject.isEmpty() == true) {
+				ow.setMessage(FAILED, CUSTOMER);
+			} else if (searchObject.get(0) == null) {
+				ow.setMessage(FAILED, CUSTOMER);
+			}
 			break;
 		}
 
@@ -305,11 +312,6 @@ public class ShopApp implements Commands {
 		}
 		}
 		try {
-			if (searchObject.isEmpty() == true) {
-				ow.setMessage(FAILED, CUSTOMER);
-			} else if (searchObject.get(0) == null) {
-				ow.setMessage(FAILED, CUSTOMER); // if query returns a null, set the outgoing message to failed
-			}
 			ow.addPassedObj(searchObject);
 			this.modelController.getOutputStream().writeObject(ow);
 		} catch (IOException e) {
@@ -319,7 +321,7 @@ public class ShopApp implements Commands {
 
 	public String printOrder() {
 		int i = this.getInventory().generateOrderID();
-		Order temp = this.modelController.getDbController().queryOrder(i);
+		Order temp = this.modelController.getDbController().queryOrder(i, this.modelController);
 		return this.getInventory().printOrder(temp);
 	}
 

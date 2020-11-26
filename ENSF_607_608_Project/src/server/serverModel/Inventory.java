@@ -57,6 +57,14 @@ public class Inventory implements PrintTableConstants, Commands {
 	public void addItems(Item_Elec item) {
 		this.itemList.add(item);
 	}
+	
+	/**
+	 * @param items (LinkedHashSet<Item>) assign a new LinkedHashSet of items to
+	 *              inventory.
+	 */
+	public void clearItems() {
+		this.itemList.clear();
+	}
 
 	/**
 	 * Searches and returns an Item in the inventory list.

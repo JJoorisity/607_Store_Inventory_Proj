@@ -442,28 +442,8 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
-
-	public Order queryOrder(int orderId) {
-		Order queryRes = null;
-		try {
-			String query = helper.queryOrder();
-			PreparedStatement pStat = conn.prepareStatement(query);
-			pStat.setInt(1, orderId);
-			ResultSet results = pStat.executeQuery();
-
-			if (results.next()) {
-				queryRes = new Order(results.getInt("orderId"));
-				pStat.close();
-				queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID()));
-			}
-			
-		} catch (SQLException e) {
-			System.err.println("queryOrder failed with " + orderId);
-		}
-		return queryRes;
-	}
-
-	private LinkedHashSet<OrderLine> queryAllOrderLines(int orderId) {
+	
+	private LinkedHashSet<OrderLine> queryAllOrderLines(int orderId, ModelController mc) {
 		LinkedHashSet<OrderLine> queryRes = new LinkedHashSet<OrderLine>();
 		try {
 			String query = helper.queryAllOrderLine();
@@ -471,8 +451,10 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 			pStat.setInt(1, orderId);
 			ResultSet results = pStat.executeQuery();
 
+			mc.getShop().getInventory().clearItems();
 			while (results.next()) {
 				Item_Elec tempItem = this.queryItem(results.getInt("itemId"));
+				mc.getShop().getInventory().addItems(tempItem);;
 				Int_Supplier tempSupp = this.querySupplier(tempItem.getSupplierID());
 				queryRes.add(
 						new OrderLine(results.getInt("itemId"), results.getInt("orderQty"), tempSupp.getCompanyName()));
@@ -483,6 +465,28 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 		return queryRes;
 	}
+
+	public Order queryOrder(int orderId, ModelController mc) {
+		Order queryRes = null;
+		try {
+			String query = helper.queryOrder();
+			PreparedStatement pStat = conn.prepareStatement(query);
+			pStat.setInt(1, orderId);
+			ResultSet results = pStat.executeQuery();
+
+			if (results.next()) {
+				queryRes = new Order(results.getInt("orderId"));
+				pStat.close();
+				queryRes.setOrderLines(this.queryAllOrderLines(queryRes.getOrderID(), mc));
+			}
+			
+		} catch (SQLException e) {
+			System.err.println("queryOrder failed with " + orderId);
+		}
+		return queryRes;
+	}
+
+	
 
 	public Int_Supplier querySupplier(int supplierID) {
 		Int_Supplier queryRes = null;

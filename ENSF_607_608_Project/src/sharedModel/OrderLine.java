@@ -36,13 +36,11 @@ public class OrderLine implements PrintTableConstants{
 	}
 
 	public String printOrderLine(Item item) {
-		String valueAlignFormat = "| %-20s  %-30d |%n";
-		String stringAlignFormat = "| %-20s  %-30s |%n";
 		String res = "";
 
-		res += String.format(stringAlignFormat, "Item Description:", item.getItemDesc());
-		res += String.format(valueAlignFormat, "Amount Ordered:", (this.orderQty));
-		res += String.format(stringAlignFormat, "Supplier:", this.getSupplierName());
+		res += String.format(STRALIGNFORMAT, "Item Description:", item.getItemDesc());
+		res += String.format(VALUEALIGNFORMAT, "Amount Ordered:", (this.orderQty));
+		res += String.format(STRALIGNFORMAT, "Supplier:", this.getSupplierName());
 		res += TABLEBREAK;
 		return res;
 	}
