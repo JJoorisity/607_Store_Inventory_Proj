@@ -14,7 +14,7 @@ import server.serverModel.ShopApp;
 /**
  * Server class to run shop inventory server Client classes.
  * 
- * @author JJoorisity NJacl
+ * @author NJack & JJoorisity
  * @version 1.0
  * @since 2020-11-06
  */
@@ -38,8 +38,8 @@ public class ServerController {
 	}
 
 	/**
-	 * Run server and allow communication with client package. Initialize a
-	 * modelController.
+	 * Run server and allow communication with client package. Initialize model/DB
+	 * controller and shop application for every connected client.
 	 */
 	public void runServer() {
 
@@ -55,10 +55,10 @@ public class ServerController {
 				DbController myDB = new DbController();
 				myDB.initializeConnection();
 				ShopApp myShop = new ShopApp();
-				
+
 				ModelController newShop = new ModelController(clientIn, clientOut, myDB, myShop);
 				myShop.setModelController(newShop);
-				
+
 				pool.execute(newShop);
 				System.out.println("Shop model active.");
 
@@ -80,6 +80,11 @@ public class ServerController {
 		}
 	}
 
+	/**
+	 * Main server run method. Initiates server based on hard coded port number and server name.
+	 * @param args (null)
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		ServerController myServer = new ServerController();
 		myServer.runServer();

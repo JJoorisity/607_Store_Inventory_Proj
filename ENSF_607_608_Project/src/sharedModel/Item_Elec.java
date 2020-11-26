@@ -1,5 +1,12 @@
 package sharedModel;
 
+/**
+ * Electrical Item, subclass of regular item/tool.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class Item_Elec extends Item {
 
 	private static final long serialVersionUID = 2L;
@@ -7,6 +14,18 @@ public class Item_Elec extends Item {
 	private int voltage;
 	private int phase;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param itemID     (Integer) itemID from txt file
+	 * @param itemName   (String) item name from txt file
+	 * @param qty        (Integer qty from txt file
+	 * @param price      (Double) price from txt file
+	 * @param supplierID (String) of numerical supplier id
+	 * @param ptype		 (String) of powertype (AC/DC)
+	 * @param volts		 (Integer required tool voltage (120/240 etc)
+	 * @param phase		 (Integer required electrical phase (1/2/3) for tool operation
+	 */
 	public Item_Elec(int itemID, char itemType, String itemDesc, int qty, double price, int supplierID, String ptype,
 			int volts, int phase) {
 		super(itemID, itemType, itemDesc, qty, price, supplierID);
@@ -15,8 +34,10 @@ public class Item_Elec extends Item {
 		this.setPhase(phase);
 	}
 	
+	/**
+	 * Default constructor for cases where an ObjectWrapper needs to query by a single parameter.
+	 */
 	public Item_Elec() {
-		
 	}
 
 	public String getPowerType() {
@@ -41,12 +62,6 @@ public class Item_Elec extends Item {
 
 	public int getVoltage() {
 		return this.voltage;
-	}
-
-	public String sqlInsert() {
-		return this.itemID + ", " + this.supplierID + ", " + this.itemType + ", " + this.itemDesc + ", " + this.price
-				+ ", " + this.qty + ", " + this.powerType + ", " + this.voltage + ", " + this.phase;
-
 	}
 
 }

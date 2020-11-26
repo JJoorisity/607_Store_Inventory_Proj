@@ -2,7 +2,16 @@ package client.clientControllers;
 
 import client.clientViews.ShopApplication;
 
-
+/**
+ * Client Controller handles all interactions between the shop client and the
+ * shop application through the use of the inventory and customer controllers.
+ * 
+ * Contains main function to launch all client side operations.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class ClientController {
 
 	private ShopClient shopClient;
@@ -10,49 +19,37 @@ public class ClientController {
 	private ImsController inventoryController;
 	private ShopApplication shopApplication;
 
-	public ClientController(ShopClient shopClient) {
-		this.shopClient = shopClient;
-		customerController = new CmsController(this);
-		inventoryController = new ImsController(this);
-		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
-
-		// replace with generic add all listenrs options
-		customerController.addActionListeners();
-		
-		shopApplication.startGui(shopApplication);
-
-		this.shopClient.communicate();
-
-		// construct gui. pass actionlisters as required.
-	}
-
-	// testing constructor to be deleted
+	/**
+	 * Client Controller constructor. Currently uses composition to create the client and inventory controllers. 
+	 */
 	public ClientController() {
 		customerController = new CmsController(this);
 		inventoryController = new ImsController(this);
 		shopApplication = new ShopApplication(customerController.getApp(), inventoryController.getApp());
 
-		// replace with generic add all listenrs options
+		// add all listeners required to gui
 		customerController.addActionListeners();
 
+		// init the shop client and set its controller
 		this.shopClient = new ShopClient("localhost", 8088);
 		shopClient.setController(this);
-	
+
+		// setup and run the gui
 		shopApplication.startGui(shopApplication);
 
+		// start the client communication loop to interact with the server.
 		shopClient.communicate();
 
-		// construct gui. pass actionlisters as required.
 	}
-	
+
 	public CmsController getCmsController() {
 		return this.customerController;
 	}
-	
+
 	public ImsController getImsController() {
 		return this.inventoryController;
 	}
-	
+
 	public ShopClient getShopClient() {
 		return this.shopClient;
 	}
@@ -62,7 +59,5 @@ public class ClientController {
 		ClientController cc = new ClientController();
 
 	}
-
-	
 
 }

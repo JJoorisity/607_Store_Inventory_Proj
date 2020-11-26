@@ -11,7 +11,7 @@ import sharedModel.*;
 /**
  * Inventory holds an inventory of items and the daily order. Allows the
  * following operations: - generation of daily order id. - printing of daily
- * order and orderlines. - printing of inventory items. - decrement of items
+ * order and order lines. - printing of inventory items. - decrement of items
  * being purchased.
  * 
  * @author NJack & JJoorisity
@@ -57,7 +57,7 @@ public class Inventory implements PrintTableConstants, Commands {
 	public void addItems(Item_Elec item) {
 		this.itemList.add(item);
 	}
-	
+
 	/**
 	 * @param items (LinkedHashSet<Item>) assign a new LinkedHashSet of items to
 	 *              inventory.
@@ -79,13 +79,12 @@ public class Inventory implements PrintTableConstants, Commands {
 			}
 		}
 		return null;
-
 	}
 
 	/**
 	 * Decrease quantity of item in inventory user input value.
 	 * 
-	 * @param item (Item) the item being purchased.
+	 * @param item (Item_Elec) the item being purchased.
 	 * @param qty  (int) the quantity of being purchased.
 	 * @return (boolean) true if purchase was successful.
 	 */
@@ -120,8 +119,7 @@ public class Inventory implements PrintTableConstants, Commands {
 	public String toString() {
 		String res = "";
 		res += TABLEBREAK;
-	
-		res +="| Tool Name       | Tool ID | Quantity | Price ($)     |\n";
+		res += "| Tool Name       | Tool ID | Quantity | Price ($)     |\n";
 		res += TABLEBREAK;
 		for (Item_Elec item : this.itemList) {
 			res += item.toString();
@@ -130,6 +128,14 @@ public class Inventory implements PrintTableConstants, Commands {
 		return res;
 	}
 
+	/**
+	 * Creates a text file from order information. Includes all included order lines
+	 * attached to this orders orderID.
+	 * 
+	 * @param order (Order) order object to be printed.
+	 * @return returns a Complete or Failed message back to client to confirm if
+	 *         order was printed properly.
+	 */
 	public String printOrder(Order order) {
 		if (order != null) {
 			String res = order.toString();
@@ -137,7 +143,7 @@ public class Inventory implements PrintTableConstants, Commands {
 				Item temp = this.getItem(oL.getItemId());
 				res += oL.printOrderLine(temp);
 			}
-			
+
 			// create new order
 			File newOrder = new File(order.getOrderID() + ".txt");
 			try {

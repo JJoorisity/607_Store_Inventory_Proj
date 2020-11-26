@@ -9,6 +9,17 @@ import java.net.UnknownHostException;
 import sharedModel.Commands;
 import sharedModel.ObjectWrapper;
 
+/**
+ * Main interaction point between the client controller and the server sockets.
+ * Contains main communication loop responsible for sending and receiving input
+ * from the server. Send and receive operations use an object wrapper and a
+ * distinct list of commands (through implemented interface) to tell the server
+ * what command to execute and what object to execute that command with.
+ * 
+ * @author NJack & JJoorisity
+ * @version 1.0
+ * @since 2020-11-26
+ */
 public class ShopClient implements Commands {
 
 	private Socket aSocket;
@@ -34,20 +45,13 @@ public class ShopClient implements Commands {
 	 * Open communication with the server sockets.
 	 */
 	public void communicate() {
-		ObjectWrapper request = new ObjectWrapper();
 		ObjectWrapper answer = new ObjectWrapper();
 
 		// client running
 		while (true) {
 			try {
-				// need input from IMS or CMS from gui
-				// write command to wrapper to send to server
-				// returns wrapper with data requested or triggers print to screen
-
-				// end of client action loop
-
 				answer = (ObjectWrapper) clientIn.readObject(); // wait for server response
-				String command = answer.getMessage()[0];
+				String command = answer.getMessage()[0]; // get command from server
 				if (answer != null && !command.equals("")) {
 					System.out.println("command : " + command);
 
@@ -79,10 +83,9 @@ public class ShopClient implements Commands {
 					}
 					}
 
-				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui
+				} else if (command.contentEquals("QUIT")) {
 					break;
 				}
-				request.resetWrapper();
 				answer.resetWrapper();
 
 			} catch (ClassNotFoundException | IOException e) {
@@ -94,6 +97,10 @@ public class ShopClient implements Commands {
 		this.close();
 	}
 
+	/**
+	 * Sends a wrapped object to the server. Waits for response from server before continuing in the communication loop above.
+	 * @param request (ObjectWrapper) object containing the request and object to be sent to the server.
+	 */
 	public void triggerOutput(ObjectWrapper request) {
 
 		// send object wrapper with command
