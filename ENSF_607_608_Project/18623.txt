@@ -1,0 +1,19 @@
+========================================================
+| OrderId: 18623      | Order Date: 2020-11-26         |
+========================================================
+| Item Description:     Tin Wits                       |
+| Amount Ordered:       33                             |
+| Supplier:             Tic Tac Manufacturing          |
+========================================================
+| Item Description:     Widgets                        |
+| Amount Ordered:       40                             |
+| Supplier:             Winork Manufacturing Inc.      |
+========================================================
+| Item Description:     Twinkies                       |
+| Amount Ordered:       40                             |
+| Supplier:             Twinkles Inc.                  |
+========================================================
+| Item Description:     Willie Widgits                 |
+| Amount Ordered:       39                             |
+| Supplier:             Wiley Inc.                     |
+========================================================
