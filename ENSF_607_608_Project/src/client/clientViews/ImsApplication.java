@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.border.*;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class ImsApplication {
 	private final JPanel ImsFrame = new JPanel();
@@ -41,8 +43,8 @@ public class ImsApplication {
 	private final JButton searchItemBtn = new JButton("Search");
 	private final JButton clearItemBtn = new JButton("Clear");
 	private final JButton searchAllBtn = new JButton("Search All");
-	private DefaultListModel listModel1 = new DefaultListModel();
-	private final JList itemList = new JList();
+	private DefaultTableModel tableModel = new DefaultTableModel();
+	private JTable itemTable;
 
 	/**
 	 * Create the application.
@@ -61,7 +63,7 @@ public class ImsApplication {
 	}
 
 	public void addSelectionListeners(ListSelectionListener listener) {
-		itemList.addListSelectionListener(listener);
+		itemTable.getSelectionModel().addListSelectionListener(listener);
 	}
 
 	public JButton getClearItemBtn() {
@@ -84,8 +86,8 @@ public class ImsApplication {
 		return this.clearPurchBtn;
 	}
 	
-	public JList getItemList() {
-		return this.itemList;
+	public JTable getItemTable() {
+		return this.itemTable;
 	}
 
 	public String getSearchItemTxt() {
@@ -133,14 +135,17 @@ public class ImsApplication {
 	}
 
 	public void setSearchResultText(String output) {
-		int i = this.listModel1.getSize();
-		this.itemList.ensureIndexIsVisible(i - 1);
-		this.listModel1.add(i, output);
+		String[] split = output.trim().split(",");
+		Object[] rowData = {new Integer(Integer.parseInt(split[0])), split[1], new Integer(Integer.parseInt(split[2])), 
+				String.format("%.2f", Float.parseFloat(split[3]))};
+		this.tableModel.addRow(rowData);
+		tableModel.fireTableRowsInserted(0, tableModel.getRowCount());
 	}
 
-	public void resetSearchResultText(String output) {
-		this.listModel1.removeAllElements();
-
+	public void resetSearchResultText() {
+		itemTable.clearSelection();
+		this.tableModel.setRowCount(0);
+		tableModel.fireTableRowsDeleted(0, 0);;
 	}
 
 	/**
@@ -238,6 +243,8 @@ public class ImsApplication {
 		gbc_pMssgLbl.gridy = 4;
 		pMssgLbl.setFont(new Font("Tahoma", Font.BOLD, 12));
 		purchaseInfoPanel.add(pMssgLbl, gbc_pMssgLbl);
+		pMssgeTxt.setBackground(Color.WHITE);
+		pMssgeTxt.setEditable(false);
 		pMssgeTxt.setColumns(10);
 
 		GridBagConstraints gbc_pMssgeTxt = new GridBagConstraints();
@@ -343,13 +350,31 @@ public class ImsApplication {
 		itemResultLbl.setOpaque(true);
 		itemResultLbl.setFont(new Font("Tahoma", Font.BOLD, 15));
 		rightPanel.add(itemResultLbl, BorderLayout.NORTH);
-
-		itemList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		itemList.setVisibleRowCount(20);
-		itemList.setLayoutOrientation(JList.VERTICAL);
-		itemSearchPane = new JScrollPane(itemList);
+		itemSearchPane = new JScrollPane();
 		itemSearchPane.setBackground(Color.WHITE);
 		rightPanel.add(itemSearchPane, BorderLayout.CENTER);
+		tableModel.setColumnIdentifiers(new String[] {
+				"Item ID", "Item Name", "Quantity", "Price"
+			});
+		
+		itemTable = new JTable(tableModel) {
+	         public boolean editCellAt(int row, int column, java.util.EventObject e) {
+	            return false;
+	         }
+		};
+		
+		// change the alignment
+		DefaultTableCellRenderer right = new DefaultTableCellRenderer();
+		DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+		center.setHorizontalAlignment(JLabel.CENTER);
+		itemTable.getColumnModel().getColumn(0).setCellRenderer(center);
+		itemTable.getColumnModel().getColumn(2).setCellRenderer(center);
+		right.setHorizontalAlignment(JLabel.RIGHT);
+		itemTable.getColumnModel().getColumn(3).setCellRenderer(right);
+		itemTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+		itemTable.setBackground(Color.WHITE);
+		
+		itemSearchPane.setViewportView(itemTable);
 
 		this.radioGroup.add(itemIdRBtn);
 		itemIdRBtn.setActionCommand("itemId");

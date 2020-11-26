@@ -172,6 +172,7 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 	}
 
 	public LinkedHashSet<Item_Elec> queryItem(String itemDesc) {
+		itemDesc = "%" + itemDesc + "%";
 		LinkedHashSet<Item_Elec> queryRes = new LinkedHashSet<Item_Elec>();
 		try {
 			String query = helper.queryItemDesc();
@@ -183,8 +184,8 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 						results.getString("itemDesc"), results.getInt("itemQty"), results.getDouble("itemPrice"),
 						results.getInt("supplierId"), results.getString("powerType"), results.getInt("V"),
 						results.getInt("Ph")));
-				pStat.close();
 			}
+			pStat.close();
 		} catch (SQLException e) {
 			System.err.println("queryItem by Desc failed with " + itemDesc);
 			e.printStackTrace();

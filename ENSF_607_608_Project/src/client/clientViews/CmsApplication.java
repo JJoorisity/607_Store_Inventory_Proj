@@ -52,7 +52,6 @@ public class CmsApplication {
 	private final JLabel pnLbl = new JLabel("Phone Number:");
 	private final JLabel cTypeLbl = new JLabel("Customer Type:");
 	private final JComboBox<String> cTypeCBox = new JComboBox<String>();
-	private final JPanel ImsApplication = new JPanel();
 	private ButtonGroup radioGroup = new ButtonGroup();
 	private DefaultListModel listModel1 = new DefaultListModel();
 	private final JList resultsList = new JList(listModel1);
@@ -443,7 +442,7 @@ public class CmsApplication {
 	}
 
 	public Customer getEditedCustInfo() {
-		if (!this.clientIdTxt.getText().isBlank()) {
+		if (!this.clientIdTxt.getText().trim().isEmpty()) {
 			int id = Integer.parseInt(this.clientIdTxt.getText());
 			String fname = this.fNameTxt.getText();
 			String lname = this.lNameTxt.getText();

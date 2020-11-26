@@ -11,7 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import client.clientViews.ImsApplication;
 import sharedModel.*;
 
-public class ImsController implements Commands {
+public class ImsController implements Commands, PrintTableConstants {
 
 	private ImsApplication app;
 	private ClientController cc;
@@ -40,7 +40,6 @@ public class ImsController implements Commands {
 	}
 	
 	public void executeSearch() {
-		this.app.setSearchResultText("");
 		String command = "";
 		String searchText = this.app.getSearchItemTxt();
 		String type = app.getSelectedRadioButton();
@@ -65,8 +64,29 @@ public class ImsController implements Commands {
 		wrapMessage(command, ITEM_ELEC, item);
 	}
 	
+	public void updateSearchResults(ArrayList<Object> objectList) {
+		for (Object o : objectList) {
+			Runnable runner = new Runnable() {
+				public void run() {
+					app.setSearchResultText(o.toString());
+				}
+			};
+			EventQueue.invokeLater(runner);
+		}
+	}
+	
+	public void updatePurchaseField(String message) {
+		Runnable runner = new Runnable() {
+			public void run() {
+				app.setPMssgeTxt(message);
+			}
+		};
+		EventQueue.invokeLater(runner);
+	}
+	
 	public void executeClearSearch() {
-		this.app.setSearchItemTxt("");		
+		this.app.setSearchItemTxt("");
+		this.app.resetSearchResultText();
 	}
 	
 	public void executeClearPurchase() {
@@ -77,7 +97,6 @@ public class ImsController implements Commands {
 	}
 	
 	public void executePurchase() {
-		this.app.setSearchResultText("");
 		String command = PURCHASE;
 		ArrayList<Object> purchases = new ArrayList<Object>();
 		purchases.add(Integer.parseInt(app.getItemIdTxt()));
@@ -87,7 +106,7 @@ public class ImsController implements Commands {
 	}
 	
 	public void executeSearchAll() {
-		this.app.setSearchResultText("");
+		this.app.resetSearchResultText();
 		String command = SEARCH + ALL;
 		// create temp customer object with searchable attribute set.
 		Item_Elec item = new Item_Elec();
@@ -136,10 +155,14 @@ public class ImsController implements Commands {
 		
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			if (e.getSource() == getApp().getItemList()) {
-				
-			}
-			
+			Runnable runner = new Runnable() {
+				public void run() {
+					String itemId = String.valueOf(app.getItemTable().getValueAt(app.getItemTable().getSelectedRow(), 0));
+					app.setItemIdTxt(itemId);
+					itemId = "";
+				}
+			};
+			EventQueue.invokeLater(runner);
 		}
 	}
 	

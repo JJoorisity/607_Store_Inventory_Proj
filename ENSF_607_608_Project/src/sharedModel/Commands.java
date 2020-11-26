@@ -18,4 +18,7 @@ public interface Commands {
 	static final String PURCHASE = "PURCHASE";
 	static final String QUIT = "QUIT";
 	static final String DISPLAYEDIT = "DISPLAYEDIT";
+	static final String DISPLAYITEM = "DISPLAYITEM";
+	static final String PCOMPLETE = "Purchase Complete";
+	static final String PFAILED = "Inventory Low";
 }

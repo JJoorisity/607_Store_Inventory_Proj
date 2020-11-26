@@ -16,7 +16,7 @@ import java.util.Objects;
  *        Description: Item object that holds all information related to the
  *        individual tool.
  */
-public class Item implements Serializable{
+public class Item implements PrintTableConstants, Serializable{
 
 	private static final long serialVersionUID = 2L;
 	protected int itemID;
@@ -104,10 +104,8 @@ public class Item implements Serializable{
 	 */
 	@Override
 	public String toString() {
-
-		String leftAlignFormat = "| %-15s | %-7d | %-8d | %-13.2f |\n";
-		String res = String.format(leftAlignFormat, this.getItemDesc(), this.getItemID(), this.getQty(),
-				this.getPrice());
+		String res = String.valueOf(getItemID()) + "," + this.getItemDesc() + "," + String.valueOf(this.getQty()) + "," + 
+				String.valueOf(this.getPrice());
 		return res;
 
 	}

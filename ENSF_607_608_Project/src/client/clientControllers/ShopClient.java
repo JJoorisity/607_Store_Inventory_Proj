@@ -68,6 +68,14 @@ public class ShopClient implements Commands {
 						this.clientController.getCmsController().updateCustInfoPane(answer.getPassedObj());
 						break;
 					}
+					case DISPLAYITEM: {
+						this.clientController.getImsController().updateSearchResults(answer.getPassedObj());
+						break;
+					}
+					case PURCHASE: {
+						this.clientController.getImsController().updatePurchaseField(answer.getMessage()[1]);
+						break;
+					}
 					}
 
 				} else if (command.contentEquals("QUIT")) { // to be actionlistener from gui

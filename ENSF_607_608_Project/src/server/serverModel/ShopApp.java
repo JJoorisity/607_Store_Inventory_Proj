@@ -110,18 +110,25 @@ public class ShopApp implements Commands {
 	 * @param customerID (int) id of customer executing the purchase.
 	 * @return (boolean) true if the purchase was successful.
 	 */
-	public boolean executePurchase(int itemID, int qty, int customerID) {
+	public void executePurchase(int itemID, int qty, int customerID) {
 		Item_Elec item = modelController.getDbController().queryItem(itemID);
-		if (modelController.getDbController().queryCustomer(customerID) == null) {
-			return false;
-		}
-		if (this.getInventory().decrement(item, qty)) {
+		boolean success = false;
+		ObjectWrapper ow = new ObjectWrapper();
+		if (this.getInventory().decrement(item, qty) && modelController.getDbController().queryCustomer(customerID) != null) {
 			modelController.getDbController().updateItem(itemID, item.getQty()); // updates Item in db with new qty
 			this.updateOrders(item, qty);
 			modelController.getDbController().insertPurchases(itemID, customerID);
-			return true;
+			success = true;
 		}
-		return false;
+		if (success)
+			ow.setMessage(PURCHASE, PCOMPLETE);
+		else
+			ow.setMessage(PURCHASE, PFAILED);
+		try {
+			this.modelController.getOutputStream().writeObject(ow);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -287,7 +294,7 @@ public class ShopApp implements Commands {
 				searchObject.addAll(this.queryItem(item.getItemDesc()));
 			else if (command.contains(ALL))
 				searchObject.addAll(this.queryItem());
-			ow.setMessage(DISPLAY, ITEM_ELEC);
+			ow.setMessage(DISPLAYITEM, ITEM_ELEC);
 			break;
 		}
 		case ORDER: {
