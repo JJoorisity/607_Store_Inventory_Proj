@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.mysql.cj.util.StringUtils;
+
 import client.clientViews.ImsApplication;
 import sharedModel.*;
 
@@ -48,7 +50,8 @@ public class ImsController implements Commands, PrintTableConstants {
 		switch (type) {
 		case "itemId": {
 			try {
-				item.setItemID(Integer.parseInt(searchText));
+				if (StringUtils.isStrictlyNumeric(searchText))
+					item.setItemID(Integer.parseInt(searchText));
 	        } catch (NumberFormatException nfe) {
 	        	item.setItemID(-1); // if user passes string instead of int set to sentinal value
 	        }
@@ -56,7 +59,8 @@ public class ImsController implements Commands, PrintTableConstants {
 			break;
 		}
 		case "itemDesc": {
-			item.setItemDesc(searchText);
+			if (!searchText.trim().isEmpty())
+				item.setItemDesc(searchText);
 			command = "SEARCHNAME";
 			break;
 		}
@@ -99,10 +103,13 @@ public class ImsController implements Commands, PrintTableConstants {
 	public void executePurchase() {
 		String command = PURCHASE;
 		ArrayList<Object> purchases = new ArrayList<Object>();
-		purchases.add(Integer.parseInt(app.getItemIdTxt()));
-		purchases.add(Integer.parseInt(app.getPurchaseQtyTxt()));
-		purchases.add(Integer.parseInt(app.getcustIdTxt()));
-		wrapMessage(command, ITEM_ELEC, purchases);
+		if (StringUtils.isStrictlyNumeric(app.getItemIdTxt()) && StringUtils.isStrictlyNumeric(app.getPurchaseQtyTxt())
+				&& StringUtils.isStrictlyNumeric(app.getcustIdTxt())) {
+			purchases.add(Integer.parseInt(app.getItemIdTxt()));
+			purchases.add(Integer.parseInt(app.getPurchaseQtyTxt()));
+			purchases.add(Integer.parseInt(app.getcustIdTxt()));
+			wrapMessage(command, ITEM_ELEC, purchases);
+		}
 	}
 	
 	public void executeSearchAll() {
