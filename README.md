@@ -29,6 +29,7 @@ To run this program, follow these steps:
 
 1. Clone the repository
 2. Populate the required database credentials in DatabaseConstants.java located in "ENSF607Proj_Server/src/server/serverControllers/DatabaseConstants.java"
-5. Run ServerController.java located in "ENSF607Proj_Server/src/server/serverControllers/ServerController.java" to run the local server
-6. Run ClientController.java located in "ENSF607Proj_Client/src/client/clientControllers/ClientController.java" to launch the GUI
-7. You can now use the GUI to perform actions on the database (The server operates on a thread pool and can handle multiple clients).
+3. Run the DbController main method to initialize the MySQL database tables, located in "ENSF607Proj_Server/src/server/serverControllers/DbController.java"
+4. Run ServerController.java located in "ENSF607Proj_Server/src/server/serverControllers/ServerController.java" to run the local server
+5. Run ClientController.java located in "ENSF607Proj_Client/src/client/clientControllers/ClientController.java" to launch the GUI
+6. You can now use the GUI to perform actions on the database (The server operates on a thread pool and can handle multiple clients).
