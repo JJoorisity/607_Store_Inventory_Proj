@@ -1,5 +1,4 @@
-package server.serverControllers;
-
+package server.serverControllers;
 /**
  * Hold the connection information for the local mySQL database.
  * @author NJack & JJoorisity

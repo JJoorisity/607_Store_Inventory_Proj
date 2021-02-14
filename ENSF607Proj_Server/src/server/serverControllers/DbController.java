@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import sharedModel.*;
+
+import java.io.IOException;
 import java.sql.*;
 
 /**
@@ -647,5 +649,14 @@ public class DbController implements DatabaseConstants, DatabaseTables {
 		}
 
 	}
-
+	
+	public static void main(String[] args) throws IOException {
+		DbController myDB = new DbController();
+		myDB.initializeConnection();
+		myDB.resetDatabase();
+		myDB.createTable();
+		myDB.initializeCustomerTable();
+		myDB.initializeSupplierTable();
+		myDB.initializeItemTable();
+	}
 }
