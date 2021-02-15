@@ -22,8 +22,6 @@ The relational diagram, outlining the MySQL database design, can be found in "To
 - MySQL Workbench
 - JDBC
 
-## Program Demo
-
 ## Running the Program
 To run this program, follow these steps:
 
